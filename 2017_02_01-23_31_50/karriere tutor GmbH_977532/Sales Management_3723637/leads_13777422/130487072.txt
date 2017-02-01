@@ -1,0 +1,4 @@
+label: CourseTitle
+field_id: 130487072
+type: calculation
+script: @[All of Maßnahmentitel](out_108135844_108285774)+'';

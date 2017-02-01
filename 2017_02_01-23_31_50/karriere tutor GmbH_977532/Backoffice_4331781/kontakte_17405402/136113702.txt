@@ -1,0 +1,49 @@
+label: JSON-Data
+field_id: 136113702
+type: calculation
+script: var out = ""
+var j =  {};
+j["ID"] = @[Old Kontakte Id](field_136107651);
+j["Anrede"] = @[Anrede](field_136107002);
+j["Titel"] = @[Titel](field_136107003);
+j["Organisation"] = @[Organisation](field_136107001);
+j["Vorname"] = @[Vorname](field_136107004);
+j["Nachname"] = @[Nachname](field_136107005);
+j["Position"] = @[Position/Abteilung](field_136107006);
+j["Adresse"]= @[Anschrift](field_136107009)+'';
+j["Email"] = @[E-Mail](field_136107011);
+j["tel"] = @[Tel](field_136107012);
+j["profile"] = @[Profile](field_136107013);
+j["Geb_Datum"] = @[Geburtsdatum](field_136107014);
+j["tag_interessent"] = @[Interessent Tag](field_136107016);
+j["tag_teilnehmer"] = @[Teilnehmer Tag](field_136107017);
+j["Kontakt_gruppen"] = @[Contact Gruppen](field_136107018);
+j["filter"] = @[Filter](field_136107019);
+j["sipgate_syncid"] = @[SipGateSyncID](field_136107021);
+
+j["status"] = @[Status](field_136107024);
+
+// if we use the calc_zip1 calculation field here then it start creating issue at fulfilment overview for too deep error so tried to copy the calculation here
+
+var zip = @[Anschrift](field_136107009).join().replace(/[^0-9]/g,"").substr(-5)
+if (zip == null) { zip ="" }
+
+if (zip  == null) {
+  out = parseInt('99999')
+} else {
+  out_tmp = zip .substring(0,1)
+  if (out_tmp == '1') { out = parseInt('1')}
+  if (out_tmp == '2') { out = parseInt('2')}
+  if (out_tmp == '3') { out = parseInt('3')}
+  if (out_tmp == '4') { out = parseInt('4')}
+  if (out_tmp == '5') { out = parseInt('5')}
+  if (out_tmp == '6') { out = parseInt('6')}
+  if (out_tmp == '7') { out = parseInt('7')}
+  if (out_tmp == '8') { out = parseInt('8')}
+  if (out_tmp == '9') { out = parseInt('9')}
+  if (out_tmp == '0') { out = parseInt('0')}
+}
+j["zip1"] = out;
+
+out = JSON.stringify(j);
+out;

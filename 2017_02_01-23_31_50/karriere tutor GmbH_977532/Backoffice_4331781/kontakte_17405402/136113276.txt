@@ -1,0 +1,37 @@
+label: InfoName
+field_id: 136113276
+type: calculation
+script: var out = ""
+var first = true
+var second = true
+if (@[Vorname](field_136107004) != null) {
+  out += @[Vorname](field_136107004)
+  first = false
+}
+if (@[Nachname](field_136107005) != null) {
+  if (first == false) { out += " " }
+  out += @[Nachname](field_136107005)
+  first = false
+}
+if (@[Anrede](field_136107002) != null) {
+  if (first == false) { out = @[Anrede](field_136107002) + " " + out }
+}
+
+if (@[E-Mail](field_136107011) != null) {
+  if (second) {
+    var my_email2 = @[E-Mail](field_136107011).map( function (obj) {return obj.value});
+    var my_email = my_email2[0]
+    if (first == false) { out += " -- " }
+    out +=  my_email;
+    second = false
+  }
+}
+if (@[Organisation](field_136107001) != null) {
+  if (second) {
+    if (first == false) { out += " -- " }
+    out += @[Organisation](field_136107001)
+    second = false
+  }
+}
+
+out

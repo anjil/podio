@@ -1,0 +1,56 @@
+label: Calculation
+field_id: 123855179
+type: calculation
+script: var items     = [];
+var myArray = Array();
+var tmpObj = {};
+var uq = @[Unique ID](item_app_item_id);
+var out = '';
+try {
+ 
+ var json= @[All of JSON-Datum2](in_121361740_118873889);
+ for (var ii=0; ii<json.length; ii++){ 
+    var x = JSON.parse(json[ii]);  
+    var oEndDate = x["EndLeh"];   
+    if(oEndDate){
+      var oChkDate = dateCompair(oEndDate);
+      if(oChkDate == 1){
+         var oCalcLeh = x["CalcLehrgang"];
+         var oStatus  = x["StatusShortName"];         
+        
+         var tempKey = oCalcLeh+'^'+oStatus;
+         if(items[tempKey]){
+           var arr = items[tempKey];      
+           arr['count'] = parseInt(arr['count'])+1;
+           items[tempKey] = arr;      
+         }     
+         else{
+           var arr = [];
+           arr['CalcLehrgang'] = oCalcLeh;         
+           arr['StatusShortName'] = oStatus;
+           arr['count'] = 1;
+           items[tempKey] = arr;
+         }    
+       }   
+     }         
+   }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function dateCompair(oE){
+  var d1 = new Date(oE);
+  var d2 = new Date();
+  if (d2.getTime() > d1.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+
+
+//JSON.stringify(items);
+out = 'Test';

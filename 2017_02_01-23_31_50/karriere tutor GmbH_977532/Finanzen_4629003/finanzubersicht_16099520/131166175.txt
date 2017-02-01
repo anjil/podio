@@ -1,0 +1,36 @@
+label: Maßnahmen Namen2
+field_id: 131166175
+type: calculation
+script: var json = @[All of JSON-FinanceUbersicht](in_124762989_124752897)[0];
+var oShowOutPutDetail = '';
+var outputHeader = ""
+var oShow = '';
+
+var oTotal = 0;
+
+try {
+
+ var js = JSON.parse(json); 
+ for (var i=0; i<js.length; i++){    
+   for(ii=0;ii<js[i].Datam.length;ii++){
+     var oQty = js[i].Datam[ii].AnzahlRaten || 0;
+     if (ii>0) { oShowOutPutDetail += ", " }
+     oShowOutPutDetail += DisplayName(js[i].Datam[ii].Maßnahmentitel) 
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function DisplayName(str){
+  if(str == null || str == '' || str == 'null' || str == 'undefined')
+   return ""
+  else 
+  return str;
+}
+
+
+oShow = outputHeader+oShowOutPutDetail;
+
+//comment for update 

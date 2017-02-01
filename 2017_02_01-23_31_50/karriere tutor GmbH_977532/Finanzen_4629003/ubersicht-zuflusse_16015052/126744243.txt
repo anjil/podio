@@ -1,0 +1,416 @@
+label: Calculation
+field_id: 126744243
+type: calculation
+script: var js = @[All of JSON-Transaction Details](in_126170927_124031145); 
+var oSearch = @[Search](field_124765868);
+var oShow = '';
+var oShowData = '';
+var oHeader = '';
+var items = [];
+var oTotAmt = 0;
+var oTotExpAmt = 0;
+var oTotDiff = 0;
+var oRow = 0;
+var oShowTotalAmt = '';
+var oShowTotalExpAmt = '';
+var oShowTotalDiff = '';
+var out =''
+var oRecord = 1;
+var displayURL = ''; 
+var t='~~';
+
+
+try{
+
+  for(var jso=0; jso<js.length; jso++){
+    var json = JSON.parse(js[jso]);
+    var oDt = new Date(json.Date);
+    var oAmt = json.Amount;
+    var oExpAmt = json.ExpectedAmount;
+    var oStName = json.StdName || '';
+    if(oSearch){
+      oSearch = oSearch.toLowerCase();
+      if(oStName.toLowerCase().indexOf(oSearch)>-1){
+        var oCid = json.Bildungsgutschein;
+        var oWeek = parseInt(getWeekNumber(oDt));
+        var oDateRange = getWeekStartEndDate(oDt);   
+        var ofinanzId  = json.finanzID;
+        var oBnkId  = json.uniqueId;
+        var oExpId  = json.ExpectedId;  
+        var tempKey = oWeek; 
+        if(items[tempKey]){
+           var arr = items[tempKey];
+           var ii = arr.length;
+           arr[ii] = [];
+           arr[ii]['StdName'] = oStName;
+           arr[ii]['Bildungsgutschein'] = oCid; 
+           arr[ii]['Amount'] = oAmt;
+           arr[ii]['ExpectedAmount'] = oExpAmt;
+           arr[ii]['Date'] = oDt;
+           arr[ii]['week'] = oWeek; 
+           arr[ii]['weekRange'] = oDateRange;
+           arr[ii]['idBank'] = oBnkId; 
+           arr[ii]['idExp'] = oExpId; 
+           arr[ii]['idFinance'] = ofinanzId;
+           items[tempKey] = arr;                  
+        } 
+        else{
+           var arr = [];
+           arr[0] = [];
+           arr[0]['StdName'] = oStName;
+           arr[0]['Bildungsgutschein'] = oCid;  
+           arr[0]['Amount'] = oAmt;
+           arr[0]['ExpectedAmount'] = oExpAmt;
+           arr[0]['Date'] = oDt;
+           arr[0]['week'] = oWeek; 
+           arr[0]['weekRange'] = oDateRange; 
+           arr[0]['idBank'] = oBnkId; 
+           arr[0]['idExp'] = oExpId; 
+           arr[0]['idFinance'] = ofinanzId;  
+           items[tempKey] = arr;
+        }
+      }     
+    }
+    else{
+      var oCid = json.Bildungsgutschein;
+      var oWeek = parseInt(getWeekNumber(oDt));
+      var oDateRange = getWeekStartEndDate(oDt); 
+      var ofinanzId  = json.finanzID;
+      var oBnkId  = json.uniqueId;
+      var oExpId  = json.ExpectedId;
+      var tempKey = oWeek; 
+      if(items[tempKey]){
+         var arr = items[tempKey];
+         var ii = arr.length;
+         arr[ii] = [];
+         arr[ii]['StdName'] = oStName;
+         arr[ii]['Bildungsgutschein'] = oCid; 
+         arr[ii]['Amount'] = oAmt;
+         arr[ii]['ExpectedAmount'] = oExpAmt;
+         arr[ii]['Date'] = oDt;
+         arr[ii]['week'] = oWeek; 
+         arr[ii]['weekRange'] = oDateRange;
+         arr[ii]['idBank'] = oBnkId; 
+         arr[ii]['idExp'] = oExpId; 
+         arr[ii]['idFinance'] = ofinanzId;
+         items[tempKey] = arr;                  
+      } 
+      else{
+         var arr = [];
+         arr[0] = [];
+         arr[0]['StdName'] = oStName;
+         arr[0]['Bildungsgutschein'] = oCid;  
+         arr[0]['Amount'] = oAmt;
+         arr[0]['ExpectedAmount'] = oExpAmt;
+         arr[0]['Date'] = oDt;
+         arr[0]['week'] = oWeek; 
+         arr[0]['weekRange'] = oDateRange;  
+         arr[0]['idBank'] = oBnkId; 
+         arr[0]['idExp'] = oExpId; 
+         arr[0]['idFinance'] = ofinanzId; 
+         items[tempKey] = arr;
+      }      
+    } 
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function getWeekNumber(t) {
+  var date = new Date(t.getTime());
+  date.setHours(0, 0, 0, 0); 
+  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+  var week1 = new Date(date.getFullYear(), 0, 4); 
+  return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000- 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
+
+function getWeekStartEndDate(d){
+  var oDate = new Date(d);                  
+  var day = oDate.getDay();                 
+  var diff = oDate.getDate() - day + (day == 0 ? -6:1);                  
+  var week_start_tstmp = oDate.setDate(diff);                            
+  var week_start = new Date(week_start_tstmp);                
+  var week_start_date =formatted_date(week_start);                 
+  var week_end  = new Date(week_start_tstmp);                   
+  week_end = new Date (week_end.setDate(week_end.getDate() + 4));                
+  var week_end_date =formatted_date(week_end);
+
+  //var oDt = week_start_date +' - '+ week_end_date;
+
+  var oDt = week_end_date +' - '+ week_start_date;
+  return oDt;
+
+}
+
+function formatted_date(date){
+ var dayName = new Array( 'Su','Mo','Tu','We','Th','Fr','Sa');
+
+ var m = ("0"+ (date.getMonth()+1)).slice(-2);  
+ var d = ("0"+ date.getDate()).slice(-2);                                 
+ var y = date.getFullYear();
+ var oDay = dayName[date.getDay()];
+ return  oDay +' '+d+'.'+m; 
+}
+
+function DisplayData(str){
+  if(str == null || str == '' || str == 'NAN' || str == 'undefined')
+   return 0
+  else 
+  return parseFloat(str);
+}
+
+function DisplayId(str){
+
+  if(str){
+t+='<br>**'+parseInt(str);
+    return parseInt(str);
+  }
+}
+
+function GetId(oUniqueId){
+ if(oUniqueId){
+  var regex=/^[0-9]+$/;
+  var oShow = '';
+  for(var i=0;i<oUniqueId.length;i++){
+    if(oUniqueId[i].match(regex)){
+       oShow+= oUniqueId[i];
+    } 
+  }
+  return parseInt(oShow);
+}
+}
+
+function DisplayName(str){
+  if(str == null || str == '' || str == 'NAN' || str == 'undefined')
+   return ""
+  else 
+  return str;
+}
+
+items.sort(function(a, b) {
+    a = a[0]['week'];
+    b = b[0]['week']
+
+    return a > b ? -1 : (a < b ? 1 : 0);
+});
+
+
+if(@[Darstellung der Wochen](field_124609209) == 'Mit Wochen'){
+for(key in items) { 
+  var oArr = items[key];
+
+  oArr.sort(function(a, b) {
+     a = new Date(a['Date']);
+     b = new Date(b['Date']);
+     return a > b ? -1 : (a < b ? 1 : 0);
+  });
+
+  var oWk = 'Woche '+oArr[0]['week'];
+  oTotAmt = 0;
+  oTotExpAmt = 0;
+  oTotDiff = 0;
+   out += '|**'+oWk+' : '+oArr[0]['weekRange'] +'**|**Bildungsgutschein Nummer **|**Betrag**|**Expected Amount**|**Difference**|**Datum**|<br>';
+  if(oRecord == 1){
+    out += '|:------|:-----|----:|----:|----:|:----:|<br>';
+  }
+ 
+  for(var i=0; i<oArr.length; i++){
+    var odt = oArr[i]['Date'];
+    var od = moment(odt).format("DD.MM.YYYY");
+    var oAmt = DisplayData(oArr[i]['Amount']);
+    oAmt=oAmt.toFixed(2).toString().replace(".", ",");
+
+    var oExpAmt = DisplayData(oArr[i]['ExpectedAmount']);
+    oExpAmt=oExpAmt.toFixed(2).toString().replace(".", ",");
+
+    var oDiff = 0;
+    oDiff = DisplayData(oArr[i]['Amount']) - DisplayData(oArr[i]['ExpectedAmount']);
+
+    oTotDiff += oDiff;
+
+   oDiff = oDiff.toFixed(2).toString().replace(".", ",");
+
+
+var urlNameFinance =  DisplayName(oArr[i]['StdName']);
+var oIdFinance = GetId(oArr[i]['idFinance']);
+var oFinanceUrl = 'https://podio.com/karrieretutorde/finance/apps/finanzubersicht/items/'+oIdFinance;
+
+var urlNameBnk =  oAmt+' €';
+var oIdBnk = GetId(oArr[i]['idBank']);
+var oBnkUrl = 'https://podio.com/karrieretutorde/finance/apps/banktransaktionen/items/'+oIdBnk;
+
+
+var urlNameExp =  oExpAmt+' €';
+var oIdExp = GetId(oArr[i]['idExp']);
+var oExpUrl = 'https://podio.com/karrieretutorde/finance/apps/erwartete-zahlungseingange/items/'+oIdExp;
+
+
+
+  //out += '|'+DisplayName(oArr[i]['StdName'])+'|';
+  out +='|'+urlNameFinance.link(oFinanceUrl)+'|';
+  out += oArr[i]['Bildungsgutschein']+' |';
+ 
+//out += oAmt+' €|';
+out += urlNameBnk.link(oBnkUrl)+'|';
+//out += oExpAmt+' €|';
+out += urlNameExp.link(oExpUrl)+'|';
+
+  //out += oAmt+' €|';
+  //out += oExpAmt+' €|';
+  out += oDiff+' €|';
+  out += od+'|<br>';
+
+    oTotAmt += DisplayData(oArr[i]['Amount']);
+    oTotExpAmt += DisplayData(oArr[i]['ExpectedAmount']);
+  }
+
+ oShowTotalAmt = oTotAmt.toFixed(2).toString().replace(".", ",");
+
+oShowTotalExpAmt = oTotExpAmt.toFixed(2).toString().replace(".", ",");
+
+oShowTotalDiff = oTotDiff.toFixed(2).toString().replace(".", ",");
+
+ out += '|**Total of '+oWk+'**|**&nbsp; **|**'+oShowTotalAmt+' €**|**'+oShowTotalExpAmt +' €**|**'+oShowTotalDiff+' €**|**&nbsp;**| <br>';
+
+//out += "----\n"; 
+out += '|--------|--------|--------|--------|--------|--------|<br>';
+
+oRecord++; 
+ }
+}
+else if(@[Darstellung der Wochen](field_124609209) == 'ohne Wochen'){
+  oTotAmt = 0;
+  oTotExpAmt = 0;
+  oTotDiff = 0;
+  out += '|**Name**|**BGS # **|**Betrag**|**Exp. Betrag**|**Difference**|**Datum**|<br>';
+  out += '|:------|:-----|----:|----:|----:|:----:|<br>';
+  for(key in items) { 
+  var oArr = items[key];
+
+  oArr.sort(function(a, b) {
+     a = new Date(a['Date']);
+     b = new Date(b['Date']);
+     return a > b ? -1 : (a < b ? 1 : 0);
+  });
+
+  for(var i=0; i<oArr.length; i++){
+    var odt = oArr[i]['Date'];
+    var od = moment(odt).format("DD.MM.YYYY");
+    var oAmt = DisplayData(oArr[i]['Amount']);
+    oAmt=oAmt.toFixed(2).toString().replace(".", ",");
+
+    var oExpAmt = DisplayData(oArr[i]['ExpectedAmount']);
+    oExpAmt=oExpAmt.toFixed(2).toString().replace(".", ",");
+
+    var oDiff = 0;
+    oDiff = DisplayData(oArr[i]['Amount']) - DisplayData(oArr[i]['ExpectedAmount']);
+
+    oTotDiff += oDiff;
+
+   oDiff = oDiff.toFixed(2).toString().replace(".", ",");
+
+
+var urlNameFinance =  DisplayName(oArr[i]['StdName']);
+var oIdFinance = GetId(oArr[i]['idFinance']);
+var oFinanceUrl = 'https://podio.com/karrieretutorde/finance/apps/finanzubersicht/items/'+oIdFinance;
+
+var urlNameBnk =  oAmt+' €';
+var oIdBnk = GetId(oArr[i]['idBank']);
+var oBnkUrl = 'https://podio.com/karrieretutorde/finance/apps/banktransaktionen/items/'+oIdBnk;
+
+
+var urlNameExp =  oExpAmt+' €';
+var oIdExp = GetId(oArr[i]['idExp']);
+var oExpUrl = 'https://podio.com/karrieretutorde/finance/apps/erwartete-zahlungseingange/items/'+oIdExp;
+
+//out +='|'+DisplayName(oArr[i]['StdName'])+'|';
+
+out +='|'+urlNameFinance.link(oFinanceUrl)+'|';
+out += oArr[i]['Bildungsgutschein']+'|';
+//out += oAmt+' €|';
+out += urlNameBnk.link(oBnkUrl)+'|';
+//out += oExpAmt+' €|';
+out += urlNameExp.link(oExpUrl)+'|';
+out += oDiff+' €|';
+out += od+'|<br>';
+
+    oTotAmt += DisplayData(oArr[i]['Amount']);
+    oTotExpAmt += DisplayData(oArr[i]['ExpectedAmount']);
+  }
+ }
+ oShowTotalAmt = oTotAmt .toFixed(2).toString().replace(".", ",");
+oShowTotalExpAmt = oTotExpAmt.toFixed(2).toString().replace(".", ",");
+
+oShowTotalDiff = oTotDiff.toFixed(2).toString().replace(".", ",");
+
+ out += '|**Total**|**&nbsp; **|**'+oShowTotalAmt+' €**|**'+oShowTotalExpAmt +' €**|**'+ oShowTotalDiff +' € **|**&nbsp;**| <br>';
+}
+
+else if(@[Darstellung der Wochen](field_124609209) == 'Nur Wochen'){
+
+ out += '|**Woche**|**Betrag**|**Expected Amount**|**Difference**|<br>';
+
+out += '|:------|----:|----:|----:|<br>';
+
+var totBankAmt = 0;
+var totExpAmt = 0 ;
+var totDiff = 0 ; 
+
+for(key in items) { 
+  var oArr = items[key];
+
+  oArr.sort(function(a, b) {
+     a = new Date(a['Date']);
+     b = new Date(b['Date']);
+     return a > b ? -1 : (a < b ? 1 : 0);
+  });
+
+  var oWk = 'Woche '+oArr[0]['week'];
+  oTotAmt = 0;
+  oTotExpAmt = 0;
+  oTotDiff = 0;
+ 
+  for(var i=0; i<oArr.length; i++){
+    var odt = oArr[i]['Date'];
+    var od = moment(odt).format("DD.MM.YYYY");
+    var oAmt = DisplayData(oArr[i]['Amount']);
+    
+    var oExpAmt = DisplayData(oArr[i]['ExpectedAmount']);
+    
+    var oDiff = 0;
+    oDiff = DisplayData(oArr[i]['Amount']) - DisplayData(oArr[i]['ExpectedAmount']);
+
+    oTotAmt += DisplayData(oArr[i]['Amount']);
+    oTotExpAmt += DisplayData(oArr[i]['ExpectedAmount']);
+    oTotDiff += oDiff;
+
+    totBankAmt += oAmt ;
+    totExpAmt += oExpAmt ;
+    totDiff += oDiff ; 
+
+  }
+
+ oShowTotalAmt = oTotAmt.toFixed(2).toString().replace(".", ",");
+
+oShowTotalExpAmt = oTotExpAmt.toFixed(2).toString().replace(".", ",");
+
+oShowTotalDiff = oTotDiff.toFixed(2).toString().replace(".", ",");
+
+ out += '|'+oWk+' : '+oArr[0]['weekRange'] +'|'+oShowTotalAmt+' €|'+oShowTotalExpAmt +' €|'+oShowTotalDiff+' €| <br>';
+
+oRecord++; 
+ }
+
+ var oShowBnkAmt = totBankAmt.toFixed(2).toString().replace(".", ",");
+
+oShowExpAmt = totExpAmt.toFixed(2).toString().replace(".", ",");
+
+oShowDiff = totDiff.toFixed(2).toString().replace(".", ",");
+
+out += '|**Total :**|**'+oShowBnkAmt +' €**|**'+oShowExpAmt +' €**|**'+oShowDiff +' €**| <br>';
+
+}
+
+oShow += out+'';

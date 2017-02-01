@@ -1,0 +1,4 @@
+label: Calc_MigMassnahme
+field_id: 113561178
+type: calculation
+script: @[Lehrgangsgebühren](field_105473427) - @[Calc_Lehrgangsgebuehren](field_113559188) 

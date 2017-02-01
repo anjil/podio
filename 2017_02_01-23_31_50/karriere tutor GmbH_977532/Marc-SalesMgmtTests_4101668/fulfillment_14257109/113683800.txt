@@ -1,0 +1,4 @@
+label: CalcCourseName
+field_id: 113683800
+type: calculation
+script: @[All of Maßnahmentitel](out_108902645_109125852)[0]

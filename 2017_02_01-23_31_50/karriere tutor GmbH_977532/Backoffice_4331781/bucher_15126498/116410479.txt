@@ -1,0 +1,3 @@
+label: Anzahl bestellt
+field_id: 116410479
+type: number

@@ -1,0 +1,6 @@
+label: CalcMaßnahme
+field_id: 113683926
+type: calculation
+script: var out = parseInt(0)
+if (@[All of CalcCourseName](out_113683800_113676698)[0]=="Online Marketing Manager") { out=parseInt(100) }
+out

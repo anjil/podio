@@ -1,0 +1,4 @@
+label: Kompletter Name
+field_id: 124787596
+type: calculation
+script: @[Nachname](field_124757896) + ", " + @[Vorname](field_124762078)

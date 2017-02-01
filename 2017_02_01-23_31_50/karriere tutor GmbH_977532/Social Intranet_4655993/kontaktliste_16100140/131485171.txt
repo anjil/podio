@@ -1,0 +1,17 @@
+label: Kontaktliste Id
+field_id: 131485171
+type: calculation
+script: var uid = GetId(@[Unique ID](item_app_item_id));
+
+function GetId(oUniqueId){
+  var regex=/^[0-9]+$/;
+  var oShow = '';
+  for(var i=0;i<oUniqueId.length;i++){
+    if(oUniqueId[i].match(regex)){
+       oShow+= oUniqueId[i];
+    } 
+  }
+  return parseInt(oShow);
+}
+
+uid+''

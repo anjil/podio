@@ -1,0 +1,5 @@
+label: Name3
+field_id: 136687544
+type: calculation
+script: var date = @[All of AktuellesDatum](out_128820243_128820289)
+@[All of CalcName](in_118640370_124752897) + ''

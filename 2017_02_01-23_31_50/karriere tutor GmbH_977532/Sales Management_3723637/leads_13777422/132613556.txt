@@ -1,0 +1,3 @@
+label: Spezielle Maßnahmennummer für Angebot
+field_id: 132613556
+type: text

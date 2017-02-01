@@ -1,0 +1,3 @@
+label: Versanddatum
+field_id: 118985246
+type: date

@@ -1,0 +1,42 @@
+label: Calculation
+field_id: 128906081
+type: calculation
+script: var oTotal  = 0;
+var t = '~~'
+try {
+ 
+ var jj   = @[JSON-Lizenze](field_128882802);
+ var oJsn = JSON.parse(jj);   
+ for (var ii=0; ii<oJsn.length; ii++){ 
+    if(oJsn[ii] && oJsn[ii]!='{}'){       
+       oTotal += parseInt(oJsn[ii].Rate);
+       var oMon =  oJsn[ii].Rate1Mon || 0;
+       var oDays = oJsn[ii].Rate1 || 0;
+       var oD   = oJsn[ii].date || null;
+       var ot = fgetDate(oMon,oDays,oD);    
+
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+
+function fgetDate(oMon,oDays,oD){
+  var oDt = new Date(oD);
+  oDt.setMonth(oDt.getMonth() + oMon);
+  t += oDt;
+  var firstDay = new Date(oDt.getFullYear(), oDt.getMonth(), 1);
+
+t+='***'+firstDay
+
+oDays = oDays-1;
+firstDay.setDate(firstDay.getDate() + oDays);
+
+t+='^^^^'+firstDay
+  
+return oDt;
+}
+
+t+''

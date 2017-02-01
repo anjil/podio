@@ -1,0 +1,39 @@
+label: Calculation
+field_id: 118142463
+type: calculation
+script: var debug = ""
+var Kurse = @[All of JSON-Data2](out_118142856_116446406)
+var jKurse = new Array();
+var temp;
+var strjson;
+for (i=0; i<Kurse.length; i++) {
+  strjson = String(Kurse[i]);
+//  temp = JSON.parse(strjson);
+//  jKurse += temp;
+  if (i===0) { debug = Kurse[i];}
+}
+
+//debug = "**" + Kurse[0] + "**";
+//JSON.parse(strjson)
+
+var mystr = "{\"Titel\":\"Six Sigma Black Belt Lehrgang\"}";
+
+var mycharcode = strjson.charCodeAt(9);
+var mycharcode2 = "\"".charCodeAt(0);
+
+
+var x = "{\"Titel\":000" + strjson.substring(10,13)+"000}";
+x= x.replace(/000/g,"\"");
+JSON.parse(x);
+
+//var y = strjson.replace(/\"/g, "000");
+var y = strjson;
+y= "\""+y+"\"";
+//y = y.replace(/000/g, " \"");
+JSON.parse(y);
+
+
+var out = "";
+out = mycharcode + " " + mycharcode2 + " " +x;
+out += "\n\n";
+out += "*"+y+"*";

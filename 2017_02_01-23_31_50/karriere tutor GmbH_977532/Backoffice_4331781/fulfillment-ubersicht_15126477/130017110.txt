@@ -1,0 +1,4 @@
+label: Leads-StartDate
+field_id: 130017110
+type: calculation
+script: @[All of Startdatum Lehrgang](in_108029027_117225519)[0]

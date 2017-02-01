@@ -1,0 +1,12 @@
+label: Calculation for View
+field_id: 136077467
+type: calculation
+script: var backKontakte = @[Backoffice Kontakte Id](field_136068749)||'';
+var salesLeads   = @[All of Leads Id](out_132128412_105474762)+''||''
+var salesAcount  = @[Sales Management Account Id](field_136068129)||''
+
+
+if(backKontakte == '' && salesLeads == '' && salesAcount)
+1
+else
+0

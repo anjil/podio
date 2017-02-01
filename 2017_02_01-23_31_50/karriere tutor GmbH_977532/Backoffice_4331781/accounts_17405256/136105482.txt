@@ -1,0 +1,9 @@
+label: CPLZStadt
+field_id: 136105482
+type: calculation
+script: var a = @[Rechnungsanschrift](field_136105476).join();
+var b = a.split(",")[1]
+if (b == null) {
+  b = a
+}
+b

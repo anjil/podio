@@ -1,0 +1,392 @@
+label: Daten
+field_id: 133708498
+type: calculation
+script: var oJsnCourse     = @[All of JSON-TestCourseDatam](out_130539839_118702791);
+var jsnVoucher     = @[All of JSON-Voucher](in_127692075_127692074);
+var Auftragsdatum  = @[All of Auftragsdatum](in_108041451_117225519);
+var Abweichender   = @[Abweichender Lehrgangsstart](field_117226512);
+
+
+var NachsterDt     = @[All of Nächster Schritt](in_105473432_117225519)[0];
+var NachsterToDo   = @[All of Nächster Schritt ToDo](in_105489883_117225519)[0];
+var NachDt         = @[Nächster Schritt](field_117227332);
+var NachToDo       = @[Nächster Schritt ToDo](field_117227333);
+
+var aktuellesDatum = @[All of AktuellesDatum](out_128820243_131327818)[0];
+var oNextSetpToDoTx= @[All of Next step todo](out_131576145_118702791)[0];
+var oNextStepToDoDt= @[All of Next step todo Date](out_131576146_118702791)[0];
+
+
+var items          = [];
+var displayURL     = '';
+var oData          = '';
+var oShow          = '';
+var oHeader        = '| Art| Datum| Status|<br>';
+oHeader           += '|-----|-----|-----|<br>';
+
+var t='~~';
+
+try {
+
+  if(jsnVoucher && jsnVoucher!= '{}' && jsnVoucher!= '[]'){
+     getVoucherArr(jsnVoucher);
+     items.sort(function(a, b) {
+        a = new Date(a['date']);
+        b = new Date(b['date']);
+        return a < b ? -1 : (a > b ? 1 : 0);
+     });
+  } 
+  if(oJsnCourse && oJsnCourse!='{}' && oJsnCourse!='[]' && oJsnCourse!=''){ 
+    printData();
+  }  
+  else{ 
+    var jsDatam = JSON.parse(@[JSON-Datum](field_118643640));
+    printJSDATUM(jsDatam);
+  }
+} 
+catch (e) {
+   "Could not parse JSON"
+}
+
+function printJSDATUM(j){
+  for(i=0;i<j.Daten.length;i++) {
+    var oTag = new Date(j.Daten[i].Datum);
+    var myDatum  = j.Daten[i].Datum;
+    var str      = '';
+     if (j.Daten[i].Art == "Massnahme") {
+       str = "MN Start: "
+     }
+    
+     if (j.Daten[i].Art != "Komponente") {
+       str   += j.Daten[i].Bezeichnung.substring(0,80)
+       oData += '|' + str;
+       oData += '|' + moment(myDatum).format("dd DD.MM.YYYY");
+       oData += '|&nbsp;';
+       oData += '|<br>';     
+    }
+  }
+}
+
+
+function printData(){
+  var Auftrag =  (Abweichender!=null) ? Abweichender : Auftragsdatum;
+  if(oJsnCourse!=''){
+  var jsn     = JSON.parse(oJsnCourse);
+  var prvTitle= ''; 
+
+  for(var i=0; i<jsn.length; i++){
+    var id       = jsn[i].id; 
+    var oTitle   = jsn[i].Title;  
+    var oLehName = jsn[i].Component;
+    var oStatus  = jsn[i].StatusShortName;
+    var oSDate   = jsn[i].StartDate;
+    var oEDate   = jsn[i].EndDate;  
+    var oDt      = moment(jsn[i].StartDate).format("dd DD.MM.YYYY");
+    var k        = 0;
+    
+    if(i==0){
+     /* var dd       = new Date(Auftrag); 
+      
+      oLehStart    = (i==0)? oSDate : oLehStart; 
+      oData += '|' + "Auftrag";
+      oData += '|' + moment(dd).format("dd DD.MM.YYYY") + '| |<br>';*/
+
+
+      for(; k<items.length; k++) {   
+        var vdate  = items[k]['date'];  
+        if(vdate){  
+          var chk = dateCompairStart(oSDate,vdate); 
+          if(chk == 1){
+            var vTitle  = items[k]['title']  || '';
+            var vStatus = items[k]['status'] || '';  
+                            
+            oData += '|' + vTitle;
+            oData += '|' + moment(vdate).format("dd DD.MM.YYYY");
+            oData += '|' + vStatus;
+            oData += '|<br>';     
+          }
+        }
+      } 
+     
+      oData += '|' + "1. Lehrgangsstart";
+      oData += '|' + oDt + '| | <br>';
+    }
+   
+displayURL = 'https://podio.com/karrieretutorde/tutoren/apps/lehrgangs-details/items/'+id;
+
+    var oShowLeh = oLehName.link(displayURL)    
+
+    if(prvTitle != oTitle){
+      oData += '|**' + oTitle + '**| | <br>';
+      prvTitle = oTitle;
+    }    
+    oData += '|' + oShowLeh;
+    oData += '|' + oDt ;
+    oData += '|' + oStatus;
+    oData += '|<br>';
+
+   
+    for(; k<items.length; k++) {   
+      var vdate  = items[k]['date'];  
+      if(vdate){  
+        var chk = dateCompair(oSDate,oEDate,vdate);
+        if(chk == 1){
+          var vTitle  = items[k]['title']  || '';
+          var vStatus = items[k]['status'] || '';  
+                            
+          oData += '|' + vTitle;
+          oData += '|' + moment(vdate).format("dd DD.MM.YYYY");
+          oData += '|' + vStatus;
+          oData += '|<br>';     
+        }
+      }
+    } 
+  }
+  if(oData){
+    var odt       = new Date(oEDate );
+    var odays     = 0;
+    if(odt.getDay()==1) odays = 3;
+    if(odt.getDay()==2) odays = 4;
+    if(odt.getDay()==3) odays = 5;
+    if(odt.getDay()==4) odays = 6;
+ 
+    odt.setDate(odt.getDate() - (odays));
+    var oLEndDate = moment(odt).format("dd DD.MM.YYYY")         
+  
+    oData += '|' + "voraussichtlicher Abschluss aller Lehrgänge";
+    oData += '|' + oLEndDate+ '| |<br>';
+
+
+    for(var k=0; k<items.length; k++) {   
+      var vdate  = items[k]['date'];  
+      if(vdate){  
+        var chk = dateCompairEnd(oEDate,vdate); 
+        if(chk == 1){
+          var vTitle  = items[k]['title']  || '';
+          var vStatus = items[k]['status'] || ''; 
+                   
+          oData += '|' + vTitle;
+          oData += '|' + moment(vdate).format("dd DD.MM.YYYY");
+          oData += '|' + vStatus;
+          oData += '|<br>';     
+        }
+      }
+    } 
+  }
+  }
+  else{
+    for(var k=0; k<items.length; k++) {   
+      var vdate  = items[k]['date'];  
+      if(vdate){  
+        
+          var vTitle  = items[k]['title']  || '';
+          var vStatus = items[k]['status'] || ''; 
+                   
+          oData += '|' + vTitle;
+          oData += '|' + moment(vdate).format("dd DD.MM.YYYY");
+          oData += '|' + vStatus;
+          oData += '|<br>';             
+      }
+    } 
+  }
+}
+
+
+function dateCompairStart(oS,AktDate){
+  var d2 = new Date(oS);
+  var d3 = new Date(AktDate);
+  if (d3.getTime() <= d2.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+
+function dateCompairEnd(oEDate,vdate){
+  var d2 = new Date(oEDate);
+  var d3 = new Date(vdate);
+  if (d3.getTime() > d2.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+function dateCompair(oSDate,oEDate,vdate){
+  var d1 = new Date(oSDate);
+  var d2 = new Date(oEDate);
+  var d3 = new Date(vdate);
+  if (d3.getTime() >= d1.getTime() && d3.getTime() <= d2.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+function getVoucherArr(jsnVoucher){
+
+  var tempArr ={};
+  var iCount  = 0; 
+  var Auftrag =  (Abweichender!=null) ? Abweichender : Auftragsdatum;
+
+ if(Auftrag){
+   var dd    = new Date(Auftrag);
+   var oTitle         = 'Auftrag';  
+   tempArr['title']   = oTitle;
+   tempArr['status']  = '';  
+   tempArr['date']    = dd; 
+   tempArr['CalcLeh'] = '';    
+   items[iCount]      = tempArr;
+   tempArr            = {};
+   iCount++;
+  }
+
+  if(oNextStepToDoDt){
+    if(oNextSetpToDoTx.length>35){
+      oNextSetpToDoTx = oNextSetpToDoTx.substr(0,35);
+    }
+    var st  = "NS Tutor: " +oNextSetpToDoTx;
+    var od  = oNextStepToDoDt;
+    var dts =  new Date(od);
+    var oTitle         = st;  
+    tempArr['title']   = oTitle;
+    tempArr['status']  = '';  
+    tempArr['date']    = dts; 
+    tempArr['CalcLeh'] = '';    
+    items[iCount]      = tempArr;
+    tempArr            = {};
+    iCount++;
+  }
+  else {
+    if(oNextSetpToDoTx !=null) {
+      if(oNextSetpToDoTx.length>35){
+        oNextSetpToDoTx = oNextSetpToDoTx.substr(0,35);
+      }
+      var st  = "NS Tutor: " +oNextSetpToDoTx; 
+      var dts =  new Date();
+      dts.setFullYear(dts.getFullYear() + 1);
+      var oTitle         = st;  
+      tempArr['title']   = oTitle;
+      tempArr['status']  = '';  
+      tempArr['date']    = dts; 
+      tempArr['CalcLeh'] = '';    
+      items[iCount]      = tempArr;
+      tempArr            = {};
+      iCount++;        
+    }
+  } 
+  
+  if(NachsterDt) {
+    if(NachsterToDo.length>35){
+      NachsterToDo = NachsterToDo.substr(0,35);
+    }
+    var st  = "NS Vertrieb: " + NachsterToDo;
+   // var od  = (Abweichender!=null) ? Abweichender : NachsterDt;
+    var od  =  NachsterDt;
+    var dts =  new Date(od);
+    var oTitle         = st;  
+    tempArr['title']   = oTitle;
+    tempArr['status']  = '';  
+    tempArr['date']    = dts; 
+    tempArr['CalcLeh'] = '';    
+    items[iCount]      = tempArr;
+    tempArr            = {};
+    iCount++;      
+  }
+  else {
+    if(NachsterToDo!=null) {
+      if(NachsterToDo.length>35){
+        NachsterToDo = NachsterToDo.substr(0,35);
+      }
+      var st  = "NS Vertrieb: " + NachsterToDo;
+      var dts =  new Date();
+      dts.setFullYear(dts.getFullYear() + 1);
+      var oTitle         = st;  
+      tempArr['title']   = oTitle;
+      tempArr['status']  = '';  
+      tempArr['date']    = dts; 
+      tempArr['CalcLeh'] = '';    
+      items[iCount]      = tempArr;
+      tempArr            = {};
+      iCount++;        
+    }
+  } 
+
+  if(NachDt) {
+    if(NachToDo.length>35){
+      NachToDo= NachToDo.substr(0,35);
+    }
+    var st  = "NS FFMT: " + NachToDo;
+    var dts =  new Date(NachDt);
+    var oTitle         = st;  
+    tempArr['title']   = oTitle;
+    tempArr['status']  = '';  
+    tempArr['date']    = dts; 
+    tempArr['CalcLeh'] = '';    
+    items[iCount]      = tempArr;
+    tempArr            = {};
+    iCount++;     
+  }
+  else {
+    if(NachToDo!=null) {
+      if(NachToDo.length>35){
+        NachToDo= NachToDo.substr(0,35);
+      }
+      var st  = "NS FFMT: " + NachToDo;
+      var dts =  new Date();
+      dts.setFullYear(dts.getFullYear() + 1);
+      var oTitle         = st;  
+      tempArr['title']   = oTitle;
+      tempArr['status']  = '';  
+      tempArr['date']    = dts; 
+      tempArr['CalcLeh'] = '';    
+      items[iCount]      = tempArr;
+      tempArr            = {};
+      iCount++;        
+    }
+  }
+
+ if(oJsnCourse!='{}' && oJsnCourse!='[]' && oJsnCourse!=''){
+  var jsn   = JSON.parse(oJsnCourse);  
+  for(var i=0; i<jsn.length; i++){
+    for(var p=0; p<jsn[i].Prufung.length; p++){
+      var pTitle  = jsn[i].Prufung[p].Title;
+      var pStatus = jsn[i].Prufung[p].Status;  
+      var pDate   = jsn[i].Prufung[p].Prufungsdatum;
+      var pDt     = '';
+      if(pDate){
+        var oTitle         = pTitle;  
+        tempArr['title']   = oTitle;
+        tempArr['status']  = pStatus;   
+        tempArr['date']    = pDate; 
+        tempArr['CalcLeh'] = '';    
+        items[iCount]      = tempArr;
+        tempArr            = {};
+        iCount++;  
+      }                 
+    }
+  }}
+
+  for(var i=0; i<jsnVoucher.length; i++){
+    var jsVoucher          = JSON.parse(jsnVoucher[i]);
+    var oDt                = jsVoucher['GultigAb'];  
+    if(oDt){
+        var oTitle         = jsVoucher['Title']||'';  
+        tempArr['title']   = oTitle;
+        tempArr['status']  = '';  
+        tempArr['date']    = oDt; 
+        tempArr['CalcLeh'] = '';    
+        items[iCount]      = tempArr;
+        tempArr            = {};
+        iCount++;      
+    }
+  }
+}
+
+oShow = oHeader + oData;
+oShow;
+//for update purposes

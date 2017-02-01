@@ -1,0 +1,242 @@
+label: Calculation
+field_id: 129841873
+type: calculation
+script: var jsn             = @[All of JSON-Lehrgangs-Lizenze](in_129506424_128735467);
+var oStatus         = @[Rabattstaffel](field_129420896);
+var oLizenzname     = @[Lizenzname](field_128735220)||'';
+var oRate           = @[Rate](field_128735324)||0;
+var oRate1          = @[Fälligkeit in Tagen 1.Rate](field_128735325)||0;
+var oRate1Mon       = @[Fälligkeit 1.Rate Monat](field_128735930) || 0;
+var oRate2          = @[Fälligkeit in Tagen 2.Rate](field_128735326) || 0;
+var oRate2Mon       = @[Fälligkeit 2. Rate Monat](field_128735931) || 0;
+
+var tuples          = Array();
+var myArray = Array();
+var oDataArr = Array();
+var t='~~';
+
+var monthArr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+
+var oArr            = [];
+oArr[0]             = [@[Anzahl max TN Staffel 1](field_129420903),@[Preis Staffel 1](field_129420904)];
+oArr[1]             = [@[Anzahl max TN Staffel 2](field_129420902),@[Preis Staffel 2](field_129420905)];
+oArr[2]             = [@[Anzahl max TN Staffel 3](field_129420901),@[Preis Staffel 3](field_129420906)];
+oArr[3]             = [@[Anzahl max TN Staffel 4](field_129420900),@[Preis Staffel 4](field_129420907)];
+oArr[4]             = [@[Anzahl max TN Staffel 5](field_129420899),@[Preis Staffel 5](field_129420908)];
+oArr[5]             = [@[Anzahl max TN Staffel 6](field_129420898),@[Preis Staffel 6](field_129420909)];
+oArr[6]             = [@[Anzahl max TN Staffel 7](field_129420897),@[Preis Staffel 7](field_129420910)];
+
+
+try {
+
+  if(jsn && jsn!='{}' && jsn!='[]'){
+    getMonthCountDate(jsn);
+
+    if(oStatus){
+      if(oStatus == 'Gestacked'){
+         oDataArr = getGestacked();
+      }
+      else if(oStatus == 'Gesamtzahlung nach TN'){
+         oDataArr = getGesamtzahlung();
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+
+function getGestacked(){
+   var tempArr   = {};
+   var oData     = Array();
+   var oFinalArr =  Array(); 
+   for(var ii=0; ii<myArray.length; ii++){
+     var oComp = myArray[ii]['Component']||'';
+     var arr   = myArray[ii]['Data'];
+     for (var key in arr) tuples.push([key, arr[key]]);
+       for(var i=0; i<tuples.length; i++){
+         var monCnt = tuples[i][1];  
+         var val    = 0;
+         var pVal   = 0;
+         for(var j=0; j<oArr.length; j++){
+           var cnt  = oArr[j][0];
+           var amt  = oArr[j][1];     
+           if(cnt && amt){
+             if(monCnt>0 && monCnt<=cnt){
+               if(j == 0){
+                 val  += monCnt * amt;
+                 pVal  = cnt; 
+               } 
+               else{
+                 var t = monCnt - pVal;
+                 val  += t * amt;
+               }        
+               if(monCnt - cnt <= 0){
+                 break;
+               }
+             }
+             if(monCnt>0 && monCnt>cnt){
+               if(j == 0){
+               val  += cnt * amt;
+               pVal  = cnt; 
+             } 
+             else{
+               var t = cnt - pVal;
+               val  += t * amt;
+               pVal  = cnt;
+             }
+           }  
+         }     
+       }
+       val                = val/monCnt;
+       tempArr['MonYear'] = tuples[i][0];
+       tempArr['Amount']  = parseFloat(val).toFixed(2);
+       tempArr['Count']   = monCnt;
+       oData[i]           = tempArr;
+       tempArr            = {};  
+     }
+     var temp             = {};
+     temp['Component']    = oComp;
+     temp['Data']         = oData;
+     oFinalArr[ii]        = temp;
+     oData                = [];
+  }
+  return oFinalArr;
+}
+
+
+function getGesamtzahlung(){
+  var ind      = 0;
+  var tempArr  = {};
+  var oData    = Array();
+  var oFinalArr =  Array(); 
+  for(var ii=0; ii<myArray.length; ii++){
+    var oComp = myArray[ii]['Component']||'';
+    var arr   = myArray[ii]['Data'];
+    for (var key in arr) tuples.push([key, arr[key]]);
+      for(var i=0; i<tuples.length; i++){
+        var monCnt = tuples[i][1];
+        for(var j=0; j<oArr.length; j++){
+          var cnt  = oArr[j][0];
+          var amt  = oArr[j][1];
+          if(cnt && amt){
+            if(monCnt>0 && monCnt<=cnt){
+              tempArr['MonYear'] = tuples[i][0];
+              tempArr['Amount']  = amt;
+              tempArr['Count']   = monCnt;
+              oData[ind]         = tempArr;
+              tempArr            = {};
+              ind++;
+              break;
+            }
+            if(monCnt>0 && monCnt>cnt){
+              var nInd = j+1;
+              if(nInd<oArr.length){
+                cnt = oArr[nInd][0];
+                amt = oArr[nInd][1];
+                if(monCnt<=cnt){
+                  tempArr['MonYear'] = tuples[i][0];
+                  tempArr['Amount']  = amt;
+                  tempArr['Count']   = monCnt;
+                  oData[ind]         = tempArr;
+                  tempArr            = {};
+                  ind++;
+                  break;
+                }  
+              }
+              else{
+                tempArr['MonYear'] = tuples[i][0];
+                tempArr['Amount']  = amt;
+                tempArr['Count']   = monCnt;
+                oData[ind]         = tempArr;
+                tempArr            = {};
+                ind++;
+                break;
+             } 
+           }
+         }     
+       }
+     }
+     var temp             = {};
+     temp['Component']    = oComp;
+     temp['Data']         = oData;
+     oFinalArr[ii]        = temp;
+     oData                = [];
+     ind                  = 0;
+  }
+  return oFinalArr;
+}
+
+
+
+function getMonthCountDate(jsn){  
+  var tempArr = {};
+  for (var i=0; i<jsn.length; i++){ 
+    var js        = JSON.parse(jsn[i]);      
+    var oCmp      = js['ComponentName']; 
+    
+    for(var ii = 0;ii<js['Datam'].length; ii++){
+      var oDatam  = js['Datam'][ii];       
+      var oDt     = oDatam['FLizDate'];  
+      if(oDt){
+        var tempKey = getKey(oDt); 
+        if(tempArr[tempKey]){
+           var cnt            = tempArr[tempKey];   
+           tempArr[tempKey]   = parseInt(cnt)+1;                            
+        } 
+        else{
+           var cnt            = 1;           
+           tempArr[tempKey]   = cnt; 
+        } 
+      }
+      oDt  = oDatam['SLizDate'];  
+      if(oDt){
+        var tempKey = getKey(oDt); 
+        if(tempArr[tempKey]){
+           var cnt            = tempArr[tempKey];   
+           tempArr[tempKey]   = parseInt(cnt)+1;                            
+        } 
+        else{
+           var cnt            = 1;           
+           tempArr[tempKey]   = cnt; 
+        } 
+      }
+    } 
+    var arr           = {};
+    arr['Component']  = oCmp;
+    arr['Data']       = tempArr;
+    myArray[i]        = arr; 
+    tempArr           = {};
+  }
+}
+
+   
+function getYr(oDt){
+  var dt = new Date(oDt);
+  return dt.getFullYear(); 
+}
+
+function getMon(oDt){
+  var dt = new Date(oDt);
+  return monthArr[dt.getMonth()]; 
+}
+
+function getKey(oDt){
+  var dt = new Date(oDt);
+  return monthArr[dt.getMonth()]+ '-' + dt.getFullYear(); 
+}
+
+
+var z = {};
+z["Lizenzname"]     = oLizenzname;
+z["Rate"]           = oRate;
+z["Rate1"]          = oRate1;
+z["Rate1Mon"]       = oRate1Mon;
+z["Rate2"]          = oRate2;
+z["Rate2Mon"]       = oRate2Mon; 
+z["Datam"]          = oDataArr;
+//z["Dat"]          = myArray;
+
+JSON.stringify(z);

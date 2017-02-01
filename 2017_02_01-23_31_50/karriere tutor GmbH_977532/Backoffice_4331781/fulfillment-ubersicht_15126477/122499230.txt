@@ -1,0 +1,4 @@
+label: Bildungsgutscheinnummer
+field_id: 122499230
+type: calculation
+script: @[All of Bildungsgutscheinnummer](in_122499056_117225519)[0]

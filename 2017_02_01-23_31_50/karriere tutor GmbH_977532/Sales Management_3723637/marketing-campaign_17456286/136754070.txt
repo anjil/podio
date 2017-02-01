@@ -1,0 +1,8 @@
+label: JSON-Marketing Campaign
+field_id: 136754070
+type: calculation
+script: var z      = {};
+z['Title'] = @[Title](field_136543176);
+z['id']    = @[Id](field_136753987)
+
+JSON.stringify(z);

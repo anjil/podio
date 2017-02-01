@@ -1,0 +1,3 @@
+label: Prüfungsdatum
+field_id: 113678916
+type: date

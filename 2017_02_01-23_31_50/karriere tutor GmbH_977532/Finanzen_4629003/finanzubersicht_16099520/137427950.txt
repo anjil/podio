@@ -1,0 +1,25 @@
+label: JSON-LizVorEndnPayment
+field_id: 137427950
+type: calculation
+script: var oJsn    = @[All of JSON-LizenzenPayment](in_133704360_128884745);
+var vorEnd  = @[Vorzeitiges Ende](field_126242725);
+var myArray = Array();
+
+try {
+  for(i=0;i<oJsn.length;i++) {
+    var js                = JSON.parse(oJsn[i]);    
+    var tmpObj            = {};
+    tmpObj["Lehrgang"]    =  js.Lehrgang;
+    tmpObj["paymentId"]   =  js.paymentId;
+    tmpObj["Lizenzen"]    =  js.Lizenzen;
+    tmpObj["PaymentDate"] =  js.PaymentDate;
+    myArray[i]            =  tmpObj;         
+  }  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+var z        = {};
+z['vorEnd']  = vorEnd;
+z['Datam']   = myArray;
+JSON.stringify(z);

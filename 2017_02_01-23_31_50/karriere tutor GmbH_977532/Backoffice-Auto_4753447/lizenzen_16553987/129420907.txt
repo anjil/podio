@@ -1,0 +1,3 @@
+label: Preis Staffel 4
+field_id: 129420907
+type: money

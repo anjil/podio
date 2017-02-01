@@ -1,0 +1,24 @@
+label: Calculation
+field_id: 124140054
+type: calculation
+script: var u=@[Unique ID](item_app_item_id)
+var out =''
+out += "Maßnahmen | BildungsgutscheinNo | Amount | Date \n"
+  out += "-----|---|---|---\n"
+
+
+for(var i=0;i<5;i++){
+
+    out += "aaaa | ";
+     out += "bbbb | ";
+     out += "ccccc | ";
+     out += "dddd\n";
+
+
+ //out += "--------\n\n"; 
+
+out += "-----|---|---|---\n\n"
+
+}
+
+out

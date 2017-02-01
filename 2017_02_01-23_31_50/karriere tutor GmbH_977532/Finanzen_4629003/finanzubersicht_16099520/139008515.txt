@@ -1,0 +1,29 @@
+label: Total Expected Lizenze Fee Test
+field_id: 139008515
+type: calculation
+script: var oJson      = @[Json-ExpectedLizenzenFee Test](field_139145293);
+var dtt        = @[Vorzeitiges Ende](field_126242725)
+var jsonArr    = [];
+var oTotal     = 0;
+ 
+try {
+
+  if(oJson && oJson !='{}' && oJson !='[]'){
+    var oJsn     = JSON.parse(oJson);
+    var oRStatus =  ''; 
+    for (var ii=0; ii<oJsn.length; ii++){ 
+      if(oJsn[ii] && oJsn[ii]!='{}' && oJsn[ii]!='[]'){    
+        var oDatam  = oJsn[ii];
+        var lizName = oDatam.LehrgangName;
+        if(lizName){
+          oTotal++;
+        }       
+      } 
+    }    
+  } 
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+oTotal;

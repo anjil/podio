@@ -1,0 +1,4 @@
+label: CourseTitle
+field_id: 130487086
+type: calculation
+script: @[All of CourseTitle](in_130487072_117225519)+''

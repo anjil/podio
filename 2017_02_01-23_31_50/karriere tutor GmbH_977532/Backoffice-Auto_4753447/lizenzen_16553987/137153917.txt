@@ -1,0 +1,37 @@
+label: JSON-ErwarteteLiz-Payment
+field_id: 137153917
+type: calculation
+script: var jsn     = ''//@All of JSON-ErwarteteLiz-Payment;
+var licName = @[Lizenzname](field_128735220) || '';
+var myArray = Array();
+var ind     = 0;
+var t='~~~'
+try {
+  
+  for (var k=0; k<jsn.length; k++){
+    if(jsn[k] && jsn[k]!='{}' && jsn[k]!='[]'){  
+      var js = JSON.parse(jsn[k]);
+      for(var i=0; i<js.length; i++){
+        if(js[i]!='' && js[i]!='{}' && js[i]!='[]'){ 
+          if(licName == js[i].Lizenzen){
+            var tmpObj                = {};
+            tmpObj['ExpId']           = js[i].ExpId;
+            tmpObj['paymentId']       = js[i].paymentId;
+            tmpObj['LizBezahltWann']  = js[i].LizBezahltWann;
+            tmpObj['Lehrgang']        = js[i].Lehrgang;
+            tmpObj['Lizenzen']        = js[i].Lizenzen;
+            tmpObj['Status']          = js[i].Status;
+            tmpObj['Rate']            = js[i].Rate; 
+            tmpObj['vorzeitigesEnd']  = js[i].vorzeitigesEnd;    
+            myArray[ind]              = tmpObj;
+            ind++;
+          }
+        }
+      }
+    }
+  }
+} catch (e) {
+  "Could not parse JSON"
+} 
+
+JSON.stringify(myArray);

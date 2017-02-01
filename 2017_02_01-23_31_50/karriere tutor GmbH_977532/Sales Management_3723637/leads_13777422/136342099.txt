@@ -1,0 +1,9 @@
+label: Sales Betreuer AA / AP Firma Exist (yes=1)
+field_id: 136342099
+type: calculation
+script: var ids = @[All of Kontakte Id](out_136292201_107413556)+''
+
+if(ids)
+1
+else
+0

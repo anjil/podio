@@ -1,0 +1,3 @@
+label: Rechnungsnummer
+field_id: 131848597
+type: text

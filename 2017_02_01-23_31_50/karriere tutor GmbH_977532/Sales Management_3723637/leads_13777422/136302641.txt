@@ -1,0 +1,18 @@
+label: Match Kontakte (yes=1)
+field_id: 136302641
+type: calculation
+script: var newKontakte = @[All of Old Kontakte Id](out_136107651_136112743)[0];
+var oldKontakte = @[All of Kontakte Id](out_136292201_113531840)[0];
+
+
+if(newKontakte!='' && oldKontakte!=''){
+  if(newKontakte == oldKontakte)
+    1
+  else
+    0
+}
+else if(newKontakte=='' && oldKontakte==''){
+  1
+}
+else
+  0

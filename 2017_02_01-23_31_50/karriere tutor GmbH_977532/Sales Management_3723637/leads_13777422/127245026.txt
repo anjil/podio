@@ -1,0 +1,9 @@
+label: diff
+field_id: 127245026
+type: calculation
+script: var ca = @[Category](field_127110688)
+var c = @[Calculation](field_127244188)
+if(ca!=c)
+1
+else
+0

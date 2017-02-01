@@ -1,0 +1,3 @@
+label: Telefonnummer
+field_id: 124757900
+type: phone

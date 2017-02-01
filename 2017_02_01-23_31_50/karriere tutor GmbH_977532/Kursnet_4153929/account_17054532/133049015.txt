@@ -1,0 +1,3 @@
+label: Anbieter Nr
+field_id: 133049015
+type: text

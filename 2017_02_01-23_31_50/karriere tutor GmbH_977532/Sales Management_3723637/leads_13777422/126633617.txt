@@ -1,0 +1,4 @@
+label: JSON-leads-und-anstehende-lehrgangsstarts
+field_id: 126633617
+type: calculation
+script: null

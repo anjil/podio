@@ -1,0 +1,103 @@
+label: Calculation
+field_id: 125355324
+type: calculation
+script: var out = ""
+var myDatum;
+var items = [];
+var oMn='';
+var t='';
+
+out = "**Art** | **Datum**\n";
+out += "---|---: \n"
+var jsPrufungn = @[All of JSON-Prufungen](out_123378265_118702791)
+
+
+try {
+  j = JSON.parse(@[JSON-Datum](field_118643640));
+
+  if(jsPrufungn && jsPrufungn !='[]'){  
+     items = getPrufArr(jsPrufungn);
+  } 
+    
+   for(i=0;i<j.Daten.length;i++) {
+     var oTag = new Date(j.Daten[i].Datum); 
+     myDatum = j.Daten[i].Datum;
+     if (j.Daten[i].Art == "Massnahme") {
+       out += "MN Start: "
+     }
+    // Hide Components
+     if (j.Daten[i].Art != "Komponente") {
+       oMn = j.Daten[i].Bezeichnung.substring(0,80);
+       out += j.Daten[i].Bezeichnung.substring(0,80) + "|";
+       out += moment(myDatum).format("dd DD.MM.YYYY")+"\n";
+      
+    for(key in items) { 
+      if(key.indexOf(oMn) > -1){
+        var oArr = items[key];     
+        for(var k=0; k<oArr.length; k++){
+          var oCalcLeh = new Date(oArr[k]['CalcLeh']);
+          var oPdate = new Date(oArr[k]['date']);
+          if(oTag.getTime() >= oPdate.getTime()){
+            var oT=(oArr[k]['title'])? oArr[k]['title']+': ' : '';
+            out += oT +" : "+oArr[k]['status']+ "|";
+            out += moment(oPdate).format("dd DD.MM.YYYY")+"\n"; 
+           }
+         }
+       }
+     } 
+   }
+ } 
+} catch (e) {
+  "Could not parse JSON"
+}
+
+function DisplayName(str){
+  var ostr = str;
+  if(ostr == null || ostr == '' || ostr == 'null' || ostr == 'undefined' || ostr == undefined){
+   return "";
+  }
+  else {
+    return str;
+  }
+}
+
+function getPrufArr(jsPrufungn){
+
+  var oArr = [];
+   jsPrArr = JSON.parse(jsPrufungn); 
+   for(var i=0; i<jsPrArr.length; i++){
+     var oDt = new Date(jsPrArr[i]['Prufungsdatum']);
+
+     if(!isNaN(oDt.getTime())){
+        var oStatus = DisplayName(jsPrArr[i]['Status']);
+        var oTitle = DisplayName(jsPrArr[i]['Title']); 
+        var oCalcLeh = jsPrArr[i]['CalcLehrgang']       
+        var tempKey = oCalcLeh; 
+
+t+='~~~'+oCalcLeh+'$$$'
+        if(oArr[tempKey]){
+           var arr = oArr[tempKey];
+           var j = arr.length;
+           arr[j] = [];
+           arr[j]['title'] = oTitle;
+           arr[j]['status'] = oStatus;  
+           arr[j]['date'] = oDt; 
+           arr[j]['CalcLeh'] = oCalcLeh;    
+           oArr[tempKey] = arr;                     
+        } 
+        else{
+           var arr = [];
+           arr[0] = [];
+           arr[0]['title'] = oTitle;
+           arr[0]['status'] = oStatus;  
+           arr[0]['date'] = oDt; 
+           arr[0]['CalcLeh'] = oCalcLeh;    
+           oArr[tempKey] = arr;
+        }      
+     }
+  }
+   return oArr;
+}
+
+out
+

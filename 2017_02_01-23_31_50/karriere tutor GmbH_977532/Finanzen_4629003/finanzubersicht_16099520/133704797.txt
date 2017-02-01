@@ -1,0 +1,21 @@
+label: JSON-LizenzenPayment
+field_id: 133704797
+type: calculation
+script: var oJsn    = @[All of JSON-LizenzenPayment](in_133704360_128884745);
+var myArray = Array();
+
+try {
+  for(i=0;i<oJsn.length;i++) {
+    var js                = JSON.parse(oJsn[i]);    
+    var tmpObj            = {};
+    tmpObj["Lehrgang"]    =  js.Lehrgang;
+    tmpObj["paymentId"]   =  js.paymentId;
+    tmpObj["Lizenzen"]    =  js.Lizenzen;
+    tmpObj["PaymentDate"] =  js.PaymentDate;
+    myArray[i]            =  tmpObj;         
+  }  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+JSON.stringify(myArray);

@@ -1,0 +1,30 @@
+label: JSON-lehrgangs-details
+field_id: 129487643
+type: calculation
+script: var myArray = Array();
+var tmpObj  = {};
+
+try {
+ 
+ var jsn = @[All of JSON-lehrgangs-details](in_129487262_118873889);
+ for (var ii=0; ii<jsn.length; ii++){ 
+    if(jsn[ii] && jsn[ii]!='{}'){
+       var x = JSON.parse(jsn[ii]);
+       tmpObj["LehrgangName"]    = x.LehrgangName; 
+       tmpObj["StartDate"]       = x.StartDate;      
+       myArray[ii]               = tmpObj; 
+       tmpObj                    = {};
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+ myArray.sort(function(a, b) {
+     a = new Date(a['StartDate']);
+     b = new Date(b['StartDate']);
+     return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+JSON.stringify(myArray);

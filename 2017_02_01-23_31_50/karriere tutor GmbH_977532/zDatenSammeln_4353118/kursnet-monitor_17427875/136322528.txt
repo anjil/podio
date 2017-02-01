@@ -1,0 +1,3 @@
+label: Bildungsangebote
+field_id: 136322528
+type: number

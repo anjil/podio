@@ -1,0 +1,12 @@
+label: Items from Oct
+field_id: 135097530
+type: calculation
+script: var dt    = @[Date](field_116016601);
+var chkdt = new Date('01/10/2016');
+var oShow = 0;
+if(dt){
+  if(dt.getTime()>= chkdt.getTime()){
+    oShow = 1;
+  }
+}
+oShow;

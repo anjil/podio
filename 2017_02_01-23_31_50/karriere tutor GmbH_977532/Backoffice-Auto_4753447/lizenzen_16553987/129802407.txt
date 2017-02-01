@@ -1,0 +1,3 @@
+label: Lizenzgültigkeit Ende Datum
+field_id: 129802407
+type: date

@@ -1,0 +1,32 @@
+label: Date Difference
+field_id: 125980173
+type: calculation
+script: var oUniqueId = @[Unique Id](field_125198678);
+var oJson = @[All of JSON-ExpectedTransactions](out_125894124_125193630);
+var oDateDiff = 0;
+
+try {
+  if(oJson && oJson !='[]'){
+    var jsn = JSON.parse(oJson); 
+    for(var i=0; i<jsn.length; i++){
+      if(jsn[i]['ExpectedId'] == oUniqueId){
+        var oDate = jsn[i]['Date'];
+        var oBkDate = jsn[i]['BankDate'];
+        if(oDate && oBkDate){          
+          var oDt = (oDate)? new Date(oDate) : null;          
+          var oBkDt = (oBkDate)? new Date(oBkDate) : null;  
+          if(oDt != null && oBkDt != null){
+            var diffc = oBkDt.getTime() - oDt.getTime();     
+            oDateDiff = parseInt((diffc)/(24*3600*1000));
+            break;
+          }            
+        }   
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+ oDateDiff

@@ -1,0 +1,21 @@
+label: Teilnehmer ID
+field_id: 130785541
+type: calculation
+script: var uid =@[All of Teilnehmer ID](out_129096386_118702791)+'';
+var oShow = 0;
+
+function GetId(oUniqueId){
+ if(oUniqueId){
+  var regex=/^[0-9]+$/;
+  var out = '';
+  for(var i=0;i<oUniqueId.length;i++){
+    if(oUniqueId[i].match(regex)){
+       out+= oUniqueId[i];
+    } 
+  }
+  return out;
+ }
+}
+
+oShow = GetId(uid);
+oShow

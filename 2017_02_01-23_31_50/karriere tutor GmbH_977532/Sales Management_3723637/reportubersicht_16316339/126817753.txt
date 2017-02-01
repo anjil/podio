@@ -1,0 +1,24 @@
+label: Calculation
+field_id: 126817753
+type: calculation
+script: var j = @[All of JSON-leads-und-anstehende-lehrgangsstarts](in_126634106_126630716);
+var oShow = "~~~~";
+var t='**';
+
+try {
+//t+=j+j.length
+for(var i=0;i<j.length;i++){
+   var jsArr = JSON.parse(j[i]);
+   for(var ii=0;ii<jsArr.length;ii++){
+    t+='<br>~~'+ jsArr[ii]['Mabnahmen'];
+  }
+
+
+}
+
+     
+}catch (e) {
+  "Could not parse JSON";
+}
+
+oShow +t

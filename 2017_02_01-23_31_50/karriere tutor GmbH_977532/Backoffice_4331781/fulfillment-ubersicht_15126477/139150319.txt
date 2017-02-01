@@ -1,0 +1,9 @@
+label: Spezielle Absprachen
+field_id: 139150319
+type: calculation
+script: var myData = @[All of Spezielle Absprachen with nulls](outn_118702748_118702791)[0]
+var out = ""
+
+if ((myData) && (myData != "")) { out = "**" + myData + "**" }
+
+out

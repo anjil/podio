@@ -1,0 +1,7 @@
+label: Hat-ProdID
+field_id: 138354149
+type: calculation
+script: var myProdID = @[Produkt-ID](field_113666517)
+var out = parseInt(1)
+if (myProdID == null) {out = parseInt(0)}
+out

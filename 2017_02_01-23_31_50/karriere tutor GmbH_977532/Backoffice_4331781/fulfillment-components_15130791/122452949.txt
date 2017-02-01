@@ -1,0 +1,15 @@
+label: JSON-SchriftlichePrüfung
+field_id: 122452949
+type: calculation
+script: var j;
+var z = {};
+
+try {
+  j = JSON.parse(@[All of JSON-PrufungenTemplate](out_122452745_118766799));
+  z = j  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out = JSON.stringify(z);
+out

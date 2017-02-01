@@ -1,0 +1,3 @@
+label: Inhalt Stichpunkte (intern)
+field_id: 127786729
+type: text

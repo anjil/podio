@@ -1,0 +1,6 @@
+label: Upload
+field_id: 137336115
+type: calculation
+script: //var id = @[Unique ID](item_app_item_id)
+
+'----------------------------------------------------'

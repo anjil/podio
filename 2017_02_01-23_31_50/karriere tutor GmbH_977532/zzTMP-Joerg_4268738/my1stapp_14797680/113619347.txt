@@ -1,0 +1,3 @@
+label: Farbe
+field_id: 113619347
+type: category

@@ -1,0 +1,25 @@
+label: Calculation
+field_id: 118166559
+type: calculation
+script: var myobj;
+var my_string2 = "";
+var my_string3 = "";
+var my_string4 = "";
+var x;
+
+try {
+  x = JSON.parse(@[JSON-Data](field_118101153));
+  my_string2 = String(x.Titel);
+  my_string3 = String(x.Kursfreigabe_ID);
+  my_string4 = String(x.Titel);
+} catch (e) {
+  out += "Could not parse JSON"
+}
+my_string2 += " ";
+my_string3 += " ";
+
+
+//my_string2 = String(x.Titel);
+var out = my_string2 + "-x";
+//out = @[JSON-Data](field_118101153)
+out

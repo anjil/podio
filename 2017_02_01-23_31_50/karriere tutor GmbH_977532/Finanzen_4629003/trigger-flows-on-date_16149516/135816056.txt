@@ -1,0 +1,3 @@
+label: Set Reportubersicht-Weekly for ZDatenSammeln 
+field_id: 135816056
+type: date

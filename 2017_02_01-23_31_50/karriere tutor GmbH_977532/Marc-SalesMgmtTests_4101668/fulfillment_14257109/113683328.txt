@@ -1,0 +1,4 @@
+label: ShortDetail
+field_id: 113683328
+type: calculation
+script: @[All of Full Name](out_109124476_109125851)[0] + " *-* " +  @[All of Maßnahmentitel](out_108902645_109125852)[0]

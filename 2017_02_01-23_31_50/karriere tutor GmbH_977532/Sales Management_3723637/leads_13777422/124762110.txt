@@ -1,0 +1,34 @@
+label: JSON-FinanceUbersicht
+field_id: 124762110
+type: calculation
+script: var oLeh = @[Lehrgangsgebühren](field_118544328);
+var oAbw_LehRen = @[Abweichende_Lehrgangsgebühren](field_105473427);
+var oAbw_LehHren_Info = @[Abweichende_Lehrgangsgebuehren_Info](field_118544329);
+var myArray = Array();
+var DataArray = {};
+var tmpObj = {};
+
+try {
+ 
+ var json= @[All of JSON-FinanceUbersicht](out_124761567_108285774);
+ for (var ii=0; ii<json.length; ii++){ 
+    var js = JSON.parse(json[ii]);
+    tmpObj["Maßnahmentitel"] = js["Maßnahmentitel"];
+    tmpObj["Gebuhren"] =  js["Gebuhren"];
+    tmpObj["AnzahlRaten"] =  js["AnzahlRaten"];
+    tmpObj["Rate"] =  js["Rate"];
+    tmpObj["Wochen"] =  js["Wochen"];
+    myArray[ii] = tmpObj; 
+    tmpObj = {};
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+DataArray['Lehrgangsgebühren'] = oLeh;
+DataArray['Abweichende_Lehrgangsgebühren'] = oAbw_LehRen;
+DataArray['Abweichende_Lehrgangsgebuehren_Info'] = oAbw_LehHren_Info;
+DataArray['Datam'] = myArray;
+
+JSON.stringify(DataArray);

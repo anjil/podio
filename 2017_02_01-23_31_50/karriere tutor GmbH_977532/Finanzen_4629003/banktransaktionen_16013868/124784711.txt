@@ -1,0 +1,8 @@
+label: Customerid(yes=1)
+field_id: 124784711
+type: calculation
+script: var cust = @[Customer ID](field_124674842)
+if(cust.trim().length)
+1
+else
+0

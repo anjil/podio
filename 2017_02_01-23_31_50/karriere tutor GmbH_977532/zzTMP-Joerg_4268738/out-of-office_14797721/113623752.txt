@@ -1,0 +1,3 @@
+label: Zeitdauer
+field_id: 113623752
+type: duration

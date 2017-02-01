@@ -1,0 +1,6 @@
+label: Systematik Data for API
+field_id: 134122533
+type: calculation
+script: var data = @[All of Systematik Data for API](out_134122516_127785237) || []
+
+data + ''

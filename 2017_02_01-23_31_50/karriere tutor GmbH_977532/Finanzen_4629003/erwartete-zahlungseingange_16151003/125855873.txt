@@ -1,0 +1,14 @@
+label: Delete (Yes = 1)
+field_id: 125855873
+type: calculation
+script: var oDelete = @[All of Difference (Expected Transaction vs Actual Transaction)](out_125623682_125193630) || 0;
+var oAmount = @[Amount](field_125193629)||0;
+var oDate = @[Date](field_125525214);
+var oShow = 0;
+if(oDelete < 0){
+  if(oAmount == 0 )//&& !oDate)
+    oShow = 1;
+}
+
+oShow;
+

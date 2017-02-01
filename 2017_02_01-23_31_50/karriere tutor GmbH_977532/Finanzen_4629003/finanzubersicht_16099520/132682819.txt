@@ -1,0 +1,8 @@
+label: Lizenze (yes=1)
+field_id: 132682819
+type: calculation
+script: var liz = @[Lizenze Month-Year](field_130404987)
+if(liz)
+ 1
+else
+ 0

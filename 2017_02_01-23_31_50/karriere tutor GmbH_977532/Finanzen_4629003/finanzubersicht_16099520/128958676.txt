@@ -1,0 +1,4 @@
+label: Differenz Forderungsmanagement
+field_id: 128958676
+type: calculation
+script: @[Auftragswert](field_128716460) - @[Eingegangene Zahlungen](field_128958632)

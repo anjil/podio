@@ -1,0 +1,3 @@
+label: Standpunkt
+field_id: 108385391
+type: category

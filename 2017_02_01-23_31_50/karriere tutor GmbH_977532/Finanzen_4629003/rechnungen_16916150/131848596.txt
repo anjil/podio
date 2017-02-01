@@ -1,0 +1,3 @@
+label: Rechnungsdatum
+field_id: 131848596
+type: date

@@ -1,0 +1,3 @@
+label: Kursnet Tel.- und Faxnummer
+field_id: 127628770
+type: phone

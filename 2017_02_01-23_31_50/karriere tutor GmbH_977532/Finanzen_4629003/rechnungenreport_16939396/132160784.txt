@@ -1,0 +1,92 @@
+label: Calculation
+field_id: 132160784
+type: calculation
+script: var json       = @[All of Calculation](in_132148137_132049808)||[];
+var bnkAmt     = @[Banking Amount](field_132049710)||0;
+var oData      = '';
+var oShow      = '';
+var oBalance   = bnkAmt;
+var oHeader ='|**Name**|**Date**|**Amount**|**Balance**|<br>';
+oHeader +='|--------|--------|----------|-----------|<br>';
+
+var t='~~~'
+
+try{
+   if(json && json!='{}' && json!='[]'){
+     var myArray = getData(json);
+     printData(myArray);   
+  }
+}catch (e) {
+  "Could not parse JSON";
+}
+
+function printData(myArray){       
+  
+  myArray.sort(function(a, b) {
+    a = new Date(a['Date']);
+    b = new Date(b['Date']);
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+  
+             
+  for(var i=0; i<myArray.length; i++){                    
+    var oName    = myArray[i]['Name'];
+    var oAmt     = myArray[i]['Amount'];
+    var oDate    = myArray[i]['Date'];
+                     
+    if(oDate){
+      var oChkDate = dateCompair(oDate);
+      if(oChkDate == 1){
+        oBalance = oBalance - oAmt;
+        var oBal = oBalance.toFixed(2).toString().replace(".", ","); 
+        oAmt     = oAmt.toFixed(2).toString().replace(".", ","); 
+        oDate    = moment(oDate).format("DD.MM.YYYY") 
+        oData   += '|';
+        oData   += oName  +'|';
+        oData   += oDate  +'|';
+        oData   += oAmt   +' €|'; 
+        oData   += oBal   +' €|<br>'; 
+      }
+    }                     
+  } 
+}
+
+
+function getData(json){
+  var tempArr = [];
+  var arr         = {};
+  for(var i=0; i<json.length; i++){ 
+    
+    if(json[i] && json[i]!='{}' && json[i]!='[]'){ 
+       var js = JSON.parse(json[i]);
+
+      for(var k=0; k<js.length; k++){  
+
+             
+         arr['Name']    = js[k].Name;  t+='<br>~~'+js[k].Name  
+        arr['Amount']  = js[k].Amount; 
+        arr['Date']    = js[k].Date;  
+        tempArr[i]     = arr;
+        arr            = {};      
+    }
+   }
+  } 
+  return tempArr;   
+}
+
+function dateCompair(oE){
+  var d1 = new Date(oE);
+  var d2 = new Date();
+  var d3 = new Date();
+  d3.setDate(d3.getDate() + 42);
+  if (d1.getTime()>= d2.getTime() && d1.getTime()<= d3.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+oShow = oHeader+oData+t;
+

@@ -1,0 +1,3 @@
+label: Kursnet E-Mail
+field_id: 127628771
+type: email

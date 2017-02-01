@@ -1,0 +1,6 @@
+label: ExamenLinks
+field_id: 114344679
+type: calculation
+script: @[Titel](field_113675395)
+out = "[example link](http://www.globiflow.com/external.php?l=MTY0MTcyfDM3MTU2NDI0NQ==) Link Zwischenprüfung anlegen" + " - -" + "Abschlussprüfung anlegen" 
+out

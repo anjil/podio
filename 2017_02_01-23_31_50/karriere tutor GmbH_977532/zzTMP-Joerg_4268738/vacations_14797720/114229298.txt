@@ -1,0 +1,3 @@
+label: Anzahl Urlaubstage
+field_id: 114229298
+type: number

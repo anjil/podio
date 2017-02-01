@@ -1,0 +1,10 @@
+label: Mismatch Tutor (yes=1)
+field_id: 131760693
+type: calculation
+script: var tutor = @[Tutor](field_119030137);
+var vorNa = @[All of Vorname](out_124762078_131560603);
+
+if(tutor.length == vorNa.length)
+ 0
+else
+ 1

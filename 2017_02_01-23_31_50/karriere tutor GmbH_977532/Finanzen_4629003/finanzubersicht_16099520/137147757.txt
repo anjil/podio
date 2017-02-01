@@ -1,0 +1,37 @@
+label: JSON-ErwarteteLiz-Payment
+field_id: 137147757
+type: calculation
+script: var vorDt   = null;
+var ind     = 0;
+var myArray = Array();
+var vorzeitigesEnd = @[Vorzeitiges Ende](field_126242725);
+
+try {
+  if(vorzeitigesEnd){
+    vorDt = new Date(vorzeitigesEnd);
+  }
+  var oJsn  = @[All of JSON-ErwarteteLiz-Payment](in_131067949_128884745); 
+  for(i=0;i<oJsn.length;i++) {
+    var js  = JSON.parse(oJsn[i]); 
+    var pid = js.paymentId || '';
+    if(pid){
+      var tmpObj                = {};
+      tmpObj['ExpId']           = js.ExpId;
+      tmpObj['paymentId']       = js.paymentId;
+      tmpObj['LizBezahltWann']  = js.LizBezahltWann;
+      tmpObj['Lehrgang']        = js.Lehrgang;
+      tmpObj['Lizenzen']        = js.Lizenzen;
+      tmpObj['Status']          = js.Status;
+      tmpObj['Rate']            = js.Rate; 
+      tmpObj['vorzeitigesEnd']  = vorDt;   
+      myArray[ind]              = tmpObj;
+      ind++;
+  
+    }     
+  }  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+
+JSON.stringify(myArray);

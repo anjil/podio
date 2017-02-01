@@ -1,0 +1,168 @@
+label: Report Hold
+field_id: 130950001
+type: calculation
+script: var out = ""
+var myDatum;
+var items = [];
+var oMn='';
+var ii = 0; 
+var t='';
+
+out = "**Art** | **Datum**\n";
+out += "---|---: \n"
+var jsPrufungn = @[All of JSON-Prufungen](out_123378265_118702791);
+//var jsnVoucher = @All of JSON-Voucher;
+
+var jsnVoucher = @[All of JSON-Voucher](in_127692075_127692074);
+
+
+try {
+  j = JSON.parse(@[JSON-Datum](field_118643640));
+
+  if(jsPrufungn && jsPrufungn !='[]'){  
+     getPrufArr(jsPrufungn,ii);
+  }
+  ii = items.length;
+
+  if(jsnVoucher && jsnVoucher!= '[]'){
+     getVoucherArr(jsnVoucher,ii);
+  } 
+  ii = items.length;
+
+    
+   var oMn = '';
+   var oTitle = '';
+   var oDt = '';
+   var tempArr ={};
+
+   for(i=0;i<j.Daten.length;i++) {
+     oMn ='';
+     myDatum = j.Daten[i].Datum;
+     if (j.Daten[i].Art == "Massnahme") {
+       oMn = "MN Start: ";
+     }    
+     if (j.Daten[i].Art != "Komponente") {
+       oTitle = j.Daten[i].Bezeichnung.substring(0,80);
+       oDt = myDatum;
+ 
+       tempArr['title'] = oMn+oTitle;
+       tempArr['status'] = '';  
+       tempArr['date'] = oDt; 
+       tempArr['CalcLeh'] = '';    
+       items[ii] = tempArr;
+       tempArr = {};
+       ii++;      
+     } 
+   } 
+
+  items.sort(function(a, b) {
+      a = new Date(a['date']);
+      b = new Date(b['date']);
+      return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+   printData(items);
+} 
+catch (e) {
+  "Could not parse JSON"
+}
+
+function printData(items){
+ var oShowTitle = '';
+ for(var k=0; k<items.length; k++) { 
+  oShowTitle = '';
+  var oPdate=moment(items[k]['date']).format("DD.MM.YYYY");  
+  if(oPdate !='01.01.1970'){  
+    var oTitle = items[k]['title']||'';
+    var oStatus = items[k]['status'] || '';
+    if(oTitle){
+      if(oTitle.indexOf("MN Start:")>-1){
+        oShowTitle = oTitle;
+      }
+      else if(oStatus){
+         oShowTitle = oTitle+" : "+items[k]['status'];
+      } 
+      else{
+         oShowTitle = oTitle;
+      }       
+    }
+  
+
+   out += oShowTitle + "|";
+   out += moment(items[k]['date']).format("dd DD.MM.YYYY")+"\n"; 
+   }
+ }
+      
+  for(var k=0; k<items.length; k++) { 
+   oShowTitle = '';
+   var oPdate=moment(items[k]['date']).format("DD.MM.YYYY");  
+     if(oPdate =='01.01.1970'){
+       var oTitle = items[k]['title']||'';
+       var oStatus = items[k]['status'] || '';
+       if(oTitle){
+         if(oTitle.indexOf("MN Start:")>-1){
+            oShowTitle = oTitle;
+         }
+         else if(oStatus){
+            oShowTitle = oTitle+" : "+items[k]['status'];
+         } 
+         else{
+            oShowTitle = oTitle;
+         }          
+       }
+
+   out += oShowTitle + "|";
+   out += moment(items[k]['date']).format("dd DD.MM.YYYY")+"\n"; 
+    }
+  }
+}
+
+
+function getPrufArr(jsPrufungn,ii){
+
+  var tempArr ={};
+  var iCount = ii;
+  jsPrArr = JSON.parse(jsPrufungn); 
+  for(var i=0; i<jsPrArr.length; i++){
+     var oDt = new Date(jsPrArr[i]['Prufungsdatum']);
+
+     if(!isNaN(oDt.getTime())){
+        var oStatus = jsPrArr[i]['Status']||'';
+        var oTitle = jsPrArr[i]['Title']||''; 
+        var oCalcLeh = jsPrArr[i]['CalcLehrgang'] 
+  
+        tempArr['title'] = oTitle;
+        tempArr['status'] = oStatus;  
+        tempArr['date'] = oDt; 
+        tempArr['CalcLeh'] = oCalcLeh;    
+        items[iCount] = tempArr;
+        tempArr = {};
+        iCount++;      
+     }
+  }
+}
+
+function getVoucherArr(jsnVoucher,ii){
+
+  var tempArr ={};
+  var iCount = ii;
+
+  for(var i=0; i<jsnVoucher.length; i++){
+    var jsVoucherArr = JSON.parse(jsnVoucher[i]);
+    var oDt = new Date(jsVoucherArr['GultigAb']);
+    if(!isNaN(oDt.getTime())){
+        var oTitle = jsVoucherArr['Title']||'';  
+        tempArr['title'] = oTitle;
+        tempArr['status'] = '';  
+        tempArr['date'] = oDt; 
+        tempArr['CalcLeh'] = '';    
+        items[iCount] = tempArr;
+        tempArr = {};
+        iCount++;      
+     }
+  }
+}
+
+
+out
+

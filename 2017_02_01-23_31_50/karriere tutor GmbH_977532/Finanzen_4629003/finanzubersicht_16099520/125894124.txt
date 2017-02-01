@@ -1,0 +1,336 @@
+label: JSON-ExpectedTransactions
+field_id: 125894124
+type: calculation
+script: var oUniqueArr = @[All of Unique Id](in_125198678_125193630);
+var json = @[All of JSON-FinanceUbersicht](in_124762989_124752897)[0];
+var oAdjustedDate = @[Adjusted Billing Start Date](field_125517113);
+var oStartdatum = @[Startdatum Bildungsgutschein](field_125198557);
+var jsonTransaction = @[All of JSON-Transaction](in_124039546_124753397)||[];
+var oTotalAmt = @[Total Amount](field_125744467) || 0;
+var oDropDate = @[Drop out date](field_126242725);
+var AktuellesDatum = @[All of AktuellesDatum](out_128820243_128820289)[0];
+
+var odD = null;
+var oAmount = 0;
+var oShow = '';
+var jsonArr = [];
+var oArr = {};
+var chkJsonHasBankingTransaction = 0;
+var oMonAdd=checkMonthNeedToAdd(oAdjustedDate,oStartdatum);
+var t='~~~';
+
+try {
+ var js = JSON.parse(json);  
+
+ for(var j=0; j<oUniqueArr.length; j++){
+   var oShowDate = null;
+   if(oAdjustedDate){
+     oShowDate = new Date(oAdjustedDate);
+     oShowDate.setMonth(oShowDate.getMonth() + oMonAdd);
+     var oWeekDay = oShowDate.getDay();
+     if(oWeekDay == 0){
+       oShowDate = addDays(oShowDate, 1);
+     }
+     else if(oWeekDay == 6){
+        oShowDate = addDays(oShowDate, 2);
+     }
+   }
+   oAmount = 0;
+   for (var i=0; i<js.length; i++){    
+     for(ii=0; ii<js[i].Datam.length; ii++){
+       var qty = js[i].Datam[ii].AnzahlRaten || 0; 
+       var amt = js[i].Datam[ii].Rate || 1;
+       if(qty > j){
+         oAmount += parseFloat(amt);
+       }
+     }
+   }
+  
+  if(oDropDate && oShowDate){
+   if(oDropDate.getTime() < oShowDate.getTime()) break;
+  }
+ 
+  oArr['ExpectedId'] = oUniqueArr[j];
+  oArr['Amount'] = oAmount.toFixed(2);
+  oArr['Date'] = oShowDate;
+  oArr['Week'] = getWeekNumber(oShowDate);
+  oArr['Year'] = (oShowDate)? oShowDate.getFullYear():'';
+  oArr['BankDate'] = null;
+  oArr['BankingAmount'] = 0;
+  oArr['BankingId'] = null;
+  jsonArr[j] = oArr;
+  oArr = {};
+  oMonAdd++;
+ }
+  if(jsonTransaction && jsonTransaction !='[]'){  
+     getBnkTransaction(jsonTransaction);
+  }
+   updateJson(); 
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function addDays(startDate, numberOfDays) {
+    return new Date(startDate.getTime() + (numberOfDays * 24 *60 * 60 * 1000));
+}
+
+function updateJson(){
+  var oTotal = (oTotalAmt)? parseFloat(oTotalAmt) : 0;
+  var oBknAmt = 0;
+  var oPreviousAmt = 0;
+  var oCurrentAmt = 0;
+  var chkAmt = 0;
+  //var maxExpectedLimit = 3429.25
+  var maxExpectedLimit = 2000;
+  var currentTransAmt = 0, lastTransAmt = 0;
+
+
+
+  for(var j=0; j<jsonArr.length; j++){
+    if(jsonArr[j]['BankingAmount'] > 0) {
+       currentTransAmt = parseFloat(jsonArr[j]['BankingAmount']);
+       lastTransAmt = currentTransAmt;
+    } else {
+       currentTransAmt = 0;
+    }
+
+    oBknAmt = (currentTransAmt > 0) ? currentTransAmt : lastTransAmt 
+
+    if(oBknAmt > 0) {
+      chkAmt = oPreviousAmt + oBknAmt;
+      if(chkAmt <= oTotal){
+         if(currentTransAmt > 0) {
+           jsonArr[j]['Amount'] = currentTransAmt.toFixed(2);
+           oPreviousAmt += DisplayData(currentTransAmt);
+         } else if(lastTransAmt > maxExpectedLimit) {
+             jsonArr[j]['Amount'] = maxExpectedLimit
+             oPreviousAmt += DisplayData(maxExpectedLimit)
+         } else if(lastTransAmt > 0) {
+             jsonArr[j]['Amount'] = lastTransAmt 
+             oPreviousAmt += DisplayData(lastTransAmt) 
+         }
+      } else{
+        var oSetAmt = parseFloat(oTotal-oPreviousAmt);
+        /*
+        if(parseInt(oSetAmt) == 0){
+           jsonArr[j]['Date']= null;
+        }*/
+
+        if(parseInt(oSetAmt) < 1){
+           jsonArr[j]['Date']= null;
+           oPreviousAmt += DisplayData(oSetAmt);
+           oSetAmt = 0;
+        }
+        if(parseFloat(oSetAmt) == oTotal){
+          jsonArr[j]['Amount']= parseFloat(oSetAmt);
+          oPreviousAmt += DisplayData(oSetAmt);
+        }
+        else if(parseFloat(oSetAmt) >= maxExpectedLimit){
+           jsonArr[j]['Amount']= maxExpectedLimit
+           oPreviousAmt += DisplayData(maxExpectedLimit)
+        } else {
+           jsonArr[j]['Amount']= oSetAmt.toFixed(2);
+           oPreviousAmt += DisplayData(oSetAmt);  
+        }  
+      }
+    } else {
+	if(jsonArr[j]['Amount'] > maxExpectedLimit) {
+	   jsonArr[j]['Amount'] = maxExpectedLimit
+	   oPreviousAmt += DisplayData(maxExpectedLimit); 
+	} else if(jsonArr[j]['Amount'] > 0) {
+	   oPreviousAmt += DisplayData(jsonArr[j]['Amount']); 
+	} else {
+	// this is the json row which is additionally created after reached the qty so set the remaining amount
+	  var oSetAmt = parseFloat(oTotal-oPreviousAmt);
+          oSetAmt = DisplayData(oSetAmt);
+	  if(parseInt(oSetAmt) == 0){
+             jsonArr[j]['Date']= null;
+	  }
+	  if(parseFloat(oSetAmt) >= maxExpectedLimit){
+	    jsonArr[j]['Amount']= maxExpectedLimit
+	    oPreviousAmt += DisplayData(maxExpectedLimit)
+	  } else {
+	    jsonArr[j]['Amount']= oSetAmt.toFixed(2);
+	    oPreviousAmt += DisplayData(oSetAmt); 
+
+	  }
+	}
+    } 
+oShow += '==='+oPreviousAmt + ',' + j;
+  } // end of for
+ 
+tempp = 0; 
+ if(oPreviousAmt < oTotal){   
+oShow += 'Entered in while block';
+  while(oPreviousAmt < oTotal && tempp < 15){
+tempp++
+    var remainingAmt = parseFloat(oTotal-oPreviousAmt);
+    var iCount = jsonArr.length; 
+
+    nextExpectedAmount = 0;
+if(lastTransAmt > 0) {
+    if(remainingAmt <= lastTransAmt && remainingAmt<= maxExpectedLimit){
+     nextExpectedAmount = remainingAmt;
+    } else if(remainingAmt <= lastTransAmt && remainingAmt> maxExpectedLimit) {
+     nextExpectedAmount = maxExpectedLimit;
+    } else if(remainingAmt > lastTransAmt && lastTransAmt < maxExpectedLimit) {
+     nextExpectedAmount = lastTransAmt;
+    } else if(remainingAmt > lastTransAmt && lastTransAmt > maxExpectedLimit) {
+     nextExpectedAmount = maxExpectedLimit;
+    }
+} else {
+if(remainingAmt < maxExpectedLimit){
+     nextExpectedAmount = remainingAmt;
+} else {
+nextExpectedAmount = maxExpectedLimit;
+}
+
+}
+
+  var oShowDate = null;
+  if(oAdjustedDate){
+    oShowDate = new Date(oAdjustedDate);
+    oShowDate.setMonth(oShowDate.getMonth() + oMonAdd);
+  }
+
+if(oDropDate && oShowDate){
+   if(oDropDate.getTime() < oShowDate.getTime()) break;
+  }
+if(nextExpectedAmount > 1){
+    createNodeInJson(oAdjustedDate,iCount, nextExpectedAmount);
+}
+
+    oPreviousAmt += nextExpectedAmount;
+oShow += '==='+oPreviousAmt + ',' + nextExpectedAmount + ',' + iCount ;
+  } // end of while
+ } // end of if
+} // end of method
+
+function createNodeInJson(oAdjustedDate,iCount,oAmt){
+  var oShowDate = null;
+  var tempArr = {};
+  if(oAdjustedDate){
+    oShowDate = new Date(oAdjustedDate);
+    oShowDate.setMonth(oShowDate.getMonth() + oMonAdd);
+    var oWeekDay = oShowDate.getDay();
+     if(oWeekDay == 0){
+       oShowDate = addDays(oShowDate, 1);
+     }
+     else if(oWeekDay == 6){
+        oShowDate = addDays(oShowDate, 2);
+     }
+  }
+
+  tempArr['ExpectedId'] = '';
+  tempArr['Amount'] = oAmt.toFixed(2);
+  tempArr['Date'] = oShowDate;
+  tempArr['Week'] = getWeekNumber(oShowDate);
+  tempArr['Year'] = (oShowDate)? oShowDate.getFullYear():'';
+  tempArr['BankDate'] = null;
+  tempArr['BankingAmount'] = 0;
+  tempArr['BankingId'] = null;
+  jsonArr[iCount] = tempArr;
+  tempArr = {};
+  oMonAdd++;
+}
+
+function getBnkTransaction(jsonTransaction){
+   var tempArr ={};
+   var bnkArr = [];
+
+   for(var i=0; i<jsonTransaction.length; i++){
+      var jsnArr = JSON.parse(jsonTransaction[i]);  
+      var otempDate = jsnArr['Date'];
+      var oDt = (otempDate)? new Date(otempDate) : null;
+      var oAmt = DisplayData(jsnArr['Amount']);
+      var oWeek = parseInt(getWeekNumber(oDt));
+      tempArr['Week'] = oWeek;
+      tempArr['Year'] = (oDt)? oDt.getFullYear():'';
+      tempArr['Amount'] = oAmt.toFixed(2);
+      tempArr['BankDate'] = oDt;
+      tempArr['BankId'] = jsnArr['uniqueId'];
+      bnkArr[i] = tempArr;
+      tempArr = {};
+   } 
+
+    if(bnkArr.length>0){
+    
+      bnkArr.sort(function(aa, bb) {
+        var y1 = aa['Year'];
+        var y2 = bb['Year'];
+
+        var w1 = aa['Week'];
+        var w2 = bb['Week'];
+
+        if (y1 < y2) return -1;
+        if (y1 > y2) return 1;
+        if (w1 < w2) return -1;
+        if (w1 > w2) return 1;
+        return 0;
+
+     });   
+    }
+
+    for(var k=0; k<bnkArr.length; k++){    
+      if(jsonArr.length > k){
+        var oBnkAmt = parseFloat(bnkArr[k]['Amount']);
+        var oBnkDate = bnkArr[k]['BankDate'];
+        var oBnkId = bnkArr[k]['BankId'];
+        jsonArr[k]['BankingAmount'] = oBnkAmt;
+        jsonArr[k]['BankDate'] = oBnkDate;
+        jsonArr[k]['BankingId'] = oBnkId;
+     }
+   }
+}    
+
+
+function checkMonthNeedToAdd(oAdjustedDate,oStartdatum){
+  if(oAdjustedDate && oStartdatum){
+    var d1 = new Date(oAdjustedDate);
+    var d2 = new Date(oStartdatum);
+    if(d1.getTime() > d2.getTime()){
+      return 0;
+    }
+    else return 1;
+  }
+  return 0;
+}
+
+function getWeekNumber(oDate) {
+ if(oDate){
+  var date = new Date(oDate.getTime());
+  date.setHours(0, 0, 0, 0); 
+  date.setDate(date.getDate()+ 3 - (date.getDay() + 6) % 7);
+  var week1 = new Date(date.getFullYear(), 0, 4); 
+  return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000- 3 + (week1.getDay() + 6) % 7) / 7);
+  }
+}
+
+function DisplayData(str){
+  if(str == 'NaN' || str == ''){
+    return 0;
+  }
+  else{ 
+     return parseFloat(str);
+  }
+}
+
+jsonArr.sort(function(aa, bb) {
+    var y1 = aa['Year'];
+    var y2 = bb['Year'];
+
+    var w1 = aa['Week'];
+    var w2 = bb['Week'];
+
+    if (y1 < y2) return -1;
+    if (y1 > y2) return 1;
+    if (w1 < w2) return -1;
+    if (w1 > w2) return 1;
+    return 0;
+
+ });
+
+
+oShow = JSON.stringify(jsonArr);
+oShow

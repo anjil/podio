@@ -1,0 +1,4 @@
+label: Verbleibende Urlaubstage
+field_id: 114229609
+type: calculation
+script: @[Urlaubstage](field_114228927)-@[Verbrauchte Urlaubstage](field_114229608)

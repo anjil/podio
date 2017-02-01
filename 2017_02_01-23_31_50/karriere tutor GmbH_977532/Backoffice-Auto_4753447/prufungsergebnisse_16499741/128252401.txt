@@ -1,0 +1,3 @@
+label: Kandidaten Ergebnis Prozent
+field_id: 128252401
+type: text

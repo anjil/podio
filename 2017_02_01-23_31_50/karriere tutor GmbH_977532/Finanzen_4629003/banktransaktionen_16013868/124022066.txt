@@ -1,0 +1,12 @@
+label: Customer-ID
+field_id: 124022066
+type: calculation
+script: var ovW = @[VWZ1](field_124021920)
+var oShow = '';
+if(ovW){
+  if(ovW.indexOf('/')>-1){
+    var oArr = ovW.split('/');
+    oShow = oArr[0];
+  }
+}
+oShow

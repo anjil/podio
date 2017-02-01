@@ -1,0 +1,6 @@
+label: Report Lizenze id
+field_id: 130870654
+type: calculation
+script: @[All of Report Lizenze id](out_130870510_132143897)+'';
+
+// I am removing space for now from concating the string because it is causing the issue on item 534 and few more

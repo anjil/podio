@@ -1,0 +1,60 @@
+label: Calculation
+field_id: 128906082
+type: calculation
+script: var t = '~~'
+var tmpObj = {};
+var myArray = [];
+try {
+ 
+ var jj   = @[JSON-Lizenze](field_128882802);
+ var oJsn = JSON.parse(jj);  
+var j = 0; 
+ for (var ii=0; ii<oJsn.length; ii++){ 
+    if(oJsn[ii] && oJsn[ii]!='{}'){       
+       var oRate = parseInt(oJsn[ii].Rate);
+       for(var i=0; i<oRate; i++){
+        if(i==0){
+         var oMon =  oJsn[ii].Rate1Mon || 0;
+         var oDays = oJsn[ii].Rate1 || 0;
+         var oD   = oJsn[ii].date || null;
+         var ot = fgetDate(oMon,oDays,oD); 
+         tmpObj["Amt"]  = oJsn[ii].Lizenzbetrags; 
+         tmpObj["Date"] = ot;
+ myArray[j] = tmpObj;
+tmpObj = {};
+j++;
+}
+if(i==1){
+  var oMon =  oJsn[ii].Rate2Mon || 0;
+         var oDays = oJsn[ii].Rate2 || 0;
+         var oD   = oJsn[ii].date || null;
+         var ot = fgetDate(oMon,oDays,oD); 
+         tmpObj["Amt"]  = oJsn[ii].Lizenzbetrags; 
+         tmpObj["Date"] = ot;
+ myArray[j] = tmpObj;
+tmpObj = {};
+j++;
+}
+       }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+function fgetDate(oMon,oDays,oD){
+  var oDt = new Date(oD);
+  oDt.setMonth(oDt.getMonth() + oMon);
+  var firstDay = new Date(oDt.getFullYear(), oDt.getMonth(), 1);
+
+  oDays = oDays-1;
+  firstDay.setDate(firstDay.getDate() + oDays);
+    
+return oDt;
+}
+
+for(var k=0;k<myArray.length;k++){
+  t+=myArray[k].Amt
+t+='^^'+myArray[k].Date
+}
+t

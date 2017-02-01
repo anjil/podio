@@ -1,0 +1,14 @@
+label: Calculation
+field_id: 127730287
+type: calculation
+script: var oModule = @[Modul](field_127692066)||'';
+var oName = @[Name](field_127692068)||'';
+var oShow = '';
+
+if(oModule){
+  if(oModule.indexOf('[CB]') > -1){
+    oShow = oModule.substr(0,oModule.indexOf('[CB]')-1);
+  }
+  oShow = oShow.replace(/[^A-Z0-9]+/ig, "_");   
+  
+}

@@ -1,0 +1,3 @@
+label: Kurzinhalte
+field_id: 132964988
+type: text

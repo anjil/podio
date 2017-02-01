@@ -1,0 +1,47 @@
+label: Calculation
+field_id: 138790340
+type: calculation
+script: var oJson      = @[Json-ExpectedLizenzenFee](field_128908966);
+var jsonArr    = [];
+var myArray    = [];
+var oArr       = {};
+
+var t='~~~~';
+
+var out = "**LehrgangName**|**Lizenzbetrags**|**Date**|**Rate**\n";
+out += "---|---:|:---:|--- \n"
+
+  
+try {
+
+  if(oJson && oJson !='{}' && oJson !='[]'){
+    var oJsn     = JSON.parse(oJson);
+    var oD       =  null;
+    var oRStatus =  ''; 
+    var oTotal   = 0; 
+
+    for (var ii=0; ii<oJsn.length; ii++){ 
+      if(oJsn[ii] && oJsn[ii]!='{}' && oJsn[ii]!='[]'){    
+        var oDatam  = oJsn[ii];
+        var oAmt    = parseFloat(oDatam.Amount||0);   
+        var lizName = oDatam.LehrgangName;
+        var oRate   = oDatam.RStatus;                              
+        var newDt    = moment(oDatam.Date).format("dd DD.MM.YYYY");                                                       
+        oTotal += oAmt;
+        oAmt    = oAmt.toFixed(2).toString().replace(".", ",");
+        out    += lizName       +"|";     
+        out    += oAmt+' €'     +"|";
+        out    += newDt         +"|";
+        out    += oRate         +"\n";   
+      }        
+    } 
+    oTotal = oTotal.toFixed(2).toString().replace(".", ",");
+    out   += '**Total**' +"|**";
+    out   += oTotal+' €' +"**\n";  
+  } 
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+out+'~~~~';

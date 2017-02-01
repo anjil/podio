@@ -1,0 +1,83 @@
+label: Report
+field_id: 126806281
+type: calculation
+script: var jsn = @[All of JSON-leads-und-anstehende-lehrgangsstarts](in_126634106_126630716);
+var oShow = '';
+var oData = '';
+var outputHeader = '| Mabnahmen| Count| <br>';
+outputHeader += '|------|-------|<br>';
+
+var monthArr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+var oItems = [];
+
+var t='~~';
+try {
+  if(jsn && jsn != '{}'){
+     oItems = getDetails(jsn);
+     printReport();
+  }     
+}catch (e) {
+  "Could not parse JSON";
+}
+
+function printReport(){  
+  var tuples = [];
+  for (var key in oItems) tuples.push([key, oItems[key]]);
+
+  tuples.sort(function(a, b) {
+    a = a[0];
+    b = b[0];
+    return a.toLowerCase().localeCompare(b.toLowerCase());
+  });
+
+  for (var i = 0; i < tuples.length; i++) {
+    var oMabnahmen  = tuples[i][0];   //Key
+    var oCount  = tuples[i][1];   //Value 
+    oData += '|**'+ oMabnahmen +'**|'+"&nbsp;"+'|<br>';
+    for(var k=0; k<monthArr.length; k++){     
+      oData+= '|'+monthArr[k]+'|';
+      oData+= oCount[monthArr[k]]+'|<br>';         
+    }
+  }   
+}
+
+function getDetails(jsn){
+  var oDataArr = [];
+  for(var i=0; i<jsn.length; i++){
+     var jsArr = JSON.parse(jsn[i]);      
+     if( jsArr['Datam'] ){
+       var oDt = jsArr['Datam'];
+       var oMabnahmen = jsArr['Mabnahmen'];
+       var oDt = new Date(jsArr['Datam']);
+       var oMon = monthArr[oDt.getMonth()];
+
+       var tempKey = oMabnahmen; 
+       if(oDataArr[tempKey]){
+           var arr           = oDataArr[tempKey];
+           arr[oMon]         = parseInt(arr[oMon])+ 1;     
+           oDataArr[tempKey] = arr;                     
+       } 
+       else{
+         var arr = [];
+         arr["Jan"]  = (oMon == "Jan") ? 1 : 0; 
+         arr["Feb"]  = (oMon == "Feb") ? 1 : 0;
+         arr["Mar"]  = (oMon == "Mar") ? 1 : 0;
+         arr["Apr"]  = (oMon == "Apr") ? 1 : 0;
+         arr["May"]  = (oMon == "May") ? 1 : 0;
+         arr["Jun"]  = (oMon == "Jun") ? 1 : 0;
+         arr["Jul"]  = (oMon == "Jul") ? 1 : 0;
+         arr["Aug"]  = (oMon == "Aug") ? 1 : 0;
+         arr["Sep"]  = (oMon == "Sep") ? 1 : 0;
+         arr["Oct"]  = (oMon == "Oct") ? 1 : 0;
+         arr["Nov"]  = (oMon == "Nov") ? 1 : 0;
+         arr["Dec"]  = (oMon == "Dec") ? 1 : 0;
+         oDataArr[tempKey] =  arr;
+
+       }  
+     }     
+   }
+  return oDataArr;
+}
+
+oShow = outputHeader + oData;

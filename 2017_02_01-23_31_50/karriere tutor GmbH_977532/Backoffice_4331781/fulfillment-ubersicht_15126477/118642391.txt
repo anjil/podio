@@ -1,0 +1,30 @@
+label: JSON-Data
+field_id: 118642391
+type: calculation
+script: var debug = "";
+var out = "";
+var x;
+var myKontakt;
+var APFirma_ary = Array();
+var Account_ary = Array();
+var weitereAPs_ary = Array();
+var Massnahmen_ary = Array();
+// Zur Sortierung der Reihenfolge der Massnahmen
+var myReihenfolge = Array();
+//JSON.parse(debug);
+
+try {
+
+} catch (e) {
+  "Could not parse JSON"
+}
+
+var j = {};
+j["ID"] = @[Unique ID](item_app_item_id);
+j["MassnahmenUebersicht"] = '';
+j["Daten"] = @[Daten](field_131450574);
+j["avendoAccount"] = @[Avendoo Account](field_117227328);
+j["Name"] = @[CalcName](field_118640370);
+
+out = JSON.stringify(j);
+out

@@ -1,0 +1,10 @@
+label: Anzahl eingegangener Zahlungen
+field_id: 128596215
+type: calculation
+script: var oReport = @[All of Betrag](in_124035570_124753397)||[]
+var oShow = 0;
+if(oReport){
+  oShow = oReport.length;
+}
+
+oShow;

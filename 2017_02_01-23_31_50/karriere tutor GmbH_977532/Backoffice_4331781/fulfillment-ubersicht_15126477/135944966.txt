@@ -1,0 +1,33 @@
+label: Title
+field_id: 135944966
+type: calculation
+script: var oShow   = '';
+var courses = @[All of CourseTitle](in_130487072_117225519)+''
+
+
+try {
+  var jsn = JSON.parse(@[All of JSON-DataPerson](in_118798421_117225519)); 
+  var k   = jsn.Kontakt;
+ 
+  oShow  += stripStr(k.Anrede)  + " " + 
+            stripStr(k.Vorname) + " " +   
+            stripStr(k.Nachname); 
+
+  if(courses){
+    if(courses.indexOf(',') > -1){
+      var cArr = courses.split(',');
+      oShow   += ' | '+cArr[0];
+    }
+    else{
+      oShow   += ' | '+courses;
+    }
+  }
+}
+ catch (e) {
+  "Could not parse JSON"
+}
+
+function stripStr(a) {if (a==null) {a="";} return a }
+
+
+oShow;

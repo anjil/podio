@@ -1,0 +1,8 @@
+label: Leads Exist (yes=1)
+field_id: 136072468
+type: calculation
+script: var id = @[All of Leads Id](in_132128412_113531840)+''
+if(id)
+1
+else
+0

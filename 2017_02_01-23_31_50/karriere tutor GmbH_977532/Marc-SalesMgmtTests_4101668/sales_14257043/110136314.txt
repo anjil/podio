@@ -1,0 +1,4 @@
+label: Calc_AnzahlRaten
+field_id: 110136314
+type: calculation
+script: @[Min of Anzahl Raten](out_min_108902650_109125321)

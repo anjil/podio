@@ -1,0 +1,9 @@
+label: Anzeigetext
+field_id: 125666524
+type: calculation
+script: var bisDatum = ""
+
+if (@[Backend Datum](field_125667526)!=null) {
+  bisDatum = " bis " + moment(@[Backend Datum](field_125667526)).format("DD.MM")
+}
+moment(@[Datum](field_124838809)).format("DD.MM") + bisDatum + " - " + @[Typ](field_124838808) + " " + @[All of Vorname](out_124762078_124840648)[0] + " " + @[All of Nachname](out_124757896_124840648)[0] + " - " + @[Grund](field_124841922)

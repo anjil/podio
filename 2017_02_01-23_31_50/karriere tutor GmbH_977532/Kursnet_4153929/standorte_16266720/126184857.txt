@@ -1,0 +1,3 @@
+label: Status E-Mail
+field_id: 126184857
+type: category

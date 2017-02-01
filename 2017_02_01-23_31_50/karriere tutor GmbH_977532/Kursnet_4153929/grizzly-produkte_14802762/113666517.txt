@@ -1,0 +1,3 @@
+label: Produkt-ID
+field_id: 113666517
+type: number

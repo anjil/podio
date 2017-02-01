@@ -1,0 +1,3 @@
+label: Preis Staffel 6
+field_id: 129420909
+type: money

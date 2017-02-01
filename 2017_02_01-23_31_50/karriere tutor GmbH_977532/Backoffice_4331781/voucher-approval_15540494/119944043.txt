@@ -1,0 +1,3 @@
+label: Zeitspanne von bis
+field_id: 119944043
+type: text

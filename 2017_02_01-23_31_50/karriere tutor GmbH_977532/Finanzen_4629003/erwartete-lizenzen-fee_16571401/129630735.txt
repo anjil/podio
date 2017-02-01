@@ -1,0 +1,4 @@
+label: Erwartete-Lizenzen-Fee
+field_id: 129630735
+type: calculation
+script: @[lizenzen Id](field_128895839)+'||'+@[Lehrgang](field_129630079)+'||'+@[Lizenzen](field_129630080);

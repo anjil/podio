@@ -1,0 +1,6 @@
+label: -
+field_id: 114377064
+type: calculation
+script: @[Auftragsdatum](field_108041451)
+out = "**Leadbearbeitung:**"+"\n\n"+ "----"
+out

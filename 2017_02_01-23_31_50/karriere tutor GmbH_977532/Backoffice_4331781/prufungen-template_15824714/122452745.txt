@@ -1,0 +1,9 @@
+label: JSON-PrufungenTemplate
+field_id: 122452745
+type: calculation
+script: var z = {};
+z["Title"] = @[Titel](field_122401190);
+z["Art"] = @[Art der Prüfung](field_122401191);
+z["Institut"] = @[All of JSON-Data](out_136113702_136113378);
+
+JSON.stringify(z);

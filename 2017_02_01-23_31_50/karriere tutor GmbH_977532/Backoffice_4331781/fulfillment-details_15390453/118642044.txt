@@ -1,0 +1,6 @@
+label: Name
+field_id: 118642044
+type: calculation
+script: var a = @[All of Kontaktdetails](in_117226241_118642007)
+var out = ""
+if (a[0] != "") out = a[0]

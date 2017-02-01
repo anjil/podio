@@ -1,0 +1,30 @@
+label: Auftragswert (Number)
+field_id: 128716460
+type: calculation
+script: var oUniqueArr = @[All of Unique Id](in_125198678_125193630);
+var json = @[All of JSON-FinanceUbersicht](in_124762989_124752897)[0];
+var oAmount = 0;
+
+try {
+  var js = JSON.parse(json);
+  var oAmt = js[0]['Abweichende_Lehrgangsgebühren']||0;
+  if(oAmt > 0){
+    oAmount = oAmt;
+  }
+  else{
+   for (var i=0; i<js.length; i++){    
+     for(ii=0; ii<js[i].Datam.length; ii++){
+       var qty = js[i].Datam[ii].AnzahlRaten || 0; 
+       var amt = js[i].Datam[ii].Rate || 1;
+       oAmount += parseFloat(amt * qty);
+     }
+   }
+ }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+
+oAmount;
+

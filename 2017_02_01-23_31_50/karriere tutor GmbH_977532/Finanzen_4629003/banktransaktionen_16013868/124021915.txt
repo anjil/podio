@@ -1,0 +1,3 @@
+label: Kontonummer
+field_id: 124021915
+type: text

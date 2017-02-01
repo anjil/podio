@@ -1,0 +1,14 @@
+label: Yearly Sales
+field_id: 128523009
+type: calculation
+script: var report = @[All of Ansicht](out_126630578_127404412)||[];
+var oShow = 0;
+
+if(report){
+  var str= report+'';
+  if(str.indexOf('Komplett')> -1) oShow = 1;
+}
+else 
+ oShow = 0;
+ 
+oShow;

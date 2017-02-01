@@ -1,0 +1,9 @@
+label: Vorzeitiges Ende Set (yes=1)
+field_id: 139141917
+type: calculation
+script: var d = @[Vorzeitiges Ende](field_126242725)
+
+if(d)
+ 1;
+else
+ 0;

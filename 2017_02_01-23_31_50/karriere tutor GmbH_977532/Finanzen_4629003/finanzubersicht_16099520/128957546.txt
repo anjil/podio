@@ -1,0 +1,6 @@
+label: calc_Demo
+field_id: 128957546
+type: calculation
+script: var out=0
+if (@[interner Status](field_128957545)=="DEMO") { out=1 }
+parseInt(out)

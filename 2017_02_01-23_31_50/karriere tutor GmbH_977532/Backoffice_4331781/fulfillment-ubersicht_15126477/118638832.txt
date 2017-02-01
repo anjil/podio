@@ -1,0 +1,12 @@
+label: Calc_Lehrgangsstart
+field_id: 118638832
+type: calculation
+script: var out = new Date();
+try {
+  j = JSON.parse(@[All of JSON-Data](in_118628182_117225519));
+  out = j.StartLehrgang;
+  
+} catch (e) {
+  "Could not parse JSON"
+}
+out += " S"

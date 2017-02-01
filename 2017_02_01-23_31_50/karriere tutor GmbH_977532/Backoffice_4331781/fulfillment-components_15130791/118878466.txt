@@ -1,0 +1,3 @@
+label: Dauer in Wochen
+field_id: 118878466
+type: number

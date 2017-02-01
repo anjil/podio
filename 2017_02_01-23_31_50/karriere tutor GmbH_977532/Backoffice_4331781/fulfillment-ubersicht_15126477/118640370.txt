@@ -1,0 +1,16 @@
+label: CalcName
+field_id: 118640370
+type: calculation
+script: var out = null;
+var dt = @[All of AktuellesDatum](out_128820243_131327818)[0];
+var jsonDataPerson = @[All of JSON-DataPerson](in_118798421_117225519) || []
+
+try {
+  j = JSON.parse(jsonDataPerson[0]);
+  
+  out = j.Kontakt.Vorname + " " + j.Kontakt.Nachname
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out

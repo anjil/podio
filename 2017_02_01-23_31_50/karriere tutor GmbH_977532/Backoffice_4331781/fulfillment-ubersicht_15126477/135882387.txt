@@ -1,0 +1,61 @@
+label: Calculation1
+field_id: 135882387
+type: calculation
+script: var out = ""
+var my_auftrag
+var my_lehrgangsstart
+var myDatum;
+var myDatum2;
+var my_lehrgangsende = "";
+var KompDauer = 0;
+var oFlagPru = 0;
+
+out = "**Art** | **Datum**\n";
+out += "---|---: \n"
+var jsP = @[All of JSON-Prufungen](out_123378265_118702791)
+var jPr
+
+try {
+  j = JSON.parse(@[JSON-Datum](field_118643640));
+
+   if(jsP.length && jsP !='[]' ){
+    jPr = JSON.parse(jps[0]);
+  }
+  var oPdate 
+  var iPr = 0;
+  var oFl =0;
+
+  for(i=0;i<j.Daten.length;i++) {
+    var oTag = new Date(j.Daten[i].Datum);
+    if(oPdate == null ){
+      if (undefined !== jPr&& jPr.length) {
+        if(iPr<jPr.length){
+          oPdate = new Date(jPr[iPr].Prufungsdatum); 
+          oFl = 0;
+        }       
+      }
+    }
+    if(oPdate != null && oTag.getTime() >= oPdate.getTime()){
+      out += jPr[iPr].Title +" : "+jPr[iPr].Status+ "|";
+      out += moment(oPdate).format("dd DD.MM.YYYY")+"\n";         
+       oPdate = null; 
+       oFl = 1;
+       iPr++;
+     }
+  
+     myDatum = j.Daten[i].Datum;
+     if (j.Daten[i].Art == "Massnahme") {
+       out += "MN Start: "
+     }
+    // Hide Components
+     if (j.Daten[i].Art != "Komponente") {
+       out += j.Daten[i].Bezeichnung.substring(0,80) + "|";
+      out += moment(myDatum).format("dd DD.MM.YYYY")+"\n";
+    }
+  }
+  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out

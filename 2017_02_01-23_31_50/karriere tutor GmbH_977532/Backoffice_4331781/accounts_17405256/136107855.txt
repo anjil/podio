@@ -1,0 +1,7 @@
+label: Unique Id
+field_id: 136107855
+type: calculation
+script: var name = @[Name](field_136105474)
+var id = @[Old Account Id](field_136105544)
+
+id 

@@ -1,0 +1,19 @@
+label: CustomerId
+field_id: 124665203
+type: calculation
+script: var oCustId = @[All of Bildungsgutscheinnummer](in_122499056_117225519)[0];
+var oShow = '';
+if(oCustId){
+   if(oCustId.indexOf("-") >-1){
+     oShow = oCustId.substr(0,oCustId.indexOf("-"));
+   }
+   else{
+     oShow = oCustId;
+   }
+}
+
+if(oShow == '' && @[Unique ID](item_app_item_id) == 'FFMT0272'){
+  oShow = '12345678900';
+}
+
+oShow;

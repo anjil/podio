@@ -1,0 +1,3 @@
+label: Preis Staffel 3
+field_id: 129420906
+type: money

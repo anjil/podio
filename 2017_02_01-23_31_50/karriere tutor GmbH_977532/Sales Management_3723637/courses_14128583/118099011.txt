@@ -1,0 +1,58 @@
+label: JSON-FFMTData
+field_id: 118099011
+type: calculation
+script: var debug = "";
+var out = "";
+var x;
+var y
+var AnzKomp;
+var MinReihenfolge = 0;
+var myReihenfolge = Array();
+var Komponenten_ary = Array();
+//JSON.parse(debug);
+
+try {
+  AnzKomp = @[All of JSON-Data](out_118101153_116414764).length;
+
+  for(i=0; i<AnzKomp;i++){
+    x = JSON.parse(@[All of JSON-Data](out_118101153_116414764)[i]);
+    var objTemp = {};
+    objTemp.Reihenfolge = x.Reihenfolge;
+    objTemp.ID = i;
+    myReihenfolge[i] = objTemp;
+    // Prüfe fuer min Reihenfolge
+    if(i==0) { MinReihenfolge = x.Reihenfolge }
+    else {  
+      if(x.Reihenfolge < MinReihenfolge) { MinReihenfolge = x.Reihenfolge; }
+    }
+  }
+  
+  myReihenfolge.sort(function (a, b) {
+    if (a.Reihenfolge > b.Reihenfolge) { return 1; }
+    if (a.Reihenfolge < b.Reihenfolge) { return -1; }
+    // a must be equal to b
+    return 0;
+  });
+
+  //debug += myReihenfolge.length;
+  debug += AnzKomp;
+
+  //Anzahl Komponenten
+  for(i=0; i<myReihenfolge.length; i++) {
+    y = JSON.parse(@[All of JSON-Data](out_118101153_116414764)[myReihenfolge[i].ID]);
+    Komponenten_ary[i]=y;
+  }
+} catch (e) {
+  "Could not parse JSON"
+}
+
+var j = {};
+j["ID"] = @[Unique ID](item_app_item_id);
+j["Titel"] = @[Maßnahmentitel](field_108135844);
+j["Komponenten"] = Komponenten_ary;
+j["MassnahmenNr"] = @[Maßnahmen Nr.](field_108136587);
+j["MinReihenfolge"] = MinReihenfolge;
+j["Dauer"] = @[Maßnahmendauer in Wochen](field_108136810);
+
+out = JSON.stringify(j);
+out

@@ -1,0 +1,4 @@
+label: Account Daten
+field_id: 128316288
+type: calculation
+script: @[All of Account Daten](in_118978756_124752897)[0]

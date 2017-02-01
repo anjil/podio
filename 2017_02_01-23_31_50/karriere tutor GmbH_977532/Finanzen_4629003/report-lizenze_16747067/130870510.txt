@@ -1,0 +1,4 @@
+label: Report Lizenze id
+field_id: 130870510
+type: calculation
+script: @[Unique ID](item_app_item_id);

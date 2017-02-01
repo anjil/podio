@@ -1,0 +1,67 @@
+label: Mig_CalcPhone
+field_id: 113531841
+type: calculation
+script: function my_strip(my_tel) {
+  var goodphone = ""
+  goodphone = my_tel.trim()
+  goodphone = goodphone.replace('\'','')
+  return goodphone;
+}
+
+var a = @[Telefon Fest](field_105489882)
+var my_work = ""
+var my_home = ""
+if (a != null) {
+  var my_work_tmp = a.filter(function (obj) {return obj.type === 'work'});
+  my_work = my_work_tmp.map(function (obj) {return obj.value}).join()
+  var my_home_tmp = a.filter(function (obj) {return obj.type === 'home'});
+  my_home = my_home_tmp.map(function (obj) {return obj.value}).join()
+}
+
+var b = @[Telefon Mobil](field_105489881)
+var my_workmob = ""
+var my_homemob = ""
+var my_mobile = ""
+if (b != null) {
+  var my_workmob_tmp = b.filter(function (obj) {return obj.type === 'work'});
+  my_workmob = my_workmob_tmp.map(function (obj) {return obj.value}).join()
+  var my_homemob_tmp = b.filter(function (obj) {return obj.type === 'home'});
+  my_homemob = my_homemob_tmp.map(function (obj) {return obj.value}).join()
+  var my_mobile_tmp = b.filter(function (obj) {return obj.type === 'mobile'});
+  my_mobile = my_mobile_tmp.map(function (obj) {return obj.value}).join()
+}
+var first = true
+
+var out = ""
+if (my_work != "") {
+  if (first) {
+    first = false
+  } else { out += "," }
+  out += "work:"+my_strip(my_work)
+}
+if (my_home != "") {
+  if (first) {
+    first = false
+  } else { out += "," }
+  out += "home:"+my_strip(my_home)
+}
+if (my_homemob != "") {
+  if (first) {
+    first = false
+  } else { out += "," }
+  out += "mobile:"+my_strip(my_homemob)
+}
+if (my_workmob != "") {
+  if (first) {
+    first = false
+  } else { out += "," }
+  out += "mobile:"+my_strip(my_workmob)
+}
+if (my_mobile != "") {
+  if (first) {
+    first = false
+  } else { out += "," }
+  out += "mobile:"+my_strip(my_mobile)
+}
+
+out

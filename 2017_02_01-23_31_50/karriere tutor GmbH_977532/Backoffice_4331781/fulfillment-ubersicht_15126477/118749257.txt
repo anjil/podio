@@ -1,0 +1,6 @@
+label: cLeadStatus
+field_id: 118749257
+type: calculation
+script: var out = "";
+out += @[All of Status](in_105473431_117225519)[0];
+out;

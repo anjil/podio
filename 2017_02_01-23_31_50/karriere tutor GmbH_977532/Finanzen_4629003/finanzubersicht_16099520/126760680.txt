@@ -1,0 +1,10 @@
+label: Report Count
+field_id: 126760680
+type: calculation
+script: var oReport = @[All of Jahr](out_124034962_126743990)||[]
+var oShow = 0;
+if(oReport){
+  oShow = oReport.length;
+}
+
+oShow;

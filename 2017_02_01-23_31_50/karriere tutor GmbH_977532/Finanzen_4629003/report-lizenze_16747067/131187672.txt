@@ -1,0 +1,6 @@
+label: Calculation
+field_id: 131187672
+type: calculation
+script: @[Unique ID](item_app_item_id)
+var t='!!!'
+t

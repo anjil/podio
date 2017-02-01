@@ -1,0 +1,34 @@
+label: JSON-CreateDetails
+field_id: 118666780
+type: calculation
+script: var j;
+var myDaten_ary = Array();
+var myDatenID_ary = Array();
+var z = {};
+var ii=0;
+
+try {
+  j = JSON.parse(@[All of JSON-Data](in_118628182_117225519));
+  for(i=0;i<j.Massnahmen.length;i++) {
+    for(k=0;k<j.Massnahmen[i].Komponenten.length;k++) {
+      myDaten_ary[ii] = j.Massnahmen[i].Komponenten[k].Titel;
+      myDatenID_ary[ii] = j.Massnahmen[i].Komponenten[k].ID;
+
+ii++;
+    }
+  }
+  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+
+/*
+z["ID"] = @[Unique ID](item_app_item_id);
+z["Daten"] = myDaten_ary;
+z["DatenID"] = myDatenID_ary;
+*/
+
+z = myDaten_ary
+out = JSON.stringify(z);
+out

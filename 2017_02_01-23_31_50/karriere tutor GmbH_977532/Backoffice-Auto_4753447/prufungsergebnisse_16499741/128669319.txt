@@ -1,0 +1,11 @@
+label: prufungen (yes=1)
+field_id: 128669319
+type: calculation
+script: var oPrufungen = @[All of prufungen Id](in_128035427_128506178)+''||''
+var oShow = 0;
+
+if(oPrufungen){
+  oShow = 1;
+}
+
+oShow;

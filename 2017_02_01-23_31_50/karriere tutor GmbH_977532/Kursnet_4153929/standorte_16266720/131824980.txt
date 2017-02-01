@@ -1,0 +1,3 @@
+label: Status Bürocenter invertiert
+field_id: 131824980
+type: category

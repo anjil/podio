@@ -1,0 +1,16 @@
+label: StatusStandortFilter
+field_id: 135343129
+type: calculation
+script: var out = parseInt(0)
+var myCounter = 0
+var myLength = 0
+myLength = @[Status Allgemein](field_126184854).length
+for(i=0; i< myLength; i++) { 
+  if (@[Status Allgemein](field_126184854)[i]=="zur Diskussion") { myCounter +=1  }
+  if (@[Status Allgemein](field_126184854)[i]=="in Planung") { myCounter += 10 }
+  if (@[Status Allgemein](field_126184854)[i]=="Bei der Anlage") { myCounter += 100 }
+  if (@[Status Allgemein](field_126184854)[i]=="Standort fertig eingerichtet") { myCounter += 1000 }
+  if (@[Status Allgemein](field_126184854)[i]=="Standort in Überprüfung") { myCounter += 10000 }
+}
+out = parseInt(myCounter)
+out

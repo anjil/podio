@@ -1,0 +1,4 @@
+label: Verbrauchte Urlaubstage
+field_id: 114229608
+type: calculation
+script: @[Sum of Anzahl Urlaubstage](in_sum_114229298_114229101)

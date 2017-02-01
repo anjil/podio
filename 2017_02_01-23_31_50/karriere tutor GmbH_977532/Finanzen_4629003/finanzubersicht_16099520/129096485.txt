@@ -1,0 +1,11 @@
+label: Teilnehmer (yes=1)
+field_id: 129096485
+type: calculation
+script: var id    = @[All of Teilnehmer ID](out_129096386_129089854)+''
+var fulid = @[All of Teilnehmer ID](in_130785541_124752897)+''
+if(id){ 1 }
+else{
+  if(!fulid){ 2 }
+  else{ 0 }
+}
+

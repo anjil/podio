@@ -1,0 +1,4 @@
+label: Urlaubstage (gesamt)
+field_id: 114229297
+type: calculation
+script: @[Max of Urlaubstage](out_max_114228927_114229101)

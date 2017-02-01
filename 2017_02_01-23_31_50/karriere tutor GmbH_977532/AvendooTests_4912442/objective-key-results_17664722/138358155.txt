@@ -1,0 +1,4 @@
+label: Ergebnis O1
+field_id: 138358155
+type: calculation
+script: @[Ergebnis KR 1a](field_138357932) + @[Ergebnis KR 1b](field_138358153) / 2

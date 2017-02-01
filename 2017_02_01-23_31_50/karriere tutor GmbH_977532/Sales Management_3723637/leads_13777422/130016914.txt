@@ -1,0 +1,5 @@
+label: Leads-StartDate
+field_id: 130016914
+type: calculation
+script: var oDate = @[Startdatum Lehrgang](field_108029027);
+oDate;

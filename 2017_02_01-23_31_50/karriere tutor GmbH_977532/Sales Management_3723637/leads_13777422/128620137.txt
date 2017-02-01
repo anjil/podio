@@ -1,0 +1,39 @@
+label: Error Code
+field_id: 128620137
+type: calculation
+script: var oMabnahmen      = @[All of Maßnahmentitel](out_108135844_108285774)+''||'';
+var oLeadsErr       = parseInt(@[Leads Error(Yes=1)](field_128150399));
+var oSalesErr       = parseInt(@[Sales Error(Yes=1)](field_128150400));
+var oYearlySales    = parseInt(@[Yearly Sales](field_128523009));
+var oQuarterlySales = parseInt(@[Quarterly Sales](field_128523298));
+var oFulfillment    = @[All of Kontaktdetails](out_117226241_117225519)+''||'';
+var oCustName       = @[Customer Name](field_128621106) ||'';
+var oAuftragsdatum  = @[Auftragsdatum](field_108041451) || null;
+var oStartdatumLeh  = @[Startdatum Lehrgang](field_108029027) || null;
+var oStartdatumBil  = @[Startdatum Bildungsgutschein](field_108109621) || null;
+
+
+var oShow = 0;
+
+if(!oMabnahmen){
+   oShow = 1;
+}
+else if(oLeadsErr == 1){
+   oShow = 2;
+}
+else if(oSalesErr == 1){
+   oShow = 3;
+}
+else if(oYearlySales == 1 && oQuarterlySales == 1){
+   if(!oFulfillment){
+      oShow = 4;
+   }
+   else if(!oCustName){
+      oShow = 5;
+   }
+   else if(!oAuftragsdatum || !oStartdatumLeh || !oStartdatumBil){
+      oShow = 6;
+   }
+}
+
+oShow;

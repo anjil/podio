@@ -1,0 +1,20 @@
+label: Voucher Id
+field_id: 128036316
+type: calculation
+script: var uid = @[Unique ID](item_app_item_id)
+var oShow = 0;
+
+function GetId(oUniqueId){
+ if(oUniqueId){
+  var regex=/^[0-9]+$/;
+  var out = '';
+  for(var i=0;i<oUniqueId.length;i++){
+    if(oUniqueId[i].match(regex)){
+       out+= oUniqueId[i];
+    } 
+  }
+  return parseInt(out);
+ }
+}
+
+oShow = GetId(uid);

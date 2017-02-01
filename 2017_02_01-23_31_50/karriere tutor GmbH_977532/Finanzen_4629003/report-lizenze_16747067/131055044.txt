@@ -1,0 +1,4 @@
+label: Calculation
+field_id: 131055044
+type: calculation
+script: @[All of JSON-Report Lizenze Data](in_130406759_130405638)+'';

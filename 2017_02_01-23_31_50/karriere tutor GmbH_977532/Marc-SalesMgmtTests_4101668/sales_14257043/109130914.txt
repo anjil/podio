@@ -1,0 +1,7 @@
+label: Calc_2ndPayDate
+field_id: 109130914
+type: calculation
+script: if (@[Min of Anzahl Raten](out_min_108902650_109125321) > 1) {
+d2 = new Date(@[Startdatum Bildungsgutschein](field_109129493));
+d22 = new Date(d2.getFullYear(),d2.getMonth()+2,d2.getDate()); 
+moment(d22).format("YYYY-MM-DD");} else {"NoMorePayDates"}

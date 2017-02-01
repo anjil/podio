@@ -1,0 +1,3 @@
+label: Aktueller Lead Bearbeiter
+field_id: 108493041
+type: contact

@@ -1,0 +1,15 @@
+label: Nächster Geburtstag
+field_id: 124788038
+type: calculation
+script: var out = @[Geburtsdatum](field_124762358)
+var myMonth = @[Geburtsdatum](field_124762358).getMonth()
+var myDay = @[Geburtsdatum](field_124762358).getDate()
+var d = new Date();
+var myCurrYear = d.getFullYear()
+var myNewDate = new Date(myCurrYear, myMonth, myDay, 0, 0, 0, 0);
+if (myNewDate < d) {
+  myNewDate = new Date(myCurrYear+1, myMonth, myDay, 0, 0, 0, 0);
+} 
+out = myNewDate
+// test
+out

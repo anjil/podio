@@ -1,0 +1,88 @@
+label: Report
+field_id: 130416652
+type: calculation
+script: var json    = @[All of JSON-Report Lizenze Data](in_130406759_130405638); 
+var monYr   = @[Month-Year](field_130401598);
+var olink   = 'https://podio.com/karrieretutorde/finance/apps/finanzubersicht/items/';
+var oTotal  = 0;
+var out     = '';
+var oData   = '';
+var oShow   = ' ';
+out += '|**Name**|**Bild#**|**LehName**|**Status**|**LizenName**|**Amount**|**Date**|<br>';
+out += '|:------|:-----|----|----|----|----:|:----:|<br>';
+
+var monthArr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+
+try{
+  if(monYr){
+   if(json && json!='{}' && json!='[]'){
+     for(var i=0; i<json.length; i++){
+       var jsn  = JSON.parse(json[i]);
+       var oName = jsn.Name;  
+       var oId   = jsn.id;
+       var oItemId = GetId(jsn.Itemid);  
+       for(var j=0;j<jsn.Lizenze.length; j++){
+         var oDt = jsn.Lizenze[j].Date;  
+         var oAmt = parseFloat(jsn.Lizenze[j].Amount);
+         var oLehName = jsn.Lizenze[j].LehrgangName; 
+         var oStatus  = jsn.Lizenze[j].LehrgangStatus;          
+         var oLizName = jsn.Lizenze[j].LizenzeName; 
+
+         if(oLehName.length > 15){
+            oLehName = oLehName.substr(0,15);
+         }
+         if(oLizName.length > 15){
+            oLizName = oLizName.substr(0,15);
+         }
+         if(oDt){
+           var oMonYear = getMonYear(oDt); 
+           if(oMonYear == monYr){  
+             oTotal += oAmt;
+             var od = moment(oDt).format("DD.MM.YYYY");  
+             oAmt=oAmt.toFixed(2).toString().replace(".", ","); 
+             var oUrl = olink + oItemId;
+                
+             oData   +='|'+oName.link(oUrl)  +'|';
+             oData   += oId                  +'|';
+             oData   += oLehName             +'|';
+             oData   += oStatus              +'|';
+             oData   += oLizName             +'|';
+             oData   += oAmt                 +'€|'; 
+             oData   += od                   +'|<br>';
+            }          
+          }
+        }
+      }
+    }
+  }
+}catch (e) {
+  "Could not parse JSON";
+}
+
+  
+function GetId(oUniqueId){
+ if(oUniqueId){
+   var regex=/^[0-9]+$/;
+   var oShow = '';
+   for(var i=0;i<oUniqueId.length;i++){
+     if(oUniqueId[i].match(regex)){
+       oShow+= oUniqueId[i];
+     } 
+   }
+   return parseInt(oShow);
+ }
+}
+
+
+function getMonYear(oDt){
+  var dt = new Date(oDt);
+  return monthArr[dt.getMonth()]+ '-' + dt.getFullYear(); 
+}
+
+if(oData){
+  oTotal = parseFloat(oTotal).toFixed(2).toString().replace(".", ",");
+  oData  += '|**Total**|**&nbsp; **|**&nbsp; **|**&nbsp; **|**&nbsp;**|**'+ oTotal+' € **|**&nbsp;**| <br>';
+  oShow = out+oData;
+}
+oShow;

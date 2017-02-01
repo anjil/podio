@@ -1,0 +1,6 @@
+label: -
+field_id: 118627957
+type: calculation
+script: @[Anrede](field_113524348)
+out = "**INTERNES - bitte unterhalb alles ignorieren:**"+"\n\n"+ "----"
+out

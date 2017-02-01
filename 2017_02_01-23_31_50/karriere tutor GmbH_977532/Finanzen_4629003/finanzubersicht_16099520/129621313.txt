@@ -1,0 +1,6 @@
+label: Calculation
+field_id: 129621313
+type: calculation
+script: var uid = @[All of Fulfillment-ubersicht ID](in_129123177_124752897)[0];
+var oShow = 0;
+oShow;

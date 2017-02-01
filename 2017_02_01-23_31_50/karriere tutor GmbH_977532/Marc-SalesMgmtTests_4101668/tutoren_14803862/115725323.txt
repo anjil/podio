@@ -1,0 +1,6 @@
+label: -
+field_id: 115725323
+type: calculation
+script: @[Progress](field_114346020)
+out = "**Überblick:**"+"\n\n"+ "----"
+out

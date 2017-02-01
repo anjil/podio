@@ -1,0 +1,3 @@
+label: Details
+field_id: 127895585
+type: text

@@ -1,0 +1,3 @@
+label: Fälligkeit in Tagen 1.Rate
+field_id: 128735325
+type: number

@@ -1,0 +1,34 @@
+label: Übersicht Bücher
+field_id: 118986408
+type: calculation
+script: var BuchStatus = "";
+
+//
+// Stati der Komponenten berechnen
+//
+if (@[Buch versendet](field_118984506)=="Buchversand abgeschlossen") {
+  BuchStatus = "erledigt"
+} else { BuchStatus = "offen" };
+
+if (@[Buch versendet](field_118984506)=="Nicht nötig") {
+  BuchStatus = "Nicht nötig"
+}
+
+var out = "Buch | Status\n"
+out += "---|---:\n"
+try {
+  j = JSON.parse(@[JSON-DataBookStatus](field_118988578));
+  if((j.Buecher!=null) && (j.Buecher.length>0)) {
+    for (i=0; i<j.Buecher.length; i++) {
+      out += j.Buecher[i].Titel + " | " + BuchStatus + "\n"; 
+    }
+  }
+
+  out += "";
+  //out = j.Kontaktdetails
+} catch (e) {
+  "Could not parse JSON"
+}
+
+
+out

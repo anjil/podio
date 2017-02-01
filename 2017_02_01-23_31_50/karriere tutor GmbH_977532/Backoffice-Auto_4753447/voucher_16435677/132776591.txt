@@ -1,0 +1,9 @@
+label: Fulfillment Ubersicht (Yes = 1)
+field_id: 132776591
+type: calculation
+script: var fullUb = @[All of Fulfillment-ubersicht ID](out_129123177_127692074)+''
+
+if(fullUb)
+  1;
+else
+  0;

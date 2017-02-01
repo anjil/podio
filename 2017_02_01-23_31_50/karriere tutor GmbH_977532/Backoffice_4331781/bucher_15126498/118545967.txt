@@ -1,0 +1,26 @@
+label: Calc-test
+field_id: 118545967
+type: calculation
+script: var myobj;
+var my_string2 = "";
+var my_string3 = "";
+var my_string4 = "";
+var x;
+
+try {
+  x = JSON.parse(@[JSON-Data](field_118100909));
+  my_string2 = String(x.Titel);
+  //my_string3 = String(x.Kursfreigabe_ID);
+  my_string4 = String(x.Titel);
+} catch (e) {
+  "Could not parse JSON"
+}
+my_string2 += " ";
+my_string3 += " ";
+
+
+//my_string2 = String(x.Titel);
+var out = "";
+out =  my_string2;
+//out = @[JSON-Data](field_118100909)
+out;

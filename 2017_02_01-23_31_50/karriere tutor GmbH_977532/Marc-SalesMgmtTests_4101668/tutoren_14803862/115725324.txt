@@ -1,0 +1,32 @@
+label: Überblick
+field_id: 115725324
+type: calculation
+script: var anrede = @[All of Anrede](out_113524348_113676697);
+var anrede2 = anrede[0];
+if (anrede2 == null) {anrede2 = "" };
+var titel = @[All of Titel](out_113524347_113676697);
+var titel2 = titel[0];
+if (titel2 == null) { titel2 = "" };
+var vn = @[All of Vorname](out_99547597_113676697);
+var vn2 = vn[0];
+if (vn2 == null) { vn2="" };
+var nn = @[All of Nachname](out_99547598_113676697);
+
+var a = @[All of Tel](out_99547600_113676697);
+var a2 = a.map(function (obj) { return obj.value});
+
+var b = @[All of Email](out_108998996_113676704);
+var b2 = b.map(function (obj) { return obj.value});
+
+var d = @[All of Straße](out_113524349_113676697);
+var e = @[All of Hausnummer](out_113524350_113676697);
+var f = @[All of PLZ](out_113524351_113676697);
+var g = @[All of Stadt](out_113524352_113676697);
+
+var mn = @[All of ShortDetail](out_113683328_113676698)
+
+out = "**Massnahme:** " + mn[0] + "\n\n"
+out += "**Name:** " + anrede2 + " " + titel2 +" " + vn[0] + " " + nn[0] + "\n\n"
+out += "**Tel:** " + a2 + " - - - **E-Mail:** " + b2 + "\n\n"
+out += "**Adresse:** " + d[0] + " " + e[0] + ", " + f[0] + " " + g[0]
+out

@@ -1,0 +1,8 @@
+label: Test Category Not Set(yes=1)
+field_id: 134528080
+type: calculation
+script: var t = @[Test Category](field_134520909)||''
+if(t)
+0
+else
+1

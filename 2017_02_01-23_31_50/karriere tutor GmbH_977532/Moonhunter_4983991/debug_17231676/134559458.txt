@@ -1,0 +1,3 @@
+label: Number of Locations
+field_id: 134559458
+type: number

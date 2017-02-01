@@ -1,0 +1,3 @@
+label: Buchungstag
+field_id: 124021916
+type: date

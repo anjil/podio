@@ -1,0 +1,19 @@
+label: JSON-FinanceUbersicht
+field_id: 124845114
+type: calculation
+script: var myArray = Array();
+var tmpObj = {};
+var json= @[All of JSON-FinanceUbersicht](in_124762989_124752897);
+
+
+try {
+  for(var i=0;i<json.length;i++){
+     j = JSON.parse(json[i]);
+     myArray[i] = j;
+  }
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out = JSON.stringify(myArray);
+out

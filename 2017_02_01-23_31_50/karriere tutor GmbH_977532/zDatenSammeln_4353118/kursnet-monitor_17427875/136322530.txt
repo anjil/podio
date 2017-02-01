@@ -1,0 +1,3 @@
+label: Studienangebote 
+field_id: 136322530
+type: number

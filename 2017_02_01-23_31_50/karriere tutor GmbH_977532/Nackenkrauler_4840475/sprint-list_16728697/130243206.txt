@@ -1,0 +1,4 @@
+label: Duration
+field_id: 130243206
+type: calculation
+script: @[Sum of Duration](out_sum_130243188_130243203)

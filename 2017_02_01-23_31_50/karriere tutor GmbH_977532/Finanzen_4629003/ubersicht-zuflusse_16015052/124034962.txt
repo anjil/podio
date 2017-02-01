@@ -1,0 +1,4 @@
+label: Jahr
+field_id: 124034962
+type: calculation
+script: @[Category](field_124031103)

@@ -1,0 +1,19 @@
+label: StatusBüroFilter
+field_id: 135343664
+type: calculation
+script: var out = parseInt(0)
+var myCounter = 0
+var myLength = 0
+myLength = @[Status Bürocenter](field_126184852).length
+for(i=0; i< myLength; i++) { 
+  if (@[Status Bürocenter](field_126184852)[i]=="Ort muss gesucht werden") { myCounter +=1  }
+  if (@[Status Bürocenter](field_126184852)[i]=="Angebot eingeholt") { myCounter +=2  }
+  if (@[Status Bürocenter](field_126184852)[i]=="Antrag läuft") { myCounter +=4  }
+  if (@[Status Bürocenter](field_126184852)[i]=="Vertrag unterzeichnet") { myCounter += 10 }
+  if (@[Status Bürocenter](field_126184852)[i]=="Kann Post empfangen") { myCounter += 100 }
+  if (@[Status Bürocenter](field_126184852)[i]=="Firmenschild in Auftrag gegeben") { myCounter += 1000 }
+  if (@[Status Bürocenter](field_126184852)[i]=="Firmenschild angebracht") { myCounter += 2000 }
+  if (@[Status Bürocenter](field_126184852)[i]=="Bild von Schild zugestellt") { myCounter += 10000 }
+}
+out = parseInt(myCounter)
+out

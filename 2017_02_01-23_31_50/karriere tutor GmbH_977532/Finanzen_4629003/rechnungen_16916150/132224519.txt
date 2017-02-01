@@ -1,0 +1,3 @@
+label: End Serie Date
+field_id: 132224519
+type: date

@@ -1,0 +1,3 @@
+label: Append additional date title in Product Id
+field_id: 136250369
+type: category

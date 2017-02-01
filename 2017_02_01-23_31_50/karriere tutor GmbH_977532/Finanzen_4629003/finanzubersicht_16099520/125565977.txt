@@ -1,0 +1,46 @@
+label: Differenz der Eingänge
+field_id: 125565977
+type: calculation
+script: var jsonExpTran = @[All of JSON-Erwartete-Zahlungseingange](in_125563047_125193630);
+var jsonBankingTran = @[All of JSON-Transaction](in_124039546_124753397);
+var oShow = 0;
+var oTotalExpAmount = 0;
+var oTotalBankingAmount = 0;
+var Diff = 0;
+var t='~~~';
+
+try {
+   
+   if(jsonExpTran && jsonExpTran !='[]'){  
+     oTotalExpAmount = getAmount(jsonExpTran);
+   }
+   if(jsonBankingTran && jsonBankingTran !='[]'){  
+     oTotalBankingAmount = getAmount(jsonBankingTran);
+   }
+
+   Diff = oTotalExpAmount - oTotalBankingAmount;
+   //Diff = Diff.toFixed(2).toString().replace(".", ",")
+   oShow = Diff;
+ 
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function getAmount(json){
+  var oCurrentDate = new Date(@[All of AktuellesDatum](out_128820243_128820289)[0]);
+  var oTotalAmount = 0;
+
+  for(var i=0; i<json.length; i++){
+     jsnArr = JSON.parse(json[i]);   
+     var oDt = new Date(jsnArr['Date']);
+     var oAmt = jsnArr['Amount']||0;
+     if(oDt.getTime() <= oCurrentDate){
+        oTotalAmount+= parseFloat(oAmt);
+     }    
+  }
+ return oTotalAmount;
+}
+
+oShow
+//Test amount

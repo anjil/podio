@@ -1,0 +1,106 @@
+label: Übersicht Maßnahmen
+field_id: 117227327
+type: calculation
+script: var j;
+var t;
+var myDatum;
+var myDatum2;
+var KompDauer;
+var myMassnahmeRF = Array();
+var myKompRF = Array()
+var out = "";
+out += "Maßnahmen | Komponente | Massnahmen# | WC | Startdatum | Status \n"
+out += "-----|---|---:|---:|:---:|---:\n"
+
+var strKomp = '';
+
+var oDt = @[Abweichender Lehrgangsstart](field_117226512);
+
+try {
+  j = JSON.parse(@[All of JSON-Data](in_118628182_117225519));
+  
+    myDatum = (oDt != null) ? oDt : j.StartLehrgang;
+
+  //myDatum = j.StartLehrgang;
+  
+  for(i=0;i<j.Massnahmen.length;i++) {
+    // Komponenten
+    for(k=0;k<j.Massnahmen[i].Komponenten.length;k++) {
+      var Massnahme = "";
+      var StartdatumStr = "";
+      if(k==0) {
+        Massnahme = "**" + j.Massnahmen[i].ID.substring(0,10) + "**";
+        StartdatumStr = moment(myDatum).format("dd DD.MM.YYYY");
+        // Addiere die Lehrgangsdauer auf myDatum
+        KompDauer = j.Massnahmen[i].Dauer;
+        myDatum2 = myDatum;
+        myDatum = new Date(myDatum2);
+        myDatum.setDate(myDatum.getDate()+KompDauer*7)
+      }
+
+
+      var oStatus = 'NV';
+      var js2 = JSON.parse(@[All of JSON-Datum2](out_123381264_118702791)[0]);
+      for(var jsi=0; jsi < js2.length; jsi++){
+        if(js2[jsi].CalcLehrgang == j.Massnahmen[i].Komponenten[k].Titel)
+          oStatus = js2[jsi].StatusShortName;
+      }
+
+
+var oStr = j.Massnahmen[i].MassnahmenNr;
+var oDauer ='';
+if(oStr.indexOf(" ") > -1){
+   oDauer = oStr.substr(0,oStr.indexOf(" "));
+   oStr = oStr.replace(/\r?\n|\r/g, " ");
+   strKomp+= '**'+j.Massnahmen[i].Komponenten[k].Titel.substring(0,30)+'**'+' '+oStr;
+}
+else{
+   oDauer =oStr;
+}
+
+      out += Massnahme + " |" + j.Massnahmen[i].Komponenten[k].Titel.substring(0,30) + "| "
+      out += oDauer + " | " + j.Massnahmen[i].Dauer + " | "
+      out += StartdatumStr +" | **"+oStatus+"**\n";
+    }
+  }
+
+  //
+  // Buchversand mit Status
+  //
+  out += "\n--------\n\n";
+  out += "Komponente | Buch | Status\n";
+  out += "---|---|---\n"
+
+  var BDetails = @[All of JSON-DataBookStatus](out_118988578_118984777);
+  var BuchArray = Array();
+  var counter = 0;
+  for (i=0; i< BDetails.length; i++) {
+    if (BDetails[i].Buecher != null) {
+      for (k=0; k<BDetails[i].Buecher.length; k++) {
+        var tmpObj = {};
+        tmpObj["Buch"] = BDetails[i].Buecher[k];
+        tmpObj["Komponente"] = BDetails[i].FfmtKomponente;
+        tmpObj["Status"] = BDetails[i].Status;
+        BuchArray[counter] = BDetails[i].Buecher[k];
+        counter++;
+      }
+    }
+  }
+out += counter + " --" + BDetails.ID +"|\n";
+out += strKomp;
+//.Buecher[0].BuchID;
+
+
+  for (i=0; i < BuchArray.length; i++) {
+    
+      out += BuchArray[i].Komponente + " | ";
+      out += BuchArray[i].Buch.Titel + " | ";
+      out += BuchArray[i].Status;
+    
+  }
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out += " "
+out

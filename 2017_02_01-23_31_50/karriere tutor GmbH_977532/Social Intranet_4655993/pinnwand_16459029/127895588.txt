@@ -1,0 +1,3 @@
+label: Anzeigedatum
+field_id: 127895588
+type: date

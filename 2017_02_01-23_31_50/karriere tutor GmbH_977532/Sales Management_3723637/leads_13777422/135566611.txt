@@ -1,0 +1,26 @@
+label: Sales Year (Weekly)
+field_id: 135566611
+type: calculation
+script: var oDt = @[Auftragsdatum](field_108041451);
+var oSh = '';
+if(oDt){
+  var sDate =  getFLDate(oDt);
+  oSh      +=  sDate.getFullYear();
+}
+
+
+function getFLDate(d){  
+var current   = new Date(d); 
+var weekstart = null;
+if(current.getDay() == 0){
+  weekstart = current.getDate() - 6;
+}
+else{
+  weekstart = current.getDate() - current.getDay() +1;    
+}
+var monday = new Date(current.setDate(weekstart));  
+return monday;
+
+}
+
+oSh;

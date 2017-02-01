@@ -1,0 +1,65 @@
+label: Calculation
+field_id: 133719026
+type: calculation
+script: var oUniqueId  = @[lizenzen Id](field_128895839);
+var oJson      = @[All of Json-ExpectedLizenzenFee](out_128908966_128884745);
+var oLeh       = @[Lehrgang](field_129630079)||'';
+var oCalLeh    = '';
+var oLiz       = @[Lizenzen](field_129630080)||'';
+var oCalLiz    = '';
+var oStatus    = @[Status](field_129777825)||'';
+var oCalSat    = '';
+var oRate      = @[Rate](field_130763189)||'';
+var oCalRate   = '';
+var oShow      = 1;
+
+try {
+
+  if(oJson && oJson !='[]' && oJson !='{}'){
+    var jsn = JSON.parse(oJson); 
+    for(var i=0; i<jsn.length; i++){
+      if(jsn[i]['ExpectedId'] == oUniqueId){
+         oCalLiz     = jsn[i]['Lizenzname']||'';
+         oCalLeh     = jsn[i]['LehrgangName']||'';
+         oCalSat     = jsn[i]['FullStatus']||'';
+         oCalRate    = jsn[i]['RStatus']||'';
+         break;
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+var t=''
+
+if(oCalLeh == oLeh){
+  t+='0';
+}
+else{
+  t+='1';
+}
+if(oCalLiz == oLiz){
+  t+='0';
+}
+else{
+  t+='1';
+}
+if(oCalRate == oRate){
+  t+='0';
+}
+else{
+  t+='1';
+}
+if(oCalSat == oStatus){
+  t+='0';
+}
+else{
+  t+='1';
+}
+
+if(t=='0000') oShow = 0;
+if(t=='1111') oShow = 0;
+if(t!='0000' && t!='1111') oShow = 1;
+
+ oShow+'~~'+t;

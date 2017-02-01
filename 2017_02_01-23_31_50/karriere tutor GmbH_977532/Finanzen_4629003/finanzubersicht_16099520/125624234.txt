@@ -1,0 +1,180 @@
+label: report-test
+field_id: 125624234
+type: calculation
+script: var jsonExpTransaction = @[JSON-ExpectedTransactions](field_125210855)||[];
+var jsonTransaction = @[All of JSON-Transaction](in_124039546_124753397)||[];
+var items = [];
+var t='';
+var out = "**Week**|**Expected Tran Amt**|**Banking Tran Amt**|**Difference**\n";
+out += "---|---:|---:|---: \n"
+
+try {
+
+  if(jsonExpTransaction && jsonExpTransaction !='[]'){  
+     getExpTransaction(jsonExpTransaction);
+  }
+  if(jsonTransaction && jsonTransaction !='[]'){  
+     getBnkTransaction(jsonTransaction);
+  }
+  
+  printData(items);
+} 
+catch (e){
+  "Could not parse JSON"
+}
+
+
+function printData(){
+ var tuples = [];
+ var oTotalExpAmt = 0; 
+ var oTotalBnkAmt = 0;
+ var oTotalDiff   = 0;
+ for (var key in items) tuples.push([key, items[key]]);
+
+ tuples.sort(function(aa, bb) {
+    var y1 = aa[1]['year'];
+    var y2 = bb[1]['year'];
+
+    var w1 = aa[1]['week'];
+    var w2 = bb[1]['week'];
+
+    if (y1 < y2) return -1;
+    if (y1 > y2) return 1;
+    if (w1 < w2) return -1;
+    if (w1 > w2) return 1;
+    return 0;
+
+ });
+
+ for (var i = 0; i < tuples.length; i++) {
+   var oTKey = tuples[i][0];   //Key
+   var oTVal = tuples[i][1];   //Value 
+   var oArr = tuples[i][1];
+   var oWeek = oArr['week'];
+    var oWeekRange = oArr['weekRange'];
+    var oExpAmt = oArr['ExpectedAmount'];
+    var oBnkAmt = oArr['BankingAmount']; 
+    var oDiff = parseFloat(oExpAmt) - parseFloat(oBnkAmt);
+
+    oTotalExpAmt += oExpAmt;
+    oTotalBnkAmt += oBnkAmt;
+    oTotalDiff   += oDiff;
+    
+
+    out +='Week: '+oWeek +' ('+oWeekRange+')'+ "|";
+    out += DisplayData(oExpAmt)+"|";
+    out +=DisplayData(oBnkAmt)+"|";
+    out +=DisplayData(oDiff)+"\n"; 
+ }
+ out +='**Total**'+ "|**";
+ out += DisplayData(oTotalExpAmt)+"**|**"; 
+ out += DisplayData(oTotalBnkAmt)+"**|**" ; 
+ out += DisplayData(oTotalDiff) +"**\n"; 
+}
+
+
+function getExpTransaction(jsonExpTransaction){
+  var tempArr ={};
+  jsnArr = JSON.parse(jsonExpTransaction); 
+  for(var i=0; i<jsnArr.length; i++){
+     var oDt = new Date(jsnArr[i]['Date']);
+     var oAmt = jsnArr[i]['Amount']||0;
+     var oWeek = parseInt(getWeekNumber(oDt));
+     var oDateRange = getWeekStartEndDate(oDt); 
+     var oYear = oDt.getFullYear();         
+     var tempKey =oYear+'_'+oWeek;
+     if(items[tempKey]){
+         var arr = items[tempKey];
+         arr['ExpectedAmount'] = parseFloat(arr['ExpectedAmount']) + oAmt;
+         items[tempKey] = arr;                  
+      } 
+      else{
+         var arr = [];
+         arr['Date'] = oDt;
+         arr['week'] = oWeek; 
+         arr['weekRange'] = oDateRange;
+         arr['ExpectedAmount'] = oAmt;
+         arr['BankingAmount'] = 0  
+         arr['year'] = oYear; 
+         items[tempKey] = arr;
+      }
+   }       
+}
+
+function getBnkTransaction(jsonTransaction){
+  var tempArr ={};
+  for(var i=0; i<jsonTransaction.length; i++){
+    jsnArr = JSON.parse(jsonTransaction[i]);  
+     var oDt = new Date(jsnArr['Date']);
+     var oAmt = jsnArr['Amount']||0;
+     var oWeek = parseInt(getWeekNumber(oDt));
+     var oDateRange = getWeekStartEndDate(oDt);
+     var oYear = oDt.getFullYear();     
+     var tempKey = oYear+'_'+oWeek;
+     if(items[tempKey]){
+         var arr = items[tempKey];
+         arr['BankingAmount'] = parseFloat(arr['BankingAmount']) + oAmt;
+         items[tempKey] = arr;                  
+      } 
+      else{
+         var arr = [];
+         arr['Date'] = oDt;
+         arr['week'] = oWeek; 
+         arr['weekRange'] = oDateRange;
+         arr['ExpectedAmount'] = 0;
+         arr['BankingAmount'] = oAmt;  
+         arr['year'] = oYear;  
+         items[tempKey] = arr;
+      }
+   }       
+}
+
+function DisplayData(str){
+  if(!str){
+   str = 0;
+   return str;
+  }
+  else {
+     str=str.toFixed(2).toString().replace(".", ",");
+     return str;
+  }
+}
+
+function getWeekNumber(t) {
+  var date = new Date(t.getTime());
+  date.setHours(0, 0, 0, 0); 
+  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+  var week1 = new Date(date.getFullYear(), 0, 4); 
+  return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000- 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
+
+function getWeekStartEndDate(d){
+  var oDate = new Date(d);                  
+  var day = oDate.getDay();                 
+  var diff = oDate.getDate() - day + (day == 0 ? -6:1);                  
+  var week_start_tstmp = oDate.setDate(diff);                            
+  var week_start = new Date(week_start_tstmp);                
+  var week_start_date =formatted_date(week_start);                 
+  var week_end  = new Date(week_start_tstmp);                   
+  week_end = new Date (week_end.setDate(week_end.getDate() + 4));                
+  var week_end_date =formatted_date(week_end);
+
+  var oDt = week_start_date +' - '+ week_end_date;
+
+  //var oDt = week_end_date +' - '+ week_start_date;
+  return oDt;
+
+}
+
+function formatted_date(date){
+ var dayName = new Array( 'Su','Mo','Tu','We','Th','Fr','Sa');
+
+ var m = ("0"+ (date.getMonth()+1)).slice(-2);  
+ var d = ("0"+ date.getDate()).slice(-2);                                 
+ var y = date.getFullYear();
+ var oDay = dayName[date.getDay()];
+ return  oDay +' '+d+'.'+m; 
+}
+
+out

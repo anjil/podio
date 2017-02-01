@@ -1,0 +1,21 @@
+label: JSON-Erwartete-Zahlungseingange
+field_id: 125563047
+type: calculation
+script: var oAmt         = @[Amount](field_125193629);
+var oDate        = @[Date](field_125525214);
+var oName        = @[All of Name](out_124789926_125193630)[0];
+var actualTrDate = @[Actual Transaction Date](field_125978825);
+var oShow = '';
+
+var trDate = '';
+if(actualTrDate) trDate = 'y';
+else trDate = 'n';
+
+var j                  = {};
+j["Name"]              = oName;
+j["Amount"]            = oAmt;
+j["Date"]              = (oDate)? new Date(oDate): '';
+j["TransactionPaid"]   = trDate;
+
+oShow = JSON.stringify(j);
+oShow;

@@ -1,0 +1,118 @@
+label: Temp
+field_id: 136735227
+type: calculation
+script: var json_data = @[All of Document Date Json](in_136563106_136035531);
+
+var itemArray = [];
+var dateArray = []; 
+var cArray = [];
+var rArray = [];
+var finalArray  = [];   
+var nomatchArray = [];
+var output = "";
+
+for(var i=0; i< json_data.length; i++) { 
+  var str = json_data[i];
+  var arr = str.split('|||');  
+  var date = arr[0]; 
+  var date_object = arr[1]; 
+if(dateArray.indexOf(date)==-1){  
+  dateArray.push(date);
+  itemArray[date] = date_object;
+}
+} 
+dateArray.sort(function(a, b){return b-a});
+notMatch = "";
+
+try {
+
+for(var i=0; i < dateArray.length; i++) { 
+   dateKey = dateArray[i]; 
+   objValue = itemArray[dateKey]; 
+  var json_data1 = JSON.parse(objValue);
+  for(var j=0; j<json_data1.length; j++) {
+    for(key in json_data1[j]) { 
+        cDate = key;   
+        temp = []; 
+        if(cArray.indexOf(cDate)==-1){  
+           cArray.push(cDate); 
+        }
+        for(key1 in json_data1[j][cDate]) {           
+           value1 = json_data1[j][cDate][key1]; 
+           if(rArray.indexOf(key1)==-1){  
+             rArray.push(key1); 
+           }  
+           temp[key1] = value1; 
+         }  
+if(!finalArray.hasOwnProperty(cDate)){ 
+  finalArray[cDate] = temp ;
+} else {
+  nomatchItem = [];
+  notMatch +=  cDate + " # " ; 
+  latestValue = finalArray[cDate];
+   for (k in latestValue){ 
+     if(temp.hasOwnProperty(k)){  
+        if (latestValue[k] != temp[k]){
+            objWithValue = []            
+            notMatch += k + " -> " +   temp[k] + " : ";
+            objWithValue =  temp[k] ;
+            nomatchItem[k] = objWithValue;
+         } 
+      }
+    }  
+    nomatchArray[cDate] = nomatchItem
+}
+    }
+  }  
+}    
+output += "| ";
+var rowUL = "|----- ";
+for(var c=0; c<cArray.length; c++) { 
+   output += '| ' + cArray[c] + ''
+   rowUL += '| -----'
+}
+
+rowUL += '| <br/> '  ;
+output += '| <br/> '  + rowUL;
+
+for(var r=0; r<rArray.length; r++) { 
+  rowValue = "| " + rArray[r];
+  for(var c=0; c<cArray.length; c++) { 
+     var cValue = finalArray[cArray[c]][rArray[r]];
+
+if (cValue == undefined) {
+     cValue = "-";
+} else {
+    if (nomatchArray.hasOwnProperty(cArray[c])){ 
+       if (nomatchArray[cArray[c]].hasOwnProperty(rArray[r])) { 
+  output1 = "";
+  flag   = false;
+  for(var i=0; i < dateArray.length; i++) { 
+   dateKey = dateArray[i]; 
+   objValue = itemArray[dateKey]; 
+   var json_data1 = JSON.parse(objValue);
+   for(var j=0; j<json_data1.length; j++) {
+     if (json_data1[j].hasOwnProperty(cArray[c])){
+        if (json_data1[j][cArray[c]].hasOwnProperty(rArray[r])){
+          if (flag == true){
+            if (output1 != "") { output1 += "," }
+            output1 += json_data1[j][cArray[c]][rArray[r]]
+          } 
+          flag = true;
+        }
+      }
+    }
+   }
+    cValue += " (" + output1 + ")";
+  }
+    } 
+}
+rowValue += "| " + cValue ;
+}
+  output += rowValue + '| <br/> '  
+}  
+} catch (e) {
+   output = e + "Could not parse JSON"
+}
+
+output + ""

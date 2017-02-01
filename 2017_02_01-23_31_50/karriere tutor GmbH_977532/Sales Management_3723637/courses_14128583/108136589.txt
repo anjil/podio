@@ -1,0 +1,3 @@
+label: Gebühren
+field_id: 108136589
+type: money

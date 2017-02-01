@@ -1,0 +1,39 @@
+label: JSON-Old
+field_id: 118573576
+type: calculation
+script: var debug = ""
+var out = ""
+//JSON.parse(debug);
+/*
+var j = {};
+j["ID"]= @Unique ID;
+j["Titel"]= @Titel;
+j["Bücher"]=@All of JSON-Data;
+j["Kursfreigabe"]=@All of JSON-Data;
+j["WebEx Training"]=@All of JSON-Data;
+j["Tutorium"]=@All of JSON-Data;
+j["WebEx Tutorium"]=@All of JSON-Data;
+j["Demo"]=@All of JSON-Data;
+j["WebEx Einzelcoaching"]=@All of JSON-Data;
+j["Examen"]="EXAMEN";
+j["Reihenfolge"]=@Reihenfolge;
+
+//debug = String(@All of JSON-Data)
+
+out = JSON.stringify(j);
+// Podio corrections to get a proper JSON Object
+out = out.replace(/\\\"/g, "\"");
+out = out.replace(/\\\\\\\\/g, "\\\\");
+out = out.replace(/\\\\\"/g, "\\\\\\\\\"");
+out = out.replace(/\[\"\{/g, "[{");
+out = out.replace(/\}\"\]/g, "}]");
+out = out.replace(/\}\"\,\"\{/g, "},{");
+out = out.replace(/\:\"\"/g, ":null");
+out = out.replace(/\[\]/g, "null");
+out = JSON.stringify(j)
+out
+//debug
+*/
+debug = @[Titel](field_116446197);
+out = "aa"
+out

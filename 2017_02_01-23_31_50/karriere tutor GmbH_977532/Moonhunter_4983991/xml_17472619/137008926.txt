@@ -1,0 +1,6 @@
+label: Validate 
+field_id: 137008926
+type: calculation
+script: //@[Unique ID](item_app_item_id)
+
+'----------------------------------------------------'

@@ -1,0 +1,3 @@
+label: Current-Kursnet-Account
+field_id: 113666518
+type: text

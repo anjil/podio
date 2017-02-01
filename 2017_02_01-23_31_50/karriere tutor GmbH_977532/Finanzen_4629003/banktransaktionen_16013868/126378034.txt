@@ -1,0 +1,25 @@
+label: Expected Id
+field_id: 126378034
+type: calculation
+script: var oUniqueId = @[UniqueId](field_124675831);
+var oJson = @[All of JSON-ExpectedTransactions](out_125894124_124753397);
+var oExpId = '';
+
+try {
+  if(oJson && oJson !='[]'){
+    var jsn = JSON.parse(oJson); 
+    for(var i=0; i<jsn.length; i++){
+      if(jsn[i]['BankingId'] == oUniqueId){
+        if(jsn[i]['ExpectedId']){
+          oExpId = jsn[i]['ExpectedId'];  
+          break; 
+        }   
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+oExpId;

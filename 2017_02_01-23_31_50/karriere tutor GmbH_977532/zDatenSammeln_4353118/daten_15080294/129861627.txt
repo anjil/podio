@@ -1,0 +1,29 @@
+label: SalesAnruf
+field_id: 129861627
+type: calculation
+script: var myText = @[Data](field_116016239)
+var out = parseInt(0)
+if (myText.indexOf("User Oliver Herbig,Lisa Fay,Jacqueline Kempte, Direction in") != -1) { out = parseInt(1) }
+if (myText.indexOf(", User Oliver Herbig,Lisa Fay,Jacqueline Kempte,kt Vertrieb, Direction in") != -1) { out = parseInt(1) }
+if (myText.indexOf(", User Oliver Herbig,Jacqueline Kempte, Direction in") != -1) { out = parseInt(1) }
+if (myText.indexOf(", User Oliver Herbig,Jacqueline Kempte,Marc Bachmann, Direction in") != -1) { out = parseInt(1) }
+if (myText.indexOf(", User Oliver Herbig,Andrea Fischer,Jacqueline Kempte, Direction in") != -1) { out = parseInt(1) }
+if (myText.indexOf(", User Oliver Herbig,Andrea Fischer,Andrea Herbig, Direction in") != -1) { out = parseInt(1) }
+if (myText.indexOf(", User Oliver Herbig,Andrea Fischer, Direction in") != -1) { out = parseInt(1) }
+
+
+if (myText.indexOf("User Jacqueline Kempte, Direction in") != -1) { out = parseInt(2) }
+
+
+if (myText.indexOf(", User Andrea Fischer, Direction in") != -1) { out = parseInt(4) }
+if (myText.indexOf(", User Oliver Herbig, Direction in") != -1) { out = parseInt(5) }
+
+if (myText.indexOf(", User Jörg Doebler, Direction in") != -1) { out = parseInt(7) }
+if (myText.indexOf(", User Hans-Peter Arndt, Direction in") != -1) { out = parseInt(7) }
+if (myText.indexOf(", User Bianca Bunz, Direction in") != -1) { out = parseInt(7) }
+
+if (myText.indexOf(", User voicemail, Direction in") != -1) { out = parseInt(9) }
+
+if (myText.indexOf(", User Lisa Fay, Direction out") != -1) { out = parseInt(13) }
+ 
+out

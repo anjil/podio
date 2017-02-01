@@ -1,0 +1,3 @@
+label: Kurs
+field_id: 112871019
+type: category

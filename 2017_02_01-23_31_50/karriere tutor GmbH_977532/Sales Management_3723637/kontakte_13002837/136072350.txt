@@ -1,0 +1,4 @@
+label: Sales Management Leads Id
+field_id: 136072350
+type: calculation
+script: @[All of Leads Id](out_132128412_105474762)+''

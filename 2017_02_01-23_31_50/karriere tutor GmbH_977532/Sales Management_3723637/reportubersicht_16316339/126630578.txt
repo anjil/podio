@@ -1,0 +1,11 @@
+label: Ansicht
+field_id: 126630578
+type: calculation
+script: out = ""
+out += @[Jahresauswahl](field_126630403) 
+if (@[Quarter](field_127304155) != null) {
+  out += " " + @[Quarter](field_127304155)
+} else {
+  out += " Komplett"
+}
+out

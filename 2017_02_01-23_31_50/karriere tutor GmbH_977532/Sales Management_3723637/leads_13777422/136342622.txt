@@ -1,0 +1,4 @@
+label: Kontakte Id (Betreuer AA / AP Firma)
+field_id: 136342622
+type: calculation
+script: @[All of Kontakte Id](out_136292201_107413556)+''

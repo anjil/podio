@@ -1,0 +1,24 @@
+label: JSON-FFMTStatistiken1
+field_id: 122444425
+type: calculation
+script: var k = @[All of JSON-MassnahmenStatistiken](in_120411272_116414764)
+var x
+var out = ""
+var j = {};
+j["ID1"] = @[Unique ID](item_app_item_id);
+try {
+  for(i=0; i<k.length; i++) {
+    x = JSON.parse(@[All of JSON-MassnahmenStatistiken](in_120411272_116414764)[i]);
+    for (var key in x){
+      j[key] = x[key];
+    }
+  }
+} 
+ catch (e) {
+   "Could not parse JSON";
+}
+
+out = JSON.stringify(j);
+
+out;
+

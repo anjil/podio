@@ -1,0 +1,3 @@
+label: Firefox test
+field_id: 107404043
+type: category

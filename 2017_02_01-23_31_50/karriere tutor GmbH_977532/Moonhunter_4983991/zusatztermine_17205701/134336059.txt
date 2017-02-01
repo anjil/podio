@@ -1,0 +1,3 @@
+label: Alle Standorte betroffen
+field_id: 134336059
+type: category

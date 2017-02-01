@@ -1,0 +1,20 @@
+label: Sales Management Account Id
+field_id: 136105485
+type: calculation
+script: var id    = @[Unique ID](item_app_item_id)
+var oShow = GetId(id);
+
+function GetId(oUniqueId){
+ if(oUniqueId){
+  var regex=/^[0-9]+$/;
+  var oShow = '';
+  for(var i=0;i<oUniqueId.length;i++){
+    if(oUniqueId[i].match(regex)){
+       oShow+= oUniqueId[i];
+    } 
+  }
+  return parseInt(oShow);
+ }
+}
+
+oShow+'';

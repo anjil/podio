@@ -1,0 +1,25 @@
+label: JSON-leads-und-anstehende-lehrgangsstarts1
+field_id: 127051722
+type: calculation
+script: var oMabnahmen = @[All of Maßnahmentitel](out_108135844_108285774);
+var oDatam     = @[Aufnahme Datum](field_105490284);
+var myArray    = Array();
+var oShow      = '';
+
+try{
+
+ var tmpObj = {};
+ for (var i=0; i<oMabnahmen.length; i++){ 
+    tmpObj["Mabnahmen"] = oMabnahmen[i];
+    tmpObj["Datam"]     = oDatam;
+    myArray[i]          = tmpObj; 
+    tmpObj              = {};
+  }
+
+}catch (e) {
+  "Could not parse JSON";
+}
+
+oShow = JSON.stringify(myArray);
+oShow;
+

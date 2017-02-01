@@ -1,0 +1,3 @@
+label: Hausnummer
+field_id: 111602492
+type: number

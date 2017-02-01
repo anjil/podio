@@ -1,0 +1,4 @@
+label: Teilnehmer
+field_id: 118985347
+type: calculation
+script: @[All of Kontaktdetails](in_117226241_118984777)[0]

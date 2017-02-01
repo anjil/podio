@@ -1,0 +1,3 @@
+label: Preis Staffel 1
+field_id: 129420904
+type: money

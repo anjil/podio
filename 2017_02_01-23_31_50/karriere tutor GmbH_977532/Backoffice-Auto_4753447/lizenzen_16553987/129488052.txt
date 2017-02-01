@@ -1,0 +1,15 @@
+label: JSON-lehrgangs-details
+field_id: 129488052
+type: calculation
+script: var j;
+var z = {};
+
+try {
+  j = JSON.parse(@[All of JSON-lehrgangs-details](in_129487643_128735467));
+  z = j  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out = JSON.stringify(z);
+out

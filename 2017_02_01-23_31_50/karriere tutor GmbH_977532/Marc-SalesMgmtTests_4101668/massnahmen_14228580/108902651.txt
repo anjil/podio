@@ -1,0 +1,3 @@
+label: Rate
+field_id: 108902651
+type: money

@@ -1,0 +1,28 @@
+label: Calculation
+field_id: 129623160
+type: calculation
+script: var uid = @[All of Fulfillment-ubersicht ID](in_129123177_124752897)[0];
+var bgs = @[All of CustomerId](in_124665203_124752897)[0]
+var oId = '';
+var displayName = '';
+var oShow = '';
+
+function GetId(oUniqueId){
+  var regex=/^[0-9]+$/;
+  var oShow = '';
+  for(var i=0;i<oUniqueId.length;i++){
+    if(oUniqueId[i].match(regex)){
+       oShow+= oUniqueId[i];
+    } 
+  }
+  return parseInt(oShow);
+}
+
+if(uid && bgs){
+  oId  = GetId(uid);
+  var  displayURL = 'https://podio.com/karrieretutorde/backoffice/apps/fulfillment-ubersicht/items/'+oId;
+   displayName =  bgs;
+  oShow =  displayName.link(displayURL);
+}
+
+oShow;

@@ -1,0 +1,7 @@
+label: Calc_3rdPayDate
+field_id: 109131051
+type: calculation
+script: if (@[Min of Anzahl Raten](out_min_108902650_109125321) > 2) {
+d2 = new Date(@[Startdatum Bildungsgutschein](field_109129493));
+d22 = new Date(d2.getFullYear(),d2.getMonth()+3,d2.getDate()); 
+moment(d22).format("YYYY-MM-DD");} else {"NoMorePayDates"}

@@ -1,0 +1,3 @@
+label: Interner Status
+field_id: 122401198
+type: category

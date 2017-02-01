@@ -1,0 +1,27 @@
+label: JSON-Rel-Buecher
+field_id: 124370515
+type: calculation
+script: var debug = "";
+var out = "";
+var x;
+var buch_ary = Array();
+//JSON.parse(debug);
+
+try {
+  //Anzahl Bücher
+  for(i=0; i<@[All of JSON-Data-Buecher](out_118100909_116446409).length; i++) {
+    x = JSON.parse(@[All of JSON-Data-Buecher](out_118100909_116446409)[i]);
+    buch_ary[i]=x;
+  }
+
+} catch (e) {
+  "Could not parse JSON"
+}
+
+var j = {};
+j["ID"]= @[Unique ID](item_app_item_id);
+j["Titel"]= @[Titel](field_116446197);
+j["Reihenfolge"]=@[Reihenfolge](field_116446843);
+j["Buecher"]=buch_ary;
+
+out = JSON.stringify(j);

@@ -1,0 +1,3 @@
+label: Fälligkeit 1.Rate Monat
+field_id: 128735930
+type: number

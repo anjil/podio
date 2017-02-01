@@ -1,0 +1,5 @@
+label: Calculation
+field_id: 131764262
+type: calculation
+script: var NachsterDt     = @[All of Nächster Schritt](in_105473432_117225519)[0];
+NachsterDt

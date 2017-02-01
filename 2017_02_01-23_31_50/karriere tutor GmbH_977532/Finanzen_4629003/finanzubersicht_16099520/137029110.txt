@@ -1,0 +1,41 @@
+label: License Paid afterVorzeitiges Ende(yes=1)
+field_id: 137029110
+type: calculation
+script: var oShow = 0;
+var vorDt = null;
+var vorzeitigesEnd = @[Vorzeitiges Ende](field_126242725);
+
+try {
+  if(vorzeitigesEnd){
+    vorDt = new Date(vorzeitigesEnd);
+  }
+  var oJsn  = JSON.parse(@[Json-ExpectedLizenzenFee](field_128908966)); 
+  for(i=0;i<oJsn.length;i++) {
+    var pid = oJsn[i].PaymentId|| ''
+    if(pid){
+      var dt  = oJsn.Date || null;
+      if(dt && vorDt){
+        var chk = checkForDispalyData(vorDt, dt);
+        if(chk == 1){
+          oShow = 1;
+          break;
+        }
+      }
+    }     
+  }  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+function checkForDispalyData(oE, pDate){
+  var d1 = new Date(oE);
+  var d3 = new Date(pDate);
+  if (d1.getTime()< d3.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }     
+}
+
+oShow

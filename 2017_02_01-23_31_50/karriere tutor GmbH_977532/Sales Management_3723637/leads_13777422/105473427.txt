@@ -1,0 +1,3 @@
+label: Abweichende_Lehrgangsgebühren
+field_id: 105473427
+type: money

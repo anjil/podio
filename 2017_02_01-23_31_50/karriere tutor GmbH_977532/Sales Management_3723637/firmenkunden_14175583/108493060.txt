@@ -1,0 +1,3 @@
+label: Aufnahme Datum
+field_id: 108493060
+type: date

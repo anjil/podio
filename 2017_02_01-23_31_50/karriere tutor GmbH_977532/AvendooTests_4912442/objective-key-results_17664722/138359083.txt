@@ -1,0 +1,4 @@
+label: Berechnung
+field_id: 138359083
+type: calculation
+script: @[Ergebnis KR 1a in %](field_138357932) + @[Ergebnis KR 1b](field_138358153)

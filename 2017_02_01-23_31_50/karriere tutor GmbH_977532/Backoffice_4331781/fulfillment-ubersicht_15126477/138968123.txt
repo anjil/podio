@@ -1,0 +1,4 @@
+label: Category
+field_id: 138968123
+type: calculation
+script: @[All of Category](in_127110688_117225519)[0];

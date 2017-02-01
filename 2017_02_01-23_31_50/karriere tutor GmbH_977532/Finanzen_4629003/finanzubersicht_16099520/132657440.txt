@@ -1,0 +1,20 @@
+label: Calculation
+field_id: 132657440
+type: calculation
+script: var oLizReportData = @[All of Month-Year](out_130401598_132143897)||[];
+var oLizMonYear    = @[Lizenze Month-Year](field_130404987) || '';
+var ol1            = 0;
+var ol2            = 0;
+
+if(oLizReportData){
+  ol1 = oLizReportData.length;
+}
+if(oLizMonYear){
+  ol2 = oLizMonYear.length;
+}
+ 
+if(ol1 == ol2)
+ 0
+else
+ 1
+ 

@@ -1,0 +1,9 @@
+label: KalText
+field_id: 125001248
+type: calculation
+script: if (@[Art](field_125664107) == "Mit Datum") {
+  @[All of Geburtstagstext](in_124790737_125001268)[0]
+} else {
+  moment(@[All of Nächster Geburtstag](in_124788038_125001268)[0]).format("DD.MM") + " - " + @[All of Geburtstagstext](in_124790737_125001268)[0]
+  //moment()+ "ss"
+}

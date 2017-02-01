@@ -1,0 +1,35 @@
+label: JSON-FFMTStatistiken
+field_id: 120624685
+type: calculation
+script: var k = @[All of JSON-MassnahmenStatistiken](in_120411272_116414764);
+var uq = @[Unique ID](item_app_item_id);
+var x
+var out = ""
+var j = {};
+j["ID1"] = uq;
+j["Reihenfolge"] = @[Reihenfolge](field_116446843);
+j["Title"] = @[Titel](field_116446197);
+
+try {
+  
+  for(i=0; i<k.length; i++) {
+    x = JSON.parse(k[i]);
+    for(var key in x){ 
+     
+ if(key == 'weitereAnfangsdaten' && uq == 'FFMTC0010'){
+        var arr = ["2016-05-30T00:00:00.000Z","2016-06-12T00:00:00.000Z","2016-06-12T00:00:00.000Z","2016-06-20T00:00:00.000Z","2016-06-12T00:00:00.000Z"]; 
+        j[key] = arr;
+      }
+      else{
+        j[key] = x[key];     
+      }
+
+    // j[key] = x[key]; 
+    }
+  }
+
+} catch (e) {
+  "Could not parse JSON"
+}
+out = JSON.stringify(j);
+out

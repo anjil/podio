@@ -1,0 +1,123 @@
+label: Zahlungsübersicht nach Datum
+field_id: 125520033
+type: calculation
+script: var jsonExpTransaction = @[JSON-ExpectedTransactions](field_125894124)||[];
+var jsonTransaction = @[All of JSON-Transaction](in_124039546_124753397)||[];
+var items = [];
+var t='~~';
+var out = "**Datum**|**Erw. Zahlungseingang**|**Zahlungseingang**|**Differenz**\n";
+out += "---|---:|---:|---: \n"
+
+try {
+
+  if(jsonExpTransaction && jsonExpTransaction !='[]'){  
+     getExpTransaction(jsonExpTransaction);
+  }
+  if(jsonTransaction && jsonTransaction !='[]'){  
+     getBnkTransaction(jsonTransaction);
+  }
+  printData();
+
+} 
+catch (e){
+  "Could not parse JSON"
+}
+
+function printData(){
+ var tuples = [];
+ var oTotalExpAmt = 0; 
+ var oTotalBnkAmt = 0;
+ var oTotalDiff   = 0;
+ for (var key in items) tuples.push([key, items[key]]);
+
+ tuples.sort(function(a, b) {
+    a = new Date(a[0]);
+    b = new Date(b[0]);
+    return a < b ? -1 : (a > b ? 1 : 0);
+ });
+
+
+
+ for (var i = 0; i < tuples.length; i++) {
+   var oTKey = tuples[i][0];   //Key
+   var oTVal = tuples[i][1];   //Value 
+   var oArr = tuples[i][1];
+   var oDt = oArr['Date'];
+
+   var oExpAmt = DisplayData(oArr['ExpTranAmt']);
+   var oBnkAmt = DisplayData(oArr['BankingTranAmt']); 
+   var oDiff = parseFloat(oExpAmt) - parseFloat(oBnkAmt);
+
+   oTotalExpAmt += parseFloat(oExpAmt);
+   oTotalBnkAmt += parseFloat(oBnkAmt);
+   oTotalDiff   += oDiff;
+
+
+
+   out += moment(oDt).format("DD.MM.YYYY")+ "|";
+   out += parseFloat(oExpAmt).toFixed(2)+"|";
+   out += parseFloat(oBnkAmt).toFixed(2)+"|";
+   out += parseFloat(oDiff).toFixed(2)+"\n"; 
+
+ }
+ out +='**Gesamt:**'+ "|**";
+ out += oTotalExpAmt.toFixed(2)+"**|**"; 
+ out += oTotalBnkAmt.toFixed(2)+"**|**" ; 
+ out += oTotalDiff.toFixed(2)+"**\n"; 
+}
+
+
+function DisplayData(str){
+  if(str == 'NaN' || str == ''){
+   str = 0;
+   return str;
+  }else 
+     return parseFloat(str);
+}
+
+function getExpTransaction(jsonExpTransaction){
+  var tempArr ={};
+  jsnArr = JSON.parse(jsonExpTransaction); 
+  for(var i=0; i<jsnArr.length; i++){
+     var otempDate = jsnArr[i]['Date'];
+     var oDt = (otempDate)? new Date(otempDate) : null;
+     var oAmt = jsnArr[i]['Amount']||0;
+     if(oDt){
+        var tKey = oDt;
+        var arr = [];
+        arr['Date'] = oDt;
+        arr['ExpTranAmt'] = DisplayData(oAmt);
+        arr['BankingTranAmt'] = 0;
+        items[tKey] = arr; 
+     }        
+  }
+}
+
+function getBnkTransaction(jsonTransaction){
+
+  var tempArr ={};
+  for(var i=0; i<jsonTransaction.length; i++){
+    jsnArr = JSON.parse(jsonTransaction[i]); 
+     var otempDate = jsnArr['Date'];
+     var oDt = (otempDate)? new Date(otempDate) : null; 
+     var oAmt = jsnArr['Amount']||0;
+
+     if(oDt){
+        var tKey = oDt;
+        if(items[tKey]){
+           var arr = items[tKey];
+           arr['BankingTranAmt'] = parseFloat(arr['BankingTranAmt']) + DisplayData(oAmt);
+           items[tKey] = arr;
+        }
+        else{
+           var arr = [];
+           arr['Date'] = oDt;
+           arr['ExpTranAmt'] = 0;
+           arr['BankingTranAmt'] = DisplayData(oAmt);
+           items[tKey] = arr;   
+        } 
+     }        
+   }
+}
+out
+//TEST

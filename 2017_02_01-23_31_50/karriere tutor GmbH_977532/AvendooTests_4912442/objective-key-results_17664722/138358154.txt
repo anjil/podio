@@ -1,0 +1,3 @@
+label: Ergebnis KR 1c
+field_id: 138358154
+type: category

@@ -1,0 +1,34 @@
+label: JSON-Lizenze
+field_id: 128878812
+type: calculation
+script: var myArray = Array();
+var tmpObj = {};
+var t='~~';
+try {
+ 
+ var jj   = @[All of JSON-Lizenze](out_128869302_118702791);
+ var oJsn = JSON.parse(jj);   
+ for (var ii=0; ii<oJsn.length; ii++){ 
+    if(oJsn[ii] && oJsn[ii]!='{}'){t+='**'; 
+       tmpObj["Lizenzname"]    = oJsn[ii].Lizenzname; 
+       tmpObj["Lizenzbetrags"] = oJsn[ii].Lizenzbetrags;
+       tmpObj["Rate"]          = oJsn[ii].Rate;
+       tmpObj["Rate1"]         = oJsn[ii].Rate1;
+       tmpObj["Rate1Mon"]      = oJsn[ii].Rate1Mon;
+       tmpObj["Rate2"]         = oJsn[ii].Rate2;
+       tmpObj["Rate2Mon"]      = oJsn[ii].Rate2Mon;
+       tmpObj["date"]          = oJsn[ii].date;
+       tmpObj["LehrgangName"]  = oJsn[ii].LehrgangName;
+       myArray[ii]             = tmpObj; 
+       tmpObj                  = {};
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+if(myArray){
+  JSON.stringify(myArray);
+}
+else ''

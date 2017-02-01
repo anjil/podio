@@ -1,0 +1,4 @@
+label: Reportubersicht Quartalsauswahl 
+field_id: 128094604
+type: calculation
+script: @[Quartalsauswahl](field_127304155)

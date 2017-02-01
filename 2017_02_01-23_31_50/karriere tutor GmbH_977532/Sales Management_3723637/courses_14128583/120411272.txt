@@ -1,0 +1,37 @@
+label: JSON-MassnahmenStatistiken
+field_id: 120411272
+type: calculation
+script: var debug = "";
+var out = "";
+var x;
+var y;
+var z;
+var a;
+var AnzFulfillment = 0;
+var AnzTutorenDaten = 0;
+var DatumAry = Array();
+
+try {
+  //Anzahl Komponenten
+  for(i=0; i<@[All of JSON-LeadStatistiken](in_120408530_108285774).length; i++) {
+    x = JSON.parse(@[All of JSON-LeadStatistiken](in_120408530_108285774)[i])
+    a = x.Fulfillment
+    //AnzFulfillment = i
+    y = x.TutorenDaten;
+    z = x.Lehrgangsstart;
+    AnzFulfillment += a;
+    AnzTutorenDaten += y
+    if ((y==0) && (z!=null)&& (a==1)) { DatumAry.push(z) }
+  }
+} catch (e) {
+  "Could not parse JSON"
+}
+
+var j = {};
+j["ID"] = @[Unique ID](item_app_item_id);
+j["AnzFulfillment"] = AnzFulfillment
+j["AnzTutorenDaten"] = AnzTutorenDaten
+j["weitereAnfangsdaten"] = DatumAry;
+
+out = JSON.stringify(j);
+out

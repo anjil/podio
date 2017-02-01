@@ -1,0 +1,18 @@
+label: Leads Id
+field_id: 132128412
+type: calculation
+script: var uid   = @[Unique ID](item_app_item_id);
+var oShow = GetId(uid);
+
+function GetId(oUniqueId){
+  var regex=/^[0-9]+$/;
+  var oShow = '';
+  for(var i=0;i<oUniqueId.length;i++){
+    if(oUniqueId[i].match(regex)){
+       oShow+= oUniqueId[i];
+    } 
+  }
+  return parseInt(oShow);
+}
+
+oShow+'';

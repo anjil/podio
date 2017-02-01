@@ -1,0 +1,20 @@
+label: Total Expected Lizenze Fee
+field_id: 128886359
+type: calculation
+script: var oTotal  = 0;
+
+try {
+  var jj   = @[All of JSON-Lizenzen](out_130128007_129089854)[0];
+  var oJsn = JSON.parse(jj);   
+  for (var ii=0; ii<oJsn.length; ii++){ 
+    if(oJsn[ii] && oJsn[ii]!='{}' && oJsn[ii]!='[]'){       
+      var oRate  = parseInt(oJsn[ii].Rate);
+      oTotal += oRate     
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+oTotal

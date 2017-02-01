@@ -1,0 +1,32 @@
+label: Total Expected Transactions
+field_id: 125194036
+type: calculation
+script: var json = @[All of JSON-FinanceUbersicht](in_124762989_124752897)[0];
+var oShow = 0;
+var temp = 0;
+
+try {
+
+ var js = JSON.parse(json); 
+ for (var i=0; i<js.length; i++){    
+   for(ii=0;ii<js[i].Datam.length;ii++){
+     temp = DisplayData(js[i].Datam[ii].AnzahlRaten); 
+     if(temp > oShow){
+       oShow = temp; 
+     }   
+   }
+ }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function DisplayData(str){
+  if(str == null || str == '' || str == 'null' || str == 'undefined'){
+   str = 0;
+   return str;
+  }
+  else {
+     return str;
+  }
+}

@@ -1,0 +1,220 @@
+label: JSON-Datum
+field_id: 118643640
+type: calculation
+script: var j;
+var t;
+var myDatum;
+var myDatum2;
+var KompDauer;
+var myDaten_ary = Array();
+var z = {};
+var counter=0;
+var tmpObj = {};
+var debug = "";
+var myBool = null;
+var counter = 0;
+var oDt = @[Abweichender Lehrgangsstart](field_117226512);
+var oTest;
+var numOfWeeks = 0;
+var oDt, oDtStartDate;
+var aktuellesDatum = @[All of AktuellesDatum](out_128820243_131327818)[0];
+
+var t='~~~'
+
+try {
+  j = JSON.parse(@[All of JSON-Data](in_118628182_117225519));
+
+  // Auftrag
+  tmpObj = {};
+  tmpObj["Bezeichnung"] = "Auftrag";
+  
+ tmpObj["Datum"] = (oDt!=null)?oDt:j.Auftragsdatum;
+
+ t+='^^'+j.Auftragsdatum
+
+  //tmpObj["Datum"] = j.Auftragsdatum; 
+  tmpObj["Reihenfolge"] = "0";
+  tmpObj["NextStep"] = null;
+  myDaten_ary[counter] = tmpObj;
+  counter++;
+
+  // 1. Lehrgangsstart
+  tmpObj = {};
+  tmpObj["Bezeichnung"] = "1. Lehrgangsstart";
+
+  tmpObj["Datum"] = (oDt!=null)?oDt:j.StartLehrgang; t+=tmpObj["Datum"]
+
+  //tmpObj["Datum"] = j.StartLehrgang
+  tmpObj["Art"] = "Basisdaten";
+  tmpObj["Reihenfolge"] = "0";
+  tmpObj["NextStep"] = null;
+  myDaten_ary[counter] = tmpObj;
+  counter++;
+  
+  // Massnahmen
+
+ myDatum = (oDt!=null)?oDt:j.StartLehrgang;
+
+  //myDatum = j.StartLehrgang;
+
+  for(i=0;i<j.Massnahmen.length;i++) {
+    // Massnahmenstart
+    tmpObj = {};
+    tmpObj["Bezeichnung"] = j.Massnahmen[i].Titel;
+    tmpObj["Datum"] = myDatum;
+    tmpObj["Art"] = "Massnahme";
+    tmpObj["Reihenfolge"] = "1";
+    tmpObj["NextStep"] = null;
+    myDaten_ary[counter] = tmpObj;
+    counter++;
+
+    //
+    // In Between - Create the corresponding items in the components
+    //
+    // Components
+    for(k=0;k<j.Massnahmen[i].Komponenten.length;k++) {
+      tmpObj = {};
+      tmpObj["Bezeichnung"] = j.Massnahmen[i].Komponenten[k].Titel;
+      tmpObj["Datum"] = myDatum;
+      tmpObj["Art"] = "Komponente";
+      tmpObj["Reihenfolge"] = "3";
+   
+      tmpObj["Dauer"] = j.Massnahmen[i].Komponenten[k].Dauer;
+      
+  
+  if(numOfWeeks > 0){
+     oDt = oDtStartDate;
+     oDtStartDate = new Date(oDt);
+     oDtStartDate.setDate(oDtStartDate.getDate() + numOfWeeks*7);
+    // oDtStartDate.setDate(oDtStartDate.getDate()-3);
+   }
+   else{
+      oDtStartDate = myDatum;
+   }
+      tmpObj["StartDate"] = oDtStartDate;
+
+  numOfWeeks = (j.Massnahmen[i].Komponenten[k].Dauer) ? parseInt(j.Massnahmen[i].Komponenten[k].Dauer):0;
+
+      tmpObj["NextStep"] = null;
+      myDaten_ary[counter] = tmpObj;
+      counter++;
+    }
+    //
+    // In Between End - Components
+    //
+        
+    // Addiere die Lehrgangsdauer auf myDatum
+    KompDauer = j.Massnahmen[i].Dauer;   t+='###'+KompDauer
+    myDatum2 = myDatum;          t+='^^'+myDatum
+    myDatum = new Date(myDatum2);
+    //
+    // Wenn Lehrgangsstart für den 1. Kurs kein Mo ist, sollten alle anderen
+    // Kurse an einem Mo anfangen und Fr enden
+
+t+='```'+myDatum.getDay()
+    if ((myDatum.getDay() != 1) && (myBool == null)) {
+      var Taganpassung = myDatum.getDay();
+      if (Taganpassung == 0) { Taganpassung = 7; }
+      Taganpassung -= 1;
+      myDatum.setDate(myDatum.getDate()-Taganpassung);
+      //myBool = 1;
+      debug += KompDauer + "  " + myDatum;
+      //debug = Taganpassung;
+    }
+    //debug += KompDauer + "  " + myDatum + "-----";
+
+t+='***'+myDatum+'@@@'+KompDauer
+    myDatum.setDate(myDatum.getDate()+KompDauer*7)
+t+='***'+myDatum
+  }
+  // Massnahmenende
+  tmpObj = {};
+  tmpObj["Bezeichnung"] = "voraussichtlicher Abschluss aller Lehrgänge";
+  tmpObj["Datum"] = myDatum.setDate(myDatum.getDate()-3);
+  tmpObj["Art"] = "Basisdaten";
+  tmpObj["Reihenfolge"] = "1";
+  tmpObj["NextStep"] = null;
+  myDaten_ary[counter] = tmpObj;
+  counter++;
+
+
+  //NextStep Vertrieb
+  if(j.NextStepDatum!=null) {
+    tmpObj = {};
+    tmpObj["Bezeichnung"] = "NS Vertrieb: " + j.NextStep2Do;
+    
+// Sep30 bajarang: We are seeing the issue that next step todo date was not correctly set so fixing it.Item id: 93
+    //tmpObj["Datum"] = (oDt!=null)?oDt:j.NextStepDatum;
+    
+    tmpObj["Datum"] = j.NextStepDatum
+    tmpObj["Art"] = "Nextstep";
+    tmpObj["Reihenfolge"] = "5";
+    tmpObj["NextStep"] = "1";
+    myDaten_ary[counter] = tmpObj;
+    counter++;
+    } else {
+    // NextStep in Lead ohne Datum
+    if (j.NextStep2Do!=null) {
+      //debug += moment().add(1, "year");
+      tmpObj = {};
+      tmpObj["Bezeichnung"] = "NS Vertrieb: " + j.NextStep2Do;
+      tmpObj["Datum"] = moment().add(1, "year").format("YYYY-MM-DD[T00:00:00.000Z]");
+      tmpObj["Art"] = "Nextstep";
+      tmpObj["Reihenfolge"] = "5";
+      tmpObj["NextStep"] = "1";
+      myDaten_ary[counter] = tmpObj;
+      counter++;
+      }
+    }
+
+  //NextStep Fulfillment
+  if(@[Nächster Schritt](field_117227332)!=null) {
+    tmpObj = {};
+    tmpObj["Bezeichnung"] = "NS FFMT: " + @[Nächster Schritt ToDo](field_117227333);
+    tmpObj["Datum"] = @[Nächster Schritt](field_117227332)
+    tmpObj["Art"] = "Nextstep";
+    tmpObj["Reihenfolge"] = "10";
+    tmpObj["NextStep"] = "1";
+    myDaten_ary[counter] = tmpObj;
+    counter++;
+    } else {
+    // NextStep in Lead ohne Datum
+    if (@[Nächster Schritt ToDo](field_117227333)!=null) {
+      //debug += moment().add(1, "year");
+      tmpObj = {};
+      tmpObj["Bezeichnung"] = "NS FFMT: " + @[Nächster Schritt ToDo](field_117227333);
+      tmpObj["Datum"] = moment().add(1, "year").format("YYYY-MM-DD[T00:00:00.000Z]");
+      tmpObj["Art"] = "Nextstep";
+      tmpObj["Reihenfolge"] = "10";
+      tmpObj["NextStep"] = "1";
+      myDaten_ary[counter] = tmpObj;
+      counter++;
+      }    
+    }
+
+  myDaten_ary.sort(function (a, b) {
+    
+    if (String(moment(a.Datum).format("YYYYMMDD")) > String(moment(b.Datum).format("YYYYMMDD"))) { return 1; }
+    if (String(moment(a.Datum).format("YYYYMMDD")) < String(moment(b.Datum).format("YYYYMMDD"))) { return -1; }
+    // Datum a must be equal to Datum b
+    // 2. Krit. Reihenfolge
+    if (String(a.Reihenfolge) > String(b.Reihenfolge)) { return 1; }
+    if (String(a.Reihenfolge) < String(b.Reihenfolge)) { return -1; }
+    // a must be equal to b
+    //debug += a.Datum + " -- " + b.Datum + "ZZZ ";
+    return 0;
+  });
+  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+z["ID"] = @[Unique ID](item_app_item_id);
+z["Daten"] = myDaten_ary;
+
+debug += " "
+
+out = JSON.stringify(z);
+out;
+
+//debug

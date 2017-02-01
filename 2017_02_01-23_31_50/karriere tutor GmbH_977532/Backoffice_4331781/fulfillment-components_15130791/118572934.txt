@@ -1,0 +1,4 @@
+label: JSON2
+field_id: 118572934
+type: calculation
+script: null

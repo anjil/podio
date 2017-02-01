@@ -1,0 +1,3 @@
+label: Kandidaten Reg Nummer
+field_id: 128252400
+type: text

@@ -1,0 +1,10 @@
+label: Calc_Zip1
+field_id: 113537003
+type: calculation
+script: var out = 1
+if (@[Zipcode](field_113524351) == null) {
+  out = null
+} else {
+  out = @[Zipcode](field_113524351).substring(0,1)
+}
+out="a"

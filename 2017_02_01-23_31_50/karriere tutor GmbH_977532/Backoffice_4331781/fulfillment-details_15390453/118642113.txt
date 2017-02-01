@@ -1,0 +1,6 @@
+label: -
+field_id: 118642113
+type: calculation
+script: @[Status](field_118641735)
+out = "**Sonstiges:**"+"\n\n"+ "----"
+out

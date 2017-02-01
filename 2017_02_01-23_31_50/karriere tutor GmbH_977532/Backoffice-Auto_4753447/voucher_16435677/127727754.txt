@@ -1,0 +1,6 @@
+label: Voucher Modul and Name
+field_id: 127727754
+type: calculation
+script: var oShow = @[Modul Name](field_127727576)+'_'+@[Voucher Name](field_127725655)
+oShow = oShow.replace(/[^A-Z0-9]+/ig, "_"); 
+oShow

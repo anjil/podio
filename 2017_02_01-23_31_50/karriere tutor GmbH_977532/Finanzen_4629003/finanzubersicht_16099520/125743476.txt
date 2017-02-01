@@ -1,0 +1,36 @@
+label: Total Amount
+field_id: 125743476
+type: calculation
+script: var oUniqueArr = @[All of Unique Id](in_125198678_125193630);
+var json = @[All of JSON-FinanceUbersicht](in_124762989_124752897)[0];
+var oAmount = 0;
+
+try {
+ var js = JSON.parse(json);
+ for(var j=0; j<oUniqueArr.length; j++){
+   for (var i=0; i<js.length; i++){    
+     for(ii=0; ii<js[i].Datam.length; ii++){
+       var qty = js[i].Datam[ii].AnzahlRaten || 0; 
+       var amt = js[i].Datam[ii].Rate || 1;
+       if(qty > j){
+         oAmount += parseFloat(amt);
+       }
+     }
+   }
+ }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function DisplayData(str){
+  if(str){
+     str=str.toFixed(2).toString().replace(".", ",");
+     return str;
+  }
+  else {     
+     return 0;
+  }
+}
+
+DisplayData(oAmount)+'';

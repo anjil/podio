@@ -1,0 +1,124 @@
+label: Test Json-ExpectedLizenzenFee
+field_id: 131101605
+type: calculation
+script: var oJson      = @[All of JSON-Lizenzen](out_130128007_129089854)[0];
+var oJson1     = @[All of JSON-ErwarteteLiz-Payment](in_131067949_128884745);
+var jsonArr    = [];
+var myArray    = [];
+var oArr       = {};
+var oShow      = '';
+var oObjArr    = [];
+var t='~~~';
+  
+try {
+
+  if(oJson && oJson !='{}' && oJson !='[]'){ 
+    var oJs = JSON.parse(oJson); 
+    myArray = getData(oJs); 
+
+    for(var i=0; i<oJson1.length; i++){
+      var j          = JSON.parse(oJson1[i]);     
+      var oExpid     = j.ExpId;
+      var oPayid     = j.paymentId||'';
+      var oLeh       = j.Lehrgang;
+      var oLiz       = j.Lizenzen;
+      var oRate      = j.Rate;      
+      var oD         = j.LizBezahltWann;
+
+      if(oPayid){
+        var pKey = oLeh+'^'+oLiz+'^'+oRate;
+        for(var ii=0; ii<myArray.length; ii++){
+          var iLeh  = myArray[ii].LehrgangName;
+          var iLiz  = myArray[ii].Lizenzname;
+          var iRate = myArray[ii].RStatus;
+          
+          var iKey  = iLeh+'^'+iLiz+'^'+iRate;
+          if(pKey == iKey){
+            
+            oArr['ExpectedId']    = oExpid;
+            oArr['PaymentId']     = oPayid;
+            oArr['Amount']        = myArray[ii].Amt;
+            oArr['Date']          = (oD) ? oD : myArray[ii].Date;
+            oArr['RStatus']       = oRate;
+            oArr['Lizenzname']    = oLiz;
+            oArr['LehrgangName']  = oLeh;
+            oArr['Status']        = myArray[ii].Status;
+            oArr['FullStatus']    = myArray[ii].FullStatus;
+            oArr['StartDate']     = myArray[ii].StartDate;
+            jsonArr[i]            = oArr;
+            oArr                  = {}; 
+            oObjArr.push(ii);  
+            break;
+          }
+        }        
+      }
+      else{
+        for(var ii=0; ii<myArray.length; ii++){
+          if(oObjArr.indexOf(ii) == -1){           
+            oArr['ExpectedId']    = oExpid;
+            oArr['PaymentId']     = oPayid;
+            oArr['Amount']        = myArray[ii].Amt;
+            oArr['Date']          = (oD) ? oD : myArray[ii].Date;
+            oArr['RStatus']       = myArray[ii].RStatus;
+            oArr['Lizenzname']    = myArray[ii].Lizenzname;
+            oArr['LehrgangName']  = myArray[ii].LehrgangName;
+            oArr['Status']        = myArray[ii].Status;
+            oArr['FullStatus']    = myArray[ii].FullStatus;
+            oArr['StartDate']     = myArray[ii].StartDate;
+            jsonArr[i]            = oArr;
+            oArr                  = {};
+            oObjArr.push(ii);  
+            break;
+          }
+        }
+      }             
+    } 
+  } 
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function getData(oJsn){ 
+  var myArr   = [];
+  var tmpObj  = {};
+  var j       =  0; 
+  var oD      =  null;
+  var oAmt    =  0; 
+  var RStatus =  ''; 
+
+  for (var ii=0; ii<oJsn.length; ii++){ 
+    if(oJsn[ii] && oJsn[ii]!='{}' && oJsn[ii]!='[]'){  
+      var oDatam  = oJsn[ii];   
+      var oRate   = parseInt(oDatam.Rate);
+      for(var i=0; i<oRate; i++){          
+        if(i==0){
+           oD      =  oDatam.Date1|| null;
+           oAmt    =  oDatam.Amount1; 
+           RStatus = 'Rate1';
+        }
+        if(i==1){
+           oD      = oDatam.Date2|| null;
+           oAmt    =  oDatam.Amount2; 
+           RStatus = 'Rate2';            
+        }
+ 
+         tmpObj["Amt"]          = oAmt; 
+         tmpObj["Date"]         = oD;
+         tmpObj["RStatus"]      = RStatus;
+         tmpObj["Lizenzname"]   = oDatam.Lizenzname;
+         tmpObj["LehrgangName"] = oJsn[ii].Component;
+         tmpObj["Status"]       = oDatam.Status;
+         tmpObj["FullStatus"]   = oDatam.FullStatus;
+         tmpObj['StartDate']    = oDatam.StartDate;
+         myArr[j]               = tmpObj;
+         tmpObj                 = {};
+         j++;
+      }      
+    }
+  }
+  return myArr;
+}
+
+oShow = JSON.stringify(jsonArr);
+oShow;

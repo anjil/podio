@@ -1,0 +1,16 @@
+label: JSON-Lizenze
+field_id: 128866347
+type: calculation
+script: var tmp = @[Titel](field_116446197)
+var j;
+var z = {};
+
+try {
+  j = JSON.parse("")//@All of JS ON-Lizenze);
+  z = j  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out = JSON.stringify(z);
+out

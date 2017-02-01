@@ -1,0 +1,11 @@
+label: Call Direction (1=in/2=out)
+field_id: 139054565
+type: calculation
+script: var myText = @[Data](field_116016239)
+var out = parseInt(0)
+
+
+if (myText.indexOf(", Direction in") != -1) { out = parseInt(1) }
+if (myText.indexOf(", Direction out") != -1) { out = parseInt(2) }
+ 
+out

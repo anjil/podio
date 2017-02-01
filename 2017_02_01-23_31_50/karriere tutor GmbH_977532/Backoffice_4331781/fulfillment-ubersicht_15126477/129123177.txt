@@ -1,0 +1,4 @@
+label: Fulfillment-ubersicht ID
+field_id: 129123177
+type: calculation
+script: @[Unique ID](item_app_item_id);

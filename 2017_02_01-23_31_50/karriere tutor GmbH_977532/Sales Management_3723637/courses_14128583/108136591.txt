@@ -1,0 +1,3 @@
+label: Rate
+field_id: 108136591
+type: number

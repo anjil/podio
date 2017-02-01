@@ -1,0 +1,3 @@
+label: Lehrgangsgebühren
+field_id: 111602476
+type: money

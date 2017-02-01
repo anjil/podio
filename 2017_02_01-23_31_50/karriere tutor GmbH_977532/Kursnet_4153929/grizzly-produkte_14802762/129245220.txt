@@ -1,0 +1,3 @@
+label: Startdatum zum bewerben in Kursnet
+field_id: 129245220
+type: date

@@ -1,0 +1,26 @@
+label: Noch nie eine Zahlung bekommen
+field_id: 128711636
+type: calculation
+script:  //
+ // Check for missing Banking Transactions before the current Date
+ //
+
+ var myMissingPayment = 0
+ var tmpJS = @[JSON-ExpectedTransactions](field_125894124)
+ try {
+  var jsn = JSON.parse(tmpJS)
+  for(var i=0; i<jsn.length; i++){
+   var curDate = new Date(@[All of AktuellesDatum](out_128820243_128820289)[0])
+   var iDate = new Date(jsn[i].Date)
+   if (iDate < curDate) {
+     if (jsn[i].BankingID == null) {
+       myMissingPayment = 1
+     }
+   }
+  }
+  //out += myMissingPayment
+ }
+ catch (e) {
+   "Could not parse JSON";
+ }
+myMissingPayment

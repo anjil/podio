@@ -1,0 +1,23 @@
+label: Json-ExpectedLizenzenFee
+field_id: 128896209
+type: calculation
+script: var oUniqueArr = @[All of lizenzen Id](in_128895839_128884745);
+var oShow = '';
+var jsonArr = [];
+var oArr = {};
+
+try {
+
+ for(var j=0; j<oUniqueArr.length; j++){
+  oArr['ExpectedId'] = oUniqueArr[j];
+  jsonArr[j] = oArr;
+  oArr = {};
+ }
+  
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+oShow = JSON.stringify(jsonArr);
+oShow;

@@ -1,0 +1,3 @@
+label: Lead owner
+field_id: 105473426
+type: contact

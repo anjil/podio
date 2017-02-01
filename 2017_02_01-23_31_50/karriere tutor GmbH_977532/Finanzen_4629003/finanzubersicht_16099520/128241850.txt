@@ -1,0 +1,4 @@
+label: Kontaktdaten
+field_id: 128241850
+type: calculation
+script: @[All of Kontaktdetails](in_117226241_124752897)[0]

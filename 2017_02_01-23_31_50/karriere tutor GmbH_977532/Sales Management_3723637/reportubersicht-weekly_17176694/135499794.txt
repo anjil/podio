@@ -1,0 +1,34 @@
+label: Week Range
+field_id: 135499794
+type: calculation
+script: var oYear = @[Jahresauswahl](field_134089175)||'';
+var oWeek = @[Week](field_134089176)||'';
+var oShow = '';
+
+if(oYear && oWeek){
+  var fDate = firstDate(oYear, oWeek);
+  var sDate = secondDate(fDate,oWeek)
+  
+  oShow = moment(fDate).format("DD.MM.YYYY")+' - '+moment(sDate).format("DD.MM.YYYY");
+}
+
+function firstDate(year, wn){
+  var Day10 = new Date( year,0,10,12,0,0),
+      Day4  = new Date( year,0,4,12,0,0),
+  weekmSec  = Day4.getTime() - Day10.getDay() * 86400000;  
+  return new Date(weekmSec + ((wn - 1)  * 7 ) * 86400000);   
+}
+
+function secondDate(dt,oWeek){
+  var week = oWeek;
+  var d    = new Date(dt);
+  var lastday = new Date(d.setDate(d.getDate() - d.getDay()+7));
+  //var w    = d.getTime() + 604800000 * (week-1); 
+ // var n2   = new Date(w + 518400000)   
+ // return n2;
+
+return lastday;
+
+}
+
+oShow;

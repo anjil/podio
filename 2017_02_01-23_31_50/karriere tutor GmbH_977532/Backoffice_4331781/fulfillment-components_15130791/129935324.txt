@@ -1,0 +1,13 @@
+label: JSON-LehrgangsStartDate
+field_id: 129935324
+type: calculation
+script: var oComponentName =  @[Titel](field_116446197) || '';
+var oStartDateArr  =  @[All of Start Date](in_128823783_118873889)+'';
+
+
+var z = {};
+z["ComponentName"]     = oComponentName ;
+z["Datam"]             = oStartDateArr.split(",");
+
+
+JSON.stringify(z);

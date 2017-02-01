@@ -1,0 +1,3 @@
+label: Quartalsauswahl
+field_id: 127304155
+type: category

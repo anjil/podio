@@ -1,0 +1,73 @@
+label: Aktueller NextStep Due
+field_id: 118693339
+type: calculation
+script: var out = null;
+var myBool = null;
+var debug = "";
+var myMoment;
+var aktuellesDatum = @[All of AktuellesDatum](out_128820243_131327818)[0];
+
+var nachsterLeads  = @[All of Nächster Schritt](in_105473432_117225519)[0]|| '';
+var nachsterDate   = @[Nächster Schritt](field_117227332)||'';
+var nextStepDate   = @[All of Next step todo Date](out_131576146_118702791)[0]||'';
+
+var nachsterLeadsTx  = @[All of Nächster Schritt ToDo](in_105489883_117225519)[0] || '';
+var nachsterTx       = @[Nächster Schritt ToDo](field_117227333)||'';
+var nextStepTx       = @[All of Next step todo](out_131576145_118702791)[0]||'';
+
+out = GetSmallestDate();
+
+
+function GetSmallestDate(){
+  var DateArray = Array();
+  if(nachsterLeads){ 
+    DateArray.push(nachsterLeads);
+  }
+  else if(!nachsterLeads){ 
+    if(nachsterLeadsTx){
+       var dt = new Date(aktuellesDatum);
+       //dt.setDate(dt.getYear() + 1);
+       dt.setFullYear(dt.getFullYear() + 1) 
+       DateArray.push(dt);
+    } 
+  }
+
+  if(nachsterDate){ 
+    DateArray.push(nachsterDate);
+  }
+  else if(!nachsterDate){ 
+    if(nextStepTx){
+       var dt = new Date(aktuellesDatum);
+       //dt.setDate(dt.getYear() + 1); 
+       dt.setFullYear(dt.getFullYear() + 1)
+       DateArray.push(dt);
+    } 
+  }
+
+  if(nextStepDate){ 
+    DateArray.push(nextStepDate);
+  }
+  else if(!nextStepDate){ 
+    if(nachsterTx){
+       var dt = new Date(aktuellesDatum);
+       //dt.setDate(dt.getYear() + 1); 
+       dt.setFullYear(dt.getFullYear() + 1)
+       DateArray.push(dt);
+    } 
+  }
+ 
+  if(DateArray.length>0){
+    var SmallestDate = new Date(DateArray[0]);
+    for(var i = 1; i < DateArray.length; i++)
+    {
+        var TempDate = new Date(DateArray[i]);
+        if(TempDate.getTime() < SmallestDate.getTime())
+            SmallestDate  = TempDate ;
+    }
+    return SmallestDate ;
+  }
+  else return null;
+}
+
+
+out

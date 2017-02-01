@@ -1,0 +1,44 @@
+label: JSON-Lehrgangs-Lizenze
+field_id: 129506424
+type: calculation
+script: var oComponentName = @[Titel](field_116446197)||'';
+var myArray        = Array();
+var tmpObj         = {};
+var z              = {};
+var t='~~~';
+
+
+try {
+ 
+ var jsn = @[All of JSON-Lehrgangs-Lizenze](in_129505875_118873889);
+ for (var ii=0; ii<jsn.length; ii++){ 
+    if(jsn[ii] && jsn[ii]!='{}'){
+       var oArr = JSON.parse(jsn[ii]); 
+       for(var i=0; i<oArr.length; i++){
+         tmpObj["LizenzenName"]    = oArr[i].LizenzenName;  
+         tmpObj["StartDate"]       = oArr[i].StartDate;  
+         tmpObj["FLizDate"]        = oArr[i].FLizDate;  
+         tmpObj["SLizDate"]        = oArr[i].SLizDate;      
+         myArray[ii]               = tmpObj; 
+         tmpObj                    = {};
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+
+ myArray.sort(function(a, b) {
+     a = new Date(a['StartDate']);
+     b = new Date(b['StartDate']);
+     return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+z['ComponentName']     = oComponentName;
+z['Datam']             = myArray;
+JSON.stringify(z);
+
+
+

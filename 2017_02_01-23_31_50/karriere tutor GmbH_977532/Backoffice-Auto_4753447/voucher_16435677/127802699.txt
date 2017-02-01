@@ -1,0 +1,20 @@
+label: Voucher Modul and Name
+field_id: 127802699
+type: calculation
+script: var oModul = @[Modul](field_127692066);
+var oName  = @[Name](field_127692068);
+var oShow = '';
+
+oShow;
+
+if(oModul){
+   oShow+=oModul;
+}
+if(oName){
+  oShow += oName;
+}
+
+if(oShow){
+  oShow = oShow.split(' ').join('');
+}
+oShow;

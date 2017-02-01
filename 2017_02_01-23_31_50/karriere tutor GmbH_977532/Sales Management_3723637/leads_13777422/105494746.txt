@@ -1,0 +1,3 @@
+label: Avendoo Demo
+field_id: 105494746
+type: category

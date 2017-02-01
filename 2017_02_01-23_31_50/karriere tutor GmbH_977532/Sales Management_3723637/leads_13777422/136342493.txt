@@ -1,0 +1,10 @@
+label: Match Account (yes=1)
+field_id: 136342493
+type: calculation
+script: var oldAc = @[All of Unique Id](out_136324672_114377061)+''
+var newAc = @[All of Old Account Id](out_136105544_136112742)+''
+
+if(oldAc == newAc)
+1
+else
+0

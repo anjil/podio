@@ -1,0 +1,8 @@
+label: Name2 Not Set
+field_id: 134436310
+type: calculation
+script: var n = @[Name2](field_124754928);
+if(n)
+1
+else
+0

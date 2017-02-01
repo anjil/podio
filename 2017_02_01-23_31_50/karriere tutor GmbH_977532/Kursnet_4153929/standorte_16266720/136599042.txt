@@ -1,0 +1,24 @@
+label: Telefon
+field_id: 136599042
+type: calculation
+script: var ph  = @[Kursnet Tel.- und Faxnummer](field_127628770)
+
+var value = ''
+
+var workPh = '', otherPh = ''
+for(var i = 0; i < ph.length; i++) {
+ if(ph[i].type == 'work') {
+  workPh= ph[i].value;
+  break;
+ } else if(otherPh == '') {
+  otherPh = ph[i].value;
+ }
+}
+
+if(workPh) {
+ value = workPh
+} else {
+ value = otherPh;
+} 
+
+value + ''

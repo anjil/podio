@@ -1,0 +1,9 @@
+label: Count finanzubersicht
+field_id: 132015634
+type: calculation
+script: var oCust = @[All of Unique Id](out_126377252_124753397)||[]
+var oShow = 0;
+if(oCust){
+  oShow = oCust.length;
+}
+oShow;

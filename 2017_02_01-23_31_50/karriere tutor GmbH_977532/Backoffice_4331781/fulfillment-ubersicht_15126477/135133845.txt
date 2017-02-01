@@ -1,0 +1,8 @@
+label: Podio Item Id set (yes=1)
+field_id: 135133845
+type: calculation
+script: var id = @[Podio Item ID](field_135133694);
+if(id)
+1
+else
+0

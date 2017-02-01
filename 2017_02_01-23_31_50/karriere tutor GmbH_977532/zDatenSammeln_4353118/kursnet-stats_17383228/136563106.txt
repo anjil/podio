@@ -1,0 +1,14 @@
+label: Document Date Json
+field_id: 136563106
+type: calculation
+script: var stat_date = @[Date](field_135912668);
+var jsonData = @[Document Count JSON](field_135994294)
+var date_key = dateFormat(stat_date);
+
+date_key + '|||' + jsonData
+
+function dateFormat(d){
+  var t = new Date(d);
+  var month = t.getMonth() + 1;
+  return t.getFullYear()+"-"+month+"-"+t.getDate();
+}

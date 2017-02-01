@@ -1,0 +1,55 @@
+label: Calculation
+field_id: 122557300
+type: calculation
+script: var json = @[All of JSON-FFMTStatistiken](out_120624685_120622004);
+var x
+var j = {};
+var oData='', oShow = '';
+var owert1 = 0, owert2 = 0;
+var oArr = {};
+ oArr[0] = 'AnzFulfillment';
+ oArr[1] = 'AnzTutorenDaten';
+try {
+  
+  for(i=0; i<json.length; i++) {
+    x = JSON.parse(@[All of JSON-FFMTStatistiken](out_120624685_120622004)[i]);
+    for (var key in x){
+      if(x[key]=== parseInt(x[key], 10)){  
+        
+        var tKey = key;
+        if(j[tKey]){
+          j[tKey] = j[tKey] +','+ x[key];
+        }
+        else{
+          j[tKey] = x['Title']+','+x[key];
+        } 
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+
+for (var key in j){
+   var obj = j[key].split(',');
+   oData += obj[0] + "|";
+   oData += obj[1] + "|";   
+   oData += obj[2] + "\n";  
+
+   owert1 += parseInt(obj[1]);
+   owert2 += parseInt(obj[2]);
+}
+      
+if(oData != ''){
+
+  var oHeader = "**Name of Component** | **" + oArr[0] + "**| **" + oArr[1]+"**\n";
+  oHeader += "---|---|---\n";
+
+  var oFooter = "**Gesamt** | **"+owert1+"**| **"+owert2+"**\n";
+
+  oShow = oHeader + oData + oFooter;
+}
+
+oShow+' ';

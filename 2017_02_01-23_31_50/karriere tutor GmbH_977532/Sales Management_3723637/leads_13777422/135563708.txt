@@ -1,0 +1,18 @@
+label: LQu
+field_id: 135563708
+type: calculation
+script: var oD = @[Aufnahme Datum](field_105490284);
+var s  = getFLDate(oD) 
+
+function getFLDate(d){  
+var current = new Date(d);     
+var weekstart = current.getDate() - current.getDay() +1;    
+var weekend = weekstart + 6;      
+var monday = new Date(current.setDate(weekstart));  
+var sunday = new Date(current.setDate(weekend));
+
+return monday+'~~'+sunday
+
+}
+
+s+'^^^'+oD+'$$'+oD.getDay()

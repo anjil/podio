@@ -1,0 +1,8 @@
+label: Actual Transaction Date Not Set (yes=1)
+field_id: 135723523
+type: calculation
+script: var dt = @[Actual Transaction Date](field_125978825)||''
+if(dt)
+0
+else
+1

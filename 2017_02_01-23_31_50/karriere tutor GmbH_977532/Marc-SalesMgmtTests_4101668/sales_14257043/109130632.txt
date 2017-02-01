@@ -1,0 +1,6 @@
+label: Calc_1stPayDate
+field_id: 109130632
+type: calculation
+script: d1 = new Date(@[Startdatum Bildungsgutschein](field_109129493));
+d12 = new Date(d1.getFullYear(),d1.getMonth()+1,d1.getDate()); 
+moment(d12).format("YYYY-MM-DD");

@@ -1,0 +1,4 @@
+label: Customer Id
+field_id: 124987537
+type: calculation
+script: @[All of Customer Id](out_124752446_124987538)[0]

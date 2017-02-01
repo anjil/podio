@@ -1,0 +1,4 @@
+label: Anzahl im Lager
+field_id: 118100514
+type: calculation
+script: @[Anzahl bestellt](field_116410479) - @[Anzahl versendet](field_118100512)

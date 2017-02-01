@@ -1,0 +1,10 @@
+label: wrong leads
+field_id: 128098221
+type: calculation
+script: var s = 0;
+if(!@[Category](field_127110688)){
+  if(@[All of Ansicht](out_126630578_127404044)){
+    s = 1
+  }
+}
+s

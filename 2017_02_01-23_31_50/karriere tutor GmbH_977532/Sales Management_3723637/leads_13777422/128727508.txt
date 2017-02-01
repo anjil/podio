@@ -1,0 +1,4 @@
+label: PLZ
+field_id: 128727508
+type: calculation
+script: @[All of PLZ](out_113524351_113531840)[0]

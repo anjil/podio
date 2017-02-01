@@ -1,0 +1,3 @@
+label: Ergebnis Objective 1
+field_id: 138359490
+type: category

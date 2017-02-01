@@ -1,0 +1,11 @@
+label: Error Sales Weekly(yes=1)
+field_id: 135567056
+type: calculation
+script: var salesYear  = @[Sales Year](field_127404413)||'';
+var tSalesYear = @[Test Sales Year](field_135566611)||'';
+var oShow      = 1;
+
+if(salesYear == tSalesYear)
+  oShow = 0;
+
+oShow;

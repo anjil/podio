@@ -1,0 +1,32 @@
+label: JSON-RechnungenReport
+field_id: 132709250
+type: calculation
+script: var oUniqueId = @[lizenzen Id](field_128895839);
+var oJson = @[All of Json-ExpectedLizenzenFee](out_128908966_128884745);
+var oAmt  = '';
+var odt   = '';
+
+try {
+
+  if(oJson && oJson !='[]'){
+    var jsn = JSON.parse(oJson); 
+    for(var i=0; i<jsn.length; i++){
+      if(jsn[i]['ExpectedId'] == oUniqueId){
+         oAmt = jsn[i]['Amount'];
+         odt  = jsn[i]['Date'];  
+         break;
+      }
+    }
+  }  
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+var z                  = {};
+z['Lizenzen']          = @[Lizenzen](field_129630080);
+z['Rate']              = @[Rate](field_130763189);
+z['Amount']            = oAmt;
+z['Date']              = odt;
+
+JSON.stringify(z);

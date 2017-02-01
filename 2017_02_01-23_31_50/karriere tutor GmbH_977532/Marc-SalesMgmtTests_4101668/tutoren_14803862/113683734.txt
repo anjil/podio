@@ -1,0 +1,4 @@
+label: CalcCourse
+field_id: 113683734
+type: calculation
+script: @[All of CalcCourseName](out_113683800_113676698)[0]

@@ -1,0 +1,19 @@
+label: Any License Paid (yes=1)
+field_id: 137029071
+type: calculation
+script: var oShow = 0;
+var t='~~~'
+try {
+  var oJsn  = JSON.parse(@[Json-ExpectedLizenzenFee](field_128908966)); 
+  for(i=0;i<oJsn.length;i++) {
+    var pid = oJsn[i].PaymentId|| ''
+    if(pid){
+      oShow = 1;
+      break;
+    }     
+  }  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+oShow

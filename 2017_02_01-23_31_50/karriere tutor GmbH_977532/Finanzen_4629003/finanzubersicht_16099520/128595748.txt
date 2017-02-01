@@ -1,0 +1,3 @@
+label: Infos über TN abgefragt
+field_id: 128595748
+type: category

@@ -1,0 +1,3 @@
+label: Banking Amount
+field_id: 132049710
+type: money

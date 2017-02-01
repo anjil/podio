@@ -1,0 +1,13 @@
+label: JSON-Data-tmp
+field_id: 129894409
+type: calculation
+script: var j = {};
+j["ID"]= ""//@Unique ID;
+j["Titel"]= @[Titel](field_116411445);
+j["Kursfreigabe_ID"]= @[Kursfreigabe_ID](field_116411491);
+j["Bemerkungen"]= @[Bemerkungen](field_116415988);
+j["Reihenfolge"]= @[Reihenfolge](field_116416438);
+j["Kursfreigabe Art"]= @[Kursfreigabe Art](field_116415990);
+j["interner Status"]= @[interner Status](field_116415989);
+
+JSON.stringify(j)

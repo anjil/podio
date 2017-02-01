@@ -1,0 +1,7 @@
+label: Unique Id
+field_id: 136106137
+type: calculation
+script: var name = @[Name](field_114375209)
+var id = @[Unique ID](item_app_item_id)
+
+id

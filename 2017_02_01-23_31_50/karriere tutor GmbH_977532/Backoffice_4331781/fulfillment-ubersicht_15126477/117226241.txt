@@ -1,0 +1,6 @@
+label: Kontaktdetails
+field_id: 117226241
+type: calculation
+script: var a = @[All of Kontaktdetails](in_113753142_117225519)
+var out = ""
+if (a[0] != "") out = a[0]

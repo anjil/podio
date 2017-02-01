@@ -1,0 +1,7 @@
+label: Sales Historie
+field_id: 117227335
+type: calculation
+script: var a = @[All of Notizen Historie](in_105491141_117225519)
+var out = ""
+if (a[0] != "") out = String(a[0])
+out.replace(/\n\n/g, "\n")

@@ -1,0 +1,8 @@
+label: AktuellesDatum (yes=1)
+field_id: 132146337
+type: calculation
+script: var id = @[All of UniqueID](out_128822775_132146328)+''
+if(id)
+1
+else
+0

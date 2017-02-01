@@ -1,0 +1,43 @@
+label: JSON-Lizenzen Details
+field_id: 137091712
+type: calculation
+script: var oStatus         = @[Rabattstaffel](field_129420896);
+var oLizenzname     = @[Lizenzname](field_128735220)||'';
+var oRate           = @[Rate](field_128735324)||0;
+var oRate1          = @[Fälligkeit in Tagen 1.Rate](field_128735325)||0;
+var oRate1Mon       = @[Fälligkeit 1.Rate Monat](field_128735930) || 0;
+var oRate2          = @[Fälligkeit in Tagen 2.Rate](field_128735326) || 0;
+var oRate2Mon       = @[Fälligkeit 2. Rate Monat](field_128735931) || 0;
+var LizStartDate    = @[Lizenzgültigkeit Start Datum](field_129802406)||null;
+var LizEndDate      = @[Lizenzgültigkeit Ende Datum](field_129802407) || null;
+
+var oAr   = [];
+var oAr0  = (@[Anzahl max TN Staffel 1](field_129420903)) ? [@[Anzahl max TN Staffel 1](field_129420903),@[Preis Staffel 1](field_129420904)] : '';
+var oAr1  = (@[Anzahl max TN Staffel 2](field_129420902)) ? [@[Anzahl max TN Staffel 2](field_129420902),@[Preis Staffel 2](field_129420905)] : '';
+var oAr2  = (@[Anzahl max TN Staffel 3](field_129420901)) ? [@[Anzahl max TN Staffel 3](field_129420901),@[Preis Staffel 3](field_129420906)] : '';
+var oAr3  = (@[Anzahl max TN Staffel 4](field_129420900)) ? [@[Anzahl max TN Staffel 4](field_129420900),@[Preis Staffel 4](field_129420907)] : '';
+var oAr4  = (@[Anzahl max TN Staffel 5](field_129420899)) ? [@[Anzahl max TN Staffel 5](field_129420899),@[Preis Staffel 5](field_129420908)] : '';
+var oAr5  = (@[Anzahl max TN Staffel 6](field_129420898)) ? [@[Anzahl max TN Staffel 6](field_129420898),@[Preis Staffel 6](field_129420909)] : '';
+var oAr6  = (@[Anzahl max TN Staffel 7](field_129420897)) ? [@[Anzahl max TN Staffel 7](field_129420897),@[Preis Staffel 7](field_129420910)] : '';
+
+if(oAr0 !='') oAr.push(oAr0);
+if(oAr1 !='') oAr.push(oAr1);
+if(oAr2 !='') oAr.push(oAr2);
+if(oAr3 !='') oAr.push(oAr3);
+if(oAr4 !='') oAr.push(oAr4);
+if(oAr5 !='') oAr.push(oAr5);
+if(oAr6 !='') oAr.push(oAr6);
+
+var z = {};
+z['Status']       = oStatus;
+z['Lizenzname']   = oLizenzname;
+z['Rate']         = oRate;
+z['Rate1']        = oRate1;
+z['Rate1Mon']     = oRate1Mon;
+z['Rate2']        = oRate2;
+z['Rate2Mon']     = oRate2Mon;
+z['LizStartDate'] = LizStartDate;
+z['LizEndDate']   = LizEndDate;
+z['Datam']        = oAr;
+
+JSON.stringify(z);

@@ -1,0 +1,69 @@
+label: JSON-DataPerson
+field_id: 118798421
+type: calculation
+script: var debug = "";
+var out = "";
+var x;
+var myKontakt;
+var APFirma_ary = Array();
+var Account_ary = Array();
+var weitereAPs_ary = Array();
+var Massnahmen_ary = Array();
+// Zur Sortierung der Reihenfolge der Massnahmen
+var myReihenfolge = Array();
+//JSON.parse(debug);
+
+try {
+  // Kontaktdaten
+  myKontakt = JSON.parse(@[All of JSON-Data](out_136113702_136112743)[0]);
+
+  //Anzahl Ansprechpartner Firma
+  for(i=0; i<@[All of JSON-Data](out_136113702_136323354).length; i++) {
+    x = JSON.parse(@[All of JSON-Data](out_136113702_136323354)[i]);
+    APFirma_ary[i]=x;
+  }
+
+  //Anzahl Accounts
+  for(i=0; i<@[All of JSON-Data](out_136105484_136112742).length; i++) {
+    x = JSON.parse(@[All of JSON-Data](out_136105484_136112742)[i]);
+    Account_ary[i]=x;
+  }
+
+  //Anzahl weitere Ansprechpartner
+  for(i=0; i<@[All of JSON-Data](out_136113702_114377062).length; i++) {
+    x = JSON.parse(@[All of JSON-Data](out_136113702_114377062)[i]);
+    weitereAPs_ary[i]=x;
+  }
+
+} catch (e) {
+  "Could not parse JSON"
+}
+
+var j = {};
+j["ID"] = @[Unique ID](item_app_item_id);
+j["Auftragsdatum"] = @[Auftragsdatum](field_108041451);
+j["StartLehrgang"] = @[Startdatum Lehrgang](field_108029027);
+j["StartBildungsgutschein"] = @[Startdatum Bildungsgutschein](field_108109621);
+j["Bildungsgutscheinnummer"] = @[Bildungsgutscheinnummer](field_122499056);
+j["AccountArt"] = @[Account Art](field_105889527);
+j["Verkaufsschritte"] = @[Verkaufsschritte](field_114376806);
+j["Wettbewerber"] = @[Wettbewerber](field_114377065);
+j["Status"] = @[Status](field_105473431);
+j["Avendoo_Account"] = @[Avendoo Account](field_105494745);
+j["Avendoo_Demo"] = @[Avendoo Demo](field_105494746);
+j["Wahrscheinlichkeit"] = @[Wahrscheinlichkeit](field_105473428)
+j["AufnahmeDatum"] = @[Aufnahme Datum](field_105490284)
+j["NextStepDatum"] = @[Nächster Schritt](field_105473432)
+j["NextStep2Do"] = @[Nächster Schritt ToDo](field_105489883)
+j["weitereNextSteps"] = @[weitere Nächste Schritte](field_114377066)
+j["LeadOwner"] = @[Lead owner](field_105473426);
+j["Kontakt"]= myKontakt;
+j["AP_Firma"]= APFirma_ary;
+j["Account"] = Account_ary;
+j["AP_weitere"] = weitereAPs_ary;
+//j["Historie"] = String(@[Notizen Historie](field_105491141));
+j["Kontaktdetails"] = @[Kontaktdetails](field_113753142);
+
+out = JSON.stringify(j);
+//out = myKontakt.Vorname
+out

@@ -1,0 +1,60 @@
+label: Aus der Zeit heraus
+field_id: 123655619
+type: calculation
+script: var items     = [];
+var oShow     = '';
+var oShowData = '';
+
+try {
+ 
+ var json = @[All of JSON-Lehrgang](out_123652274_120622004);
+ for (var ii=0; ii<json.length; ii++){ 
+    var oArr = JSON.parse(json[ii]);  
+    for (var jj=0; jj<oArr.length; jj++){
+       var oCalcLeh = oArr[jj]["CalcLehrgang"];
+       var oStatus = oArr[jj]["StatusShortName"];  
+       
+       var tempKey = oCalcLeh+'^'+oStatus;
+       if(items[tempKey]){
+           var arr = items[tempKey];      
+           arr['count'] = parseInt(arr['count'])+1;
+           items[tempKey] = arr;      
+        }     
+        else{
+           var arr = [];
+           arr['CalcLehrgang'] = oCalcLeh;         
+           arr['StatusShortName'] = oStatus;
+           arr['count'] = 1;
+           items[tempKey] = arr;
+        }    
+      }             
+   }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+ 
+for(key in items) { 
+   var oArr = items[key];
+   var oStatus =  oArr['StatusShortName'].replace(/\s/g, ""); 
+oStatus = oStatus.toLowerCase();
+
+   if(oStatus  != 'lgfertig' && 
+      oStatus  != 'lgnefertig' ){
+      oShowData += '|' +oArr['CalcLehrgang']; 
+      oShowData += '|' +oArr['StatusShortName'];
+      oShowData += '|' +oArr['count']+ '|<br>'; 
+   }  
+}
+
+
+if(oShowData.length > 0){
+  
+  var oHeader ='|**Lehrgang**|**Status**|**Count**|';
+  oHeader+='<br>'; 
+  oHeader += '|------|-----|-----|<br>';
+  oShow += oHeader + oShowData;
+
+}
+
+oShow+' ';

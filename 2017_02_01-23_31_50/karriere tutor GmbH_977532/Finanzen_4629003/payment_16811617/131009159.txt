@@ -1,0 +1,4 @@
+label: Amount
+field_id: 131009159
+type: calculation
+script: @[All of Amount](out_128910047_131003524)[0];

@@ -1,0 +1,19 @@
+label: Expected Transaction Scenario1
+field_id: 139084907
+type: calculation
+script: var jsonTransaction = @[All of JSON-Transaction](in_124039546_124753397)||[];
+var oZeiteinsatz    = @[All of Zeiteinsatz](in_133706683_124752897)[0]||'';
+var json = @[All of JSON-FinanceUbersicht](in_124762989_124752897)[0];
+var totalWochen = 0;
+var oShow       = 0;
+
+try {
+
+  if(jsonTransaction.length == 0){
+   oShow = 1;
+  } 
+}
+catch (e) {
+  "Could not parse JSON";
+}
+oShow;

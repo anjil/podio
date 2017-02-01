@@ -1,0 +1,3 @@
+label: Bildungsbereich
+field_id: 127783061
+type: category

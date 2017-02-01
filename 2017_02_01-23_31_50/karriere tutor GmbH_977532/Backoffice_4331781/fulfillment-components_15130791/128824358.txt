@@ -1,0 +1,4 @@
+label: JSON-Lizenze
+field_id: 128824358
+type: calculation
+script: null

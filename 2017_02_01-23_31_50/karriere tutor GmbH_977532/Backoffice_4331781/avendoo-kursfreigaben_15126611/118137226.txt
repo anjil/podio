@@ -1,0 +1,6 @@
+label: JSON-Data
+field_id: 118137226
+type: calculation
+script: @[Titel](field_116411445)
+var j = {};
+JSON.stringify(j)

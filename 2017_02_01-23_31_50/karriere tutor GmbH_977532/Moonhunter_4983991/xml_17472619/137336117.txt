@@ -1,0 +1,3 @@
+label: Upload Status
+field_id: 137336117
+type: category

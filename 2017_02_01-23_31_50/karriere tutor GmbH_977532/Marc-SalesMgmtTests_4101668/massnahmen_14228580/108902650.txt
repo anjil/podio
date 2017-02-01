@@ -1,0 +1,3 @@
+label: Anzahl Raten
+field_id: 108902650
+type: number

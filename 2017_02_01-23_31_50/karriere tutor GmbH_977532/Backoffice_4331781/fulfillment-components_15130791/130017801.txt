@@ -1,0 +1,14 @@
+label: JSON-Course
+field_id: 130017801
+type: calculation
+script: var oCompo        = @[Titel](field_116446197) || '';
+var oWochen       = @[Dauer in Wochen](field_118878466);
+var oReihenfolge  = @[Reihenfolge](field_116446843) || 0;
+
+var temp              = {};
+temp['Component']     = oCompo;
+temp['Wochen']        = oWochen;
+temp['Reihenfolge']   = oReihenfolge;
+
+
+JSON.stringify(temp);

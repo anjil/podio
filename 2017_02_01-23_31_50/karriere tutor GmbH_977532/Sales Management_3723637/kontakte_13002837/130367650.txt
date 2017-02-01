@@ -1,0 +1,9 @@
+label: Anzahl Leads
+field_id: 130367650
+type: calculation
+script: var out = parseInt(0)
+if (@[All of Status](in_105473431_113531840).length > 0) {
+  out = parseInt(@[All of Status](in_105473431_113531840).length) 
+}
+
+out

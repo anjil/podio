@@ -1,0 +1,18 @@
+label: Berechnung
+field_id: 128601021
+type: calculation
+script: var out = ""
+var tmpJS = @[All of JSON-ExpectedTransactions](out_125894124_125193630)[0]
+try {
+ var jsn = JSON.parse(tmpJS)
+ for(var i=0; i<jsn.length; i++){
+  out += jsn[i]
+ }
+ out += " -- " + tmpJS
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+
+out

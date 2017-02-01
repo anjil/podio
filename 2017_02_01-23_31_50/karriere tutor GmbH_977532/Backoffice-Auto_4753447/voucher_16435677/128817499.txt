@@ -1,0 +1,8 @@
+label: Prufungen (Yes =1)
+field_id: 128817499
+type: calculation
+script: var pid = @[Pid](field_128039680);
+if(pid)
+1
+else
+0

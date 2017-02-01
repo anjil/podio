@@ -1,0 +1,4 @@
+label: Lizenz bezahlt wann
+field_id: 131284975
+type: calculation
+script: @[All of Lizenz bezahlt wann](out_130667169_131003524)[0];

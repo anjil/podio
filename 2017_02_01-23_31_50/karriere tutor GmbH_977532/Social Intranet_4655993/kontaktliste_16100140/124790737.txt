@@ -1,0 +1,4 @@
+label: Geburtstagstext
+field_id: 124790737
+type: calculation
+script: @[Vorname](field_124762078) + ' ' + @[Nachname](field_124757896) + ' wird ' + @[Alter (wird)](field_124789473)

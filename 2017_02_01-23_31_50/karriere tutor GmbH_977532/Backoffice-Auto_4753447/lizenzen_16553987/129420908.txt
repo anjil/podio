@@ -1,0 +1,3 @@
+label: Preis Staffel 5
+field_id: 129420908
+type: money

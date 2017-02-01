@@ -1,0 +1,3 @@
+label: Update all dates in current item
+field_id: 130695360
+type: date

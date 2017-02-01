@@ -1,0 +1,54 @@
+label: JSON-Lizen
+field_id: 129942387
+type: calculation
+script: var oTitle    = @[Titel](field_116446197) || '';
+var jsn       = @[All of JSON-Lizen](out_129936833_128735467);
+
+var myArray   = Array();
+var myData    = Array();
+var oArr      = {}; 
+var t= '~~'
+
+try {
+  for (var ii=0; ii<jsn.length; ii++){ 
+    if(jsn[ii] && jsn[ii]!='{}'){    
+       var js     = JSON.parse(jsn[ii]);  
+       for(var i=0; i<js['Datam'].length; i++){
+         var oCmArr = js['Datam'][i];
+         if(oCmArr['Component'] == oTitle){
+           for(var k=0 ;k<oCmArr['Data'].length; k++){
+             var oData = oCmArr['Data'][k];
+             var temp = {};
+             temp['MonYear'] = oData['MonYear'];
+             temp['Amount']  = oData['Amount'];
+             temp['Count']   = oData['Count'];
+             myData[k]       = temp;
+           }
+           //oArr['Component']    = oTitle;
+           oArr['Lizenzname']   = js['Lizenzname'];
+           oArr['Rate']         = js['Rate'];
+           oArr['Rate1']        = js['Rate1'];
+           oArr['Rate1Mon']     = js['Rate1Mon'];
+           oArr['Rate2']        = js['Rate2'];
+           oArr['Rate2Mon']     = js['Rate2Mon'];
+           oArr['LizStartDate'] = js['LizStartDate'];
+           oArr['LizEndDate']   = js['LizEndDate'];
+           oArr['Data']         = myData;
+           myArray[ii]          = oArr;
+           myData               = [];
+           oArr                 = {};
+        } 
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+var z = {};
+z['Component']  = oTitle;
+z['Datam']      = myArray;
+
+JSON.stringify(z);
+

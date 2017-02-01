@@ -1,0 +1,18 @@
+label: Calculation
+field_id: 136567581
+type: calculation
+script: var json_data = @[All of Document Date Json](in_136563106_136035531);
+
+var dataWiseData = '';
+
+for(var i=0; i<json_data.length; i++) {
+
+  var str = json_data[i];
+  var arr = str.split('|||');
+
+  var date = arr[0];
+  var date_object = arr[1];
+
+  dataWiseData += date_object + ", ";
+}
+dataWiseData

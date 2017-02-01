@@ -1,0 +1,13 @@
+label: Quarterly Sales
+field_id: 128523298
+type: calculation
+script: var report = @[All of Ansicht](out_126630578_127404412)||[];
+var oShow = 0;
+if(report){
+  var str= report+'';
+  if(str.indexOf('Q')>-1) oShow = 1; 
+}
+else 
+oShow = 0;
+
+oShow;

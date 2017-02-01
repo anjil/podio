@@ -1,0 +1,6 @@
+label: MNContainsSAP
+field_id: 138836107
+type: calculation
+script: var out = parseInt(0)
+if (@[CourseTitle](field_130487086).toUpperCase().indexOf("SAP")!=-1) {out = parseInt(1)}
+out

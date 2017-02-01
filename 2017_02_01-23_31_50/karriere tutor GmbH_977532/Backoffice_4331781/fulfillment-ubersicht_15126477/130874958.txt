@@ -1,0 +1,234 @@
+label: Report
+field_id: 130874958
+type: calculation
+script: var oJsnCourse    = @[All of JSON-TestCourseDatam](out_130539839_118702791);
+var jsnVoucher    = @[All of JSON-Voucher](in_127692075_127692074);
+var Auftragsdatum = @[All of Auftragsdatum](in_108041451_117225519);
+var Abweichender  = @[Abweichender Lehrgangsstart](field_117226512);
+
+
+var NachsterDt    = @[All of Nächster Schritt](in_105473432_117225519)[0];
+var NachsterToDo  = @[All of Nächster Schritt ToDo](in_105489883_117225519)[0];
+var NachDt        = @[Nächster Schritt](field_117227332);
+var NachToDo      = @[Nächster Schritt ToDo](field_117227333);
+
+var aktuellesDatum = @[All of AktuellesDatum](out_128820243_131327818)[0];
+
+var items         = [];
+var displayURL    = '';
+var oData         = '';
+var oShow         = '';
+var oHeader       = '| Art| Datum| Status|<br>';
+oHeader          += '|----|------|-------|<br>';
+
+var t='~~'
+try {
+
+  if(jsnVoucher && jsnVoucher!= '{}' && jsnVoucher!= '[]'){
+     getVoucherArr(jsnVoucher);
+     items.sort(function(a, b) {
+        a = new Date(a['date']);
+        b = new Date(b['date']);
+        return a < b ? -1 : (a > b ? 1 : 0);
+     });
+  } 
+  if(oJsnCourse && oJsnCourse!='{}' && oJsnCourse!='[]'){   
+    printData();
+  }  
+} 
+catch (e) {
+   "Could not parse JSON"
+}
+
+
+function printData(){
+  var Auftrag =  (Abweichender!=null)?Abweichender : Auftragsdatum;
+  var jsn     = JSON.parse(oJsnCourse);
+  var prvTitle= '';
+    
+  for(var i=0; i<jsn.length; i++){
+    var id       = jsn[i].id; 
+    var oTitle   = jsn[i].Title;  
+    var oLehName = jsn[i].Component;
+    var oStatus  = jsn[i].StatusShortName;
+    var oSDate   = jsn[i].StartDate;
+    var oEDate   = jsn[i].EndDate;  t+='~~~'+oEDate 
+    var oDt      = moment(jsn[i].StartDate).format("dd DD.MM.YYYY");
+    
+    if(i==0){
+      var dd       = new Date(Auftrag); 
+      oLehStart    = (i==0)? oSDate : oLehStart; 
+      oData += '|' + "Auftrag";
+      oData += '|' + moment(dd).format("dd DD.MM.YYYY") + '| |<br>';
+      oData += '|' + "1. Lehrgangsstart";
+      oData += '|' + oDt + '| | <br>';
+    }
+   
+displayURL = 'https://podio.com/karrieretutorde/tutoren/apps/lehrgangs-details/items/'+id;
+
+    var oShowLeh = oLehName.link(displayURL)    
+
+    if(prvTitle != oTitle){
+      oData += '|**' + oTitle + '**| | <br>';
+      prvTitle = oTitle;
+    }    
+    oData += '|' + oShowLeh;
+    oData += '|' + oDt ;
+    oData += '|' + oStatus;
+    oData += '|<br>';
+
+   
+    for(var p=0; p<jsn[i].Prufung.length; p++){
+      var pTitle  = jsn[i].Prufung[p].Title;
+      var pStatus = jsn[i].Prufung[p].Status;
+      var pDate   = jsn[i].Prufung[p].Prufungsdatum;
+      var pDt     = '';
+      if(pDate){
+        pDt = moment(pDate).format("dd DD.MM.YYYY");
+      }
+         
+       oData += '|' + pTitle;
+       oData += '|' + pDt;
+       oData += '|' + pStatus;
+       oData += '|<br>';      
+    }
+
+    for(var k=0; k<items.length; k++) {   
+      var vdate  = items[k]['date'];  
+      if(vdate){  
+        var chk = dateCompair(oSDate,oEDate,vdate);t+='^^--'+chk 
+        if(chk == 1){
+          var vTitle  = items[k]['title']||'';
+          var vStatus = items[k]['status'] || '';                              
+
+          oData += '|' + vTitle;
+          oData += '|' + moment(vdate).format("dd DD.MM.YYYY") + '| |<br>';
+        }
+      }
+    } 
+  }
+  if(oData){
+    var odt       = new Date(oEDate );
+    var odays     = 0;
+    if(odt.getDay()==1) odays = 3;
+    if(odt.getDay()==2) odays = 4;
+    if(odt.getDay()==3) odays = 5;
+    if(odt.getDay()==4) odays = 6;
+ 
+    odt.setDate(odt.getDate() - (odays));
+    var oLEndDate = moment(odt).format("dd DD.MM.YYYY")         
+  
+    oData += '|' + "voraussichtlicher Abschluss aller Lehrgänge";
+    oData += '|' + oLEndDate+ '| |<br>';
+
+
+    for(var k=0; k<items.length; k++) {   
+      var vdate  = items[k]['date'];  
+      if(vdate){  
+        var chk = dateCompairEnd(oEDate,vdate);t+='^^--'+chk 
+        if(chk == 1){
+          var vTitle  = items[k]['title']||'';
+          var vStatus = items[k]['status'] || '';                              
+
+          oData += '|' + vTitle;
+          oData += '|' + moment(vdate).format("dd DD.MM.YYYY") + '| |<br>';
+        }
+      }
+    } 
+
+
+    
+    if(NachsterDt) {
+      if(NachsterToDo.length>35){
+        NachsterToDo = NachsterToDo.substr(0,35);
+      }
+      var st  = "NS Vertrieb: " + NachsterToDo;
+      var od  = (Abweichender!=null) ? Abweichender : NachsterDt;
+      var dts =  new Date(od);
+      oData += '|' + st;
+      oData += '|' + moment(dts).format("dd DD.MM.YYYY")+ '||<br>';
+    }
+    else {
+      if(NachsterToDo!=null) {
+        if(NachsterToDo.length>35){
+           NachsterToDo = NachsterToDo.substr(0,35);
+        }
+        var st  = "NS Vertrieb: " + NachsterToDo;
+        oData += '|' + st;
+        oData += '|' + moment().add(1,"year").format("dd DD.MM.YYYY");
+        oData += '||<br>';
+      }
+    }
+
+ 
+    if(NachDt) {
+      if(NachToDo.length>35){
+        NachToDo= NachToDo.substr(0,35);
+      }
+      var st  = "NS FFMT: " + NachToDo;
+      var dts =  new Date(NachDt);
+      oData += '|' + st;
+      oData += '|' + moment(dts).format("dd DD.MM.YYYY")+ '||<br>';
+    }
+    else {
+      if(NachToDo!=null) {
+        if(NachToDo.length>35){
+          NachToDo= NachToDo.substr(0,35);
+        }
+        var st  = "NS FFMT: " + NachToDo;
+        oData += '|' + st;
+        oData += '|' + moment().add(1,"year").format("dd DD.MM.YYYY");
+        oData += '||<br>';
+      }
+    }
+  }
+}
+
+
+function dateCompairEnd(oEDate,vdate){
+  var d2 = new Date(oEDate);
+  var d3 = new Date(vdate);
+  if (d3.getTime() > d2.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+function dateCompair(oSDate,oEDate,vdate){
+  var d1 = new Date(oSDate);
+  var d2 = new Date(oEDate);
+  var d3 = new Date(vdate);
+  if (d3.getTime() >= d1.getTime() && d3.getTime() <= d2.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+function getVoucherArr(jsnVoucher){
+
+  var tempArr ={};
+  var iCount  = 0; 
+
+  for(var i=0; i<jsnVoucher.length; i++){
+    var jsVoucher          = JSON.parse(jsnVoucher[i]);
+    var oDt                = jsVoucher['GultigAb'];  
+    if(oDt){
+        var oTitle         = jsVoucher['Title']||'';  
+        tempArr['title']   = oTitle;
+        tempArr['status']  = '';  
+        tempArr['date']    = oDt; 
+        tempArr['CalcLeh'] = '';    
+        items[iCount]      = tempArr;
+        tempArr            = {};
+        iCount++;      
+    }
+  }
+}
+
+oShow = oHeader + oData;
+oShow;
+

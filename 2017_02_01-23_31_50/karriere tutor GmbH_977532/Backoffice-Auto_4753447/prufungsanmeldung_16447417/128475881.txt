@@ -1,0 +1,20 @@
+label: Prüfung and Kandidatname
+field_id: 128475881
+type: calculation
+script: var oModul = @[Prüfung](field_127795432);
+var oName  = @[Kandidatname](field_127795436);
+var oShow = '';
+
+oShow;
+
+if(oModul){
+   oShow+=oModul;
+}
+if(oName){
+  oShow += oName;
+}
+
+if(oShow){
+  oShow = oShow.split(' ').join('');
+}
+oShow;

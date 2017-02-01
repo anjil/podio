@@ -1,0 +1,3 @@
+label: Money
+field_id: 124035569
+type: money

@@ -1,0 +1,26 @@
+label: Calculation
+field_id: 123466091
+type: calculation
+script: var myArray = Array();
+var tmpObj = {};
+
+try {
+ 
+ var jj=@[All of JSON-Datum2](in_121361740_118873889);
+ for (var ii=0; ii<jj.length; ii++){ 
+    var x = JSON.parse(jj[ii]);
+    tmpObj["CalcLehrgang"] = x["CalcLehrgang"];
+    tmpObj["Status"] =  x["Status"];
+    tmpObj["StatusShortName"] =  x["StatusShortName"];
+    tmpObj["StartDate"] =  x["StartDate"];
+    tmpObj["EndDate"] =  x["EndDate"];
+    myArray[ii] = tmpObj; 
+    tmpObj = {};
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+JSON.stringify(myArray);
+

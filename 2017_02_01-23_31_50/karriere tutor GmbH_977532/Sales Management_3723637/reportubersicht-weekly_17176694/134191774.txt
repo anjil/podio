@@ -1,0 +1,25 @@
+label: Week Range
+field_id: 134191774
+type: calculation
+script: var oYear = @[Jahresauswahl](field_134089175)||'';
+var oWeek = @[Week](field_134089176)||'';
+var oShow = '';
+
+if(oYear && oWeek){
+  oShow = weekRange(oYear,oWeek);
+}
+
+function weekRange(oYear,oWeek){
+  var year = oYear;
+  var week = oWeek;
+  var d    = new Date("Jan 01, "+year+" 01:00:00");
+  var w    = d.getTime() + 604800000 * (week-1);
+  var n1   = new Date(w);
+  var n2   = new Date(w + 518400000)
+  var str  = moment(n1).format("DD.MM.YYYY");
+  str     += ' - ';
+  str     += moment(n2).format("DD.MM.YYYY");
+  return str;
+}
+
+oShow;

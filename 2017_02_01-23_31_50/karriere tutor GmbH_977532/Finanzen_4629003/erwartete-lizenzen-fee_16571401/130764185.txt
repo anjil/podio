@@ -1,0 +1,29 @@
+label: Lehrgang StartDate
+field_id: 130764185
+type: calculation
+script: var oUniqueId = @[lizenzen Id](field_128895839);
+var oJson     = @[All of Json-ExpectedLizenzenFee](out_128908966_128884745);
+var oShow     = null;
+
+try {
+  if(oJson && oJson !='[]'){
+    var jsn = JSON.parse(oJson); 
+    for(var i=0; i<jsn.length; i++){
+      if(jsn[i]['ExpectedId'] == oUniqueId){
+        if(jsn[i]['Date']){
+          oShow = jsn[i]['StartDate'];  
+          break; 
+        }   
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+var dt = null;
+if(oShow){
+  dt =  new Date(oShow);
+}
+dt;

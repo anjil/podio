@@ -1,0 +1,20 @@
+label: Date widget
+field_id: 126878007
+type: calculation
+script: var u = @[Unique Id](field_125198678)
+var oActualDate = @[Actual Transaction Date](field_125978825) || null;
+var oDate = @[Date](field_125525214) || null;
+var oDt = new Date();
+var oShow = null;
+
+if(oActualDate){
+  oDt = new Date(oActualDate);
+}
+else if(oDate){
+  oDt = new Date(oDate);
+}
+else{
+  oDt = null;
+}
+
+oShow = oDt;

@@ -1,0 +1,3 @@
+label: Alle Produkte betroffen
+field_id: 134766754
+type: category

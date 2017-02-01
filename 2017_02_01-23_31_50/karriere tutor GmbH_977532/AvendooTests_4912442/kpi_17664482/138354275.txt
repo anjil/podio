@@ -1,0 +1,3 @@
+label: KPI period
+field_id: 138354275
+type: date

@@ -1,0 +1,3 @@
+label: Serienhäufigkeit
+field_id: 131848594
+type: text

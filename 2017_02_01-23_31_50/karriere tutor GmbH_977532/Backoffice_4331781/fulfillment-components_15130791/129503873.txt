@@ -1,0 +1,29 @@
+label: JSON-LizenzenData
+field_id: 129503873
+type: calculation
+script: var jsn      = @[All of JSON-LizenzenData](out_129503866_128735467);
+var tmpObj   = {};
+var myArray  = Array();
+
+
+try {
+ 
+ for (var ii=0; ii<jsn.length; ii++){ 
+    if(jsn[ii] && jsn[ii]!='{}'){
+       var x = JSON.parse(jsn[ii]);
+       tmpObj["Lizenzname"]   = x.Lizenzname; 
+       tmpObj["Rate"]         = x.Rate; 
+       tmpObj["Rate1"]        = x.Rate1;  
+       tmpObj["Rate1Mon"]     = x.Rate1Mon;  
+       tmpObj["Rate2"]        = x.Rate2;  
+       tmpObj["Rate2Mon"]     = x.Rate2Mon;      
+       myArray[ii]            = tmpObj; 
+       tmpObj                 = {};
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+JSON.stringify(myArray);

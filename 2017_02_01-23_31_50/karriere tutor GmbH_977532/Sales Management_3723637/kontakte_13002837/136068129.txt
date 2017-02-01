@@ -1,0 +1,4 @@
+label: Sales Management Account Id
+field_id: 136068129
+type: calculation
+script: @[All of Sales Management Account Id](out_136066656_114376100)+''

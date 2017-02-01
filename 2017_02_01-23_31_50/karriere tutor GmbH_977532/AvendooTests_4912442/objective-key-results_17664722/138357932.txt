@@ -1,0 +1,3 @@
+label: Ergebnis KR 1a in %
+field_id: 138357932
+type: category

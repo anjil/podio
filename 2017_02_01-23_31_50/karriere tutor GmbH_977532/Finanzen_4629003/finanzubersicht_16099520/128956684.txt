@@ -1,0 +1,6 @@
+label: -
+field_id: 128956684
+type: calculation
+script: @[Name](field_124789926)
+out ="----"
+out

@@ -1,0 +1,75 @@
+label: Category1
+field_id: 127040191
+type: calculation
+script: var oMabnahmen = @[All of Maßnahmentitel](out_108135844_108285774);
+var oTotalAmt  = @[Calc_Lehrgangsgebuehren](field_113559188)||0;
+var myArray    = Array();
+var oItems     = '';
+var oCategory  = '';
+
+for (var i=0; i<oMabnahmen.length; i++){ 
+   myArray[i] = oMabnahmen[i]; 
+}
+
+oItems = myArray.join();
+
+if(oItems.indexOf('Six Sigma') > -1 ){ 
+   oCategory = 'QMS';
+}
+if(oItems.indexOf('Scrum') > -1 ){ 
+   oCategory = 'Agile';
+}
+if(oItems.indexOf('Online Marketing Manager') > -1 ){ 
+   oCategory = 'OMM einzeln';
+}
+if(oItems.indexOf('Online Marketing Manager') > -1 && 
+  (oItems.indexOf('E-Commerce') > -1 || 
+   oItems.indexOf('Social Media Manager') > -1) ){ 
+   oCategory = 'OMM Kombo';
+}
+if(oItems.indexOf('Online Marketing Manager') == -1 && 
+  (oItems.indexOf('E-Commerce') > -1 || 
+   oItems.indexOf('Social Media Manager') > -1) ){ 
+   oCategory = 'OMM sonst';
+}
+
+if(oItems.indexOf('Vertriebsleiter') > -1 || 
+   oItems.indexOf('Business Development Manager') > -1 || 
+   oItems.indexOf('vom Mitarbeiter zur Führungskraft Management') > -1){ 
+   oCategory = 'Management';
+}
+
+if(oItems.indexOf('Bilanzbuchhalter') > -1){ 
+   oCategory = 'Fachkraft';
+}
+
+if(oItems.indexOf('ITIL') > -1 && parseFloat(oTotalAmt)< 3000 ){ 
+   oCategory = 'IT Small';
+}
+if(oItems.indexOf('ITIL') > -1 && parseFloat(oTotalAmt) > 3000 ){ 
+   oCategory = 'IT Medium';
+}
+if(oItems.indexOf('ITIL') > -1 && parseFloat(oTotalAmt)< 3000 && 
+   oItems.indexOf('Scrum')> -1 ){ 
+   oCategory = 'Agile IT Small';
+}
+if(oItems.indexOf('ITIL') > -1 && parseFloat(oTotalAmt)> 3000 && 
+   oItems.indexOf('Scrum')> -1 ){ 
+   oCategory = 'Agile IT Medium';
+}
+if(oItems.indexOf('Six Sigma')> -1 && oItems.indexOf('ITIL')> -1){ 
+   oCategory = 'QMS IT';
+}
+if(oItems.indexOf('Six Sigma')> -1 && oItems.indexOf('Scrum')> -1){ 
+   oCategory = 'Agile QMS';
+}
+if(oItems.indexOf('Six Sigma')> -1 && oItems.indexOf('ITIL')> -1 && 
+   oItems.indexOf('Scrum')> -1){ 
+   oCategory = 'Agile QMS IT';
+}
+
+if(oCategory == "" && oItems){ 
+   oCategory = 'sonst Kombo';
+}
+
+oCategory;

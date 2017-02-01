@@ -1,0 +1,12 @@
+label: Adjusted Billing Start Date
+field_id: 125517113
+type: calculation
+script: var oTransactionDate = @[Min of Buchungstag](in_min_124021916_124753397) || null ;
+var oStartdatum = @[All of Startdatum Bildungsgutschein](in_121119108_124752897)[0];
+var oShow = oStartdatum ;
+
+if (oTransactionDate) {
+    oShow = new Date(oTransactionDate) ;
+}   
+
+oShow;

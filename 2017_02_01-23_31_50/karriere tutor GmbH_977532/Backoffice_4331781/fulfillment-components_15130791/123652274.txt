@@ -1,0 +1,47 @@
+label: JSON-Lehrgang
+field_id: 123652274
+type: calculation
+script: var myArray = Array();
+var tmpObj = {};
+var iInd = 0;
+var uq = @[Unique ID](item_app_item_id);
+try {
+ 
+ var json= @[All of JSON-Datum2](in_121361740_118873889);
+ for (var ii=0; ii<json.length; ii++){ 
+    var x = JSON.parse(json[ii]);  
+    var oEndDate = x["EndLeh"];   
+    if(oEndDate){
+      var oChkDate = dateCompair(oEndDate);
+      if(oChkDate == 1){
+        tmpObj["CalcLehrgang"] = x["CalcLehrgang"];
+        tmpObj["Status"] =  x["Status"];
+        tmpObj["StatusShortName"] =  x["StatusShortName"];
+        //tmpObj["StartDate"] =  x["StartDate"];
+        //tmpObj["EndDate"] =  x["EndDate"];
+        myArray[iInd] = tmpObj; 
+        tmpObj = {};
+        iInd++;
+             
+       }
+     }
+   }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function dateCompair(oE){
+  var d1 = new Date(oE);
+  var d2 = new Date();
+  if (d2.getTime() > d1.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+
+
+JSON.stringify(myArray);

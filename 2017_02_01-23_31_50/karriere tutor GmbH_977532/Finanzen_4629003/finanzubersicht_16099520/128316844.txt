@@ -1,0 +1,6 @@
+label: hatWiedervorlage
+field_id: 128316844
+type: calculation
+script: var out = 0
+if (@[Wiedervorlage Datum](field_128316682) != null) out=1
+out

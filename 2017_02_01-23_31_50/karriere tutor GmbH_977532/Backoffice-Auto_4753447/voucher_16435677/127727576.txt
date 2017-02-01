@@ -1,0 +1,15 @@
+label: Modul Name
+field_id: 127727576
+type: calculation
+script: var oModule = @[Modul](field_127692066);
+oShow = '';
+
+if(oModule){
+ /* if(oModule.indexOf('[CB]') > -1){
+    oShow = oModule.substr(0,oModule.indexOf('[CB]')-1);
+  }*/
+  oShow = oShow.replace(/[^A-Z0-9]+/ig, "_");   
+  
+}
+
+oShow;

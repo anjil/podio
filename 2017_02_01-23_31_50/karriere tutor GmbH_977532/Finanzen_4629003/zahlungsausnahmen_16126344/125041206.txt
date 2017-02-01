@@ -1,0 +1,10 @@
+label: Valid Data(Yes = 1)
+field_id: 125041206
+type: calculation
+script: var oName = @[Name](field_124987513)||'';
+var oCustomerId = @[Customer Id](field_124987537)||'';
+var oShow = 0;
+if(oName.trim() && oCustomerId){
+  oShow = 1;
+}
+oShow;

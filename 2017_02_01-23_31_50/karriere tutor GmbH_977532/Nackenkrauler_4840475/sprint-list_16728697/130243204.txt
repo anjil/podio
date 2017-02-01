@@ -1,0 +1,4 @@
+label: Progress
+field_id: 130243204
+type: calculation
+script: ""+@[All of Status](out_130243190_130243203)+""

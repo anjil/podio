@@ -1,0 +1,3 @@
+label: SipGateSyncID
+field_id: 136107021
+type: text

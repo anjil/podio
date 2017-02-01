@@ -1,0 +1,5 @@
+label: Calc_LehrgangsStart
+field_id: 118638904
+type: calculation
+script: @[All of Startdatum Lehrgang](in_108029027_117225519)[0];
+if (@[Abweichender Lehrgangsstart](field_117226512) != null) {@[Abweichender Lehrgangsstart](field_117226512)}

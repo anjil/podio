@@ -1,0 +1,15 @@
+label: JSON-TestCourse
+field_id: 130489469
+type: calculation
+script: var oCourse       = @[All of Maßnahmentitel](in_108135844_116414764);
+var oCompo        = @[Titel](field_116446197) || '';
+var oWochen       = @[Dauer in Wochen](field_118878466);
+var oReihenfolge  = @[Reihenfolge](field_116446843) || 0;
+
+var temp              = {};
+temp['Component']     = oCompo;
+temp['Wochen']        = oWochen;
+temp['Reihenfolge']   = oReihenfolge;
+temp['Course']        = oCourse;
+
+JSON.stringify(temp);

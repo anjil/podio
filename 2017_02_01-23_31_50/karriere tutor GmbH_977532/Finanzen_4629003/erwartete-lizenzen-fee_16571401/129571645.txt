@@ -1,0 +1,25 @@
+label: Lizenzen Name
+field_id: 129571645
+type: calculation
+script: var oUniqueId = @[lizenzen Id](field_128895839);
+var oJson = @[All of Json-ExpectedLizenzenFee](out_128908966_128884745);
+var oShow = '';
+
+
+try {
+
+  if(oJson && oJson !='[]'){
+    var jsn = JSON.parse(oJson); 
+    for(var i=0; i<jsn.length; i++){
+      if(jsn[i]['ExpectedId'] == oUniqueId){
+         oShow = jsn[i]['Lizenzname'];
+         break;
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+oShow;

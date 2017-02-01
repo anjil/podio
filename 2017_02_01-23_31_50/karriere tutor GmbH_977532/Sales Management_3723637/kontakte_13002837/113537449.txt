@@ -1,0 +1,6 @@
+label: Calc_1
+field_id: 113537449
+type: calculation
+script: var a = @[Zipcode](field_113524351)
+var out = parseInt('1')
+out

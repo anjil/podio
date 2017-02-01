@@ -1,0 +1,3 @@
+label: Wahrscheinlichkeit
+field_id: 111602487
+type: progress

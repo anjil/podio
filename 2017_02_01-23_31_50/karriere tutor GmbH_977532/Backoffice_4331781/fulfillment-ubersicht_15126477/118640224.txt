@@ -1,0 +1,21 @@
+label: Calc_Lehrgangsende
+field_id: 118640224
+type: calculation
+script: var out = new Date();
+var KompDauer = 0;
+try {
+  j = JSON.parse(@[All of JSON-Data](in_118628182_117225519));
+  //out = moment(j.StartLehrgang).isoWeek();
+  
+  for(i=0;i<j.Massnahmen.length;i++) {
+    // Summiere die Lehrgangsdauer in Wochen // Lehrgangsstart
+    KompDauer += j.Massnahmen[i].Dauer;
+  }
+
+  myDatum = new Date(j.StartLehrgang);
+  out.setDate(myDatum.getDate()+(KompDauer*7)-3)
+
+} catch (e) {
+  "Could not parse JSON"
+}
+out

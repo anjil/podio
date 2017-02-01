@@ -1,0 +1,12 @@
+label: Mismatch Zahlungsübersicht nach Woche (yes=1)
+field_id: 139038305
+type: calculation
+script: var r2  = @[Zahlungsübersicht nach Woche](field_125894138)+'';
+var tr2 = @[Zahlungsübersicht nach Woche Test](field_139035428)+''
+var oS  = 0;
+
+if(r2 == tr2)
+  oS = 0;
+else
+  oS = 1;
+oS;

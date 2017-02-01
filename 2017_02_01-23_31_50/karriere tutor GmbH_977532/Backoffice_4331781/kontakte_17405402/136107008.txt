@@ -1,0 +1,6 @@
+label: -
+field_id: 136107008
+type: calculation
+script: @[Vorname](field_136107004)
+out = "**Anschrift:**"+"\n\n"+ "----"
+out

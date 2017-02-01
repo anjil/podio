@@ -1,0 +1,23 @@
+label: Mismatch Report Lizenze(yes=1) 
+field_id: 130407889
+type: calculation
+script: var oLizReportData = @[All of Month-Year](out_130401598_132143897)||[];
+var oLizMonYear    = @[Lizenze Month-Year](field_130404987) || '';
+var ind            = 0;
+var oArr           = [];
+if(oLizMonYear){
+  oArr = oLizMonYear.split(',');
+  for(var ii=0; ii<oArr.length; ii++){
+    for(var i=0; i<oLizReportData.length; i++){
+      if(oArr[ii] == oLizReportData[i]){
+        ind++;
+        break;
+      }    
+    }
+  }
+}
+
+if(ind == oArr.length)
+ 0
+else
+ 1

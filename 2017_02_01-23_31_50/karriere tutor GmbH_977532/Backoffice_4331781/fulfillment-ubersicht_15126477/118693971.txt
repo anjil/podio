@@ -1,0 +1,75 @@
+label: Aktueller NextStep
+field_id: 118693971
+type: calculation
+script: var out = ""
+var aktuellesDatum   = @[All of AktuellesDatum](out_128820243_131327818)[0];
+var nachsterLeadsTx  = @[All of Nächster Schritt ToDo](in_105489883_117225519)[0]||'';
+var nachsterTx       = @[Nächster Schritt ToDo](field_117227333)||'';
+var nextStepTx       = @[All of Next step todo](out_131576145_118702791)[0]||'';
+
+var nachsterLeads    = @[All of Nächster Schritt](in_105473432_117225519)[0]||'';
+var nachsterDate     = @[Nächster Schritt](field_117227332)||'';
+var nextStepDate     = @[All of Next step todo Date](out_131576146_118702791)[0]||'';
+
+var t='~~~';
+
+  var DateArray = Array();
+  var TxtArray  = Array();
+
+  if(nachsterLeads){ 
+    DateArray.push(nachsterLeads);
+    TxtArray.push("NS Vertrieb: " +nachsterLeadsTx);
+  }
+  else if(!nachsterLeads){ 
+    if(nachsterLeadsTx){
+       var dt = new Date(aktuellesDatum);
+       dt.setFullYear(dt.getFullYear() + 1)
+       DateArray.push(dt);
+       TxtArray.push("NS Vertrieb: " +nachsterLeadsTx);
+    } 
+  }
+
+  if(nachsterDate){ 
+    DateArray.push(nachsterDate);
+    TxtArray.push("NS FFMT: " +nachsterTx);
+  }
+  else if(!nachsterDate){ 
+    if(nachsterTx){
+       var dt = new Date(aktuellesDatum);
+       dt.setFullYear(dt.getFullYear() + 1)
+       DateArray.push(dt);
+       TxtArray.push("NS FFMT: " +nachsterTx); 
+    } 
+  }
+
+  if(nextStepDate){ 
+    DateArray.push(nextStepDate);
+    TxtArray.push("NS Tutor: " +nextStepTx);
+  }
+  else if(!nextStepDate){ 
+    if(nextStepTx){
+       var dt = new Date(aktuellesDatum);
+       dt.setFullYear(dt.getFullYear() + 1)
+       DateArray.push(dt);
+       TxtArray.push("NS Teiln: " +nextStepTx); 
+    } 
+  }
+
+    
+  if(DateArray.length>0){
+    var SmallestDate = new Date(DateArray[0]);
+    for(var i = 1; i < DateArray.length; i++){
+      var TempDate = new Date(DateArray[i]);
+      if(TempDate.getTime() <= SmallestDate.getTime()){
+        SmallestDate  = TempDate ;
+        out = TxtArray[i]+'';
+      }
+    }
+    if(!out){
+      out = TxtArray[0]+'';
+    }
+  }
+
+
+
+out+''

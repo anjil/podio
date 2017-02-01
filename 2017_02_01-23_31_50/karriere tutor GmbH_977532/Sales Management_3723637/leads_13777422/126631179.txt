@@ -1,0 +1,11 @@
+label: Leads Year
+field_id: 126631179
+type: calculation
+script: var oD = @[Aufnahme Datum](field_105490284);
+var oShow = ''
+if(oD){
+  var oDate = new Date(oD);
+  var oY = oDate.getFullYear();
+  oShow += oY;
+}
+oShow;

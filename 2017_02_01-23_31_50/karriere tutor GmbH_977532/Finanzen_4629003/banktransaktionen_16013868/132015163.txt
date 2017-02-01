@@ -1,0 +1,8 @@
+label: Count finanzubersicht
+field_id: 132015163
+type: calculation
+script: var uid = @[All of Unique Id](out_126377252_124753397);
+if(uid)
+ uid.length;
+else
+ 0;

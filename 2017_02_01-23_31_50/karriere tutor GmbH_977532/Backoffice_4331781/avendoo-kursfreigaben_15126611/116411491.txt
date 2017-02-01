@@ -1,0 +1,3 @@
+label: Kursfreigabe_ID
+field_id: 116411491
+type: text

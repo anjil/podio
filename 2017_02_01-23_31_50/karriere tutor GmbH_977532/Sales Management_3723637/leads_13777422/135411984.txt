@@ -1,0 +1,11 @@
+label: Category Match (yes=1)
+field_id: 135411984
+type: calculation
+script: var testCat  = @[Test Category](field_134520909);
+var testCat1 = @[Test Category1](field_135354436);
+var oShow    = 0;
+
+if(testCat == testCat1)
+  oShow = 1;
+
+oShow;

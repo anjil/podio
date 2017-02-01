@@ -1,0 +1,16 @@
+label: Defensiver Cashflow Betrag
+field_id: 128596747
+type: calculation
+script: var out = 0
+var anzBankTrans = 0
+var BankTrans = @[All of Anzahl eingegangener Zahlungen](out_128596215_125193630) || null
+if (BankTrans) { 
+  anzBankTrans = BankTrans[0]
+}
+
+if (anzBankTrans > 0) {
+  out=@[Amount](field_125193629) 
+}
+//out=anzBankTrans
+
+out

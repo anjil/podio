@@ -1,0 +1,5 @@
+label: Calculation
+field_id: 137009088
+type: calculation
+script: //@[Unique ID](item_app_item_id)
+'--------------------------------------------------------------- <br> If Debug flag is set then while generating XML it will use following configurations.'

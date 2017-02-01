@@ -1,0 +1,68 @@
+label: Kontaktdetails
+field_id: 113753142
+type: calculation
+script: var out = "";
+var j;
+var myBool = null;
+var count = 0;
+
+var out = "Art | Wert | * | Art | Wert \n";
+out += "---|---|---|---|---\n";
+
+function stripStr(a) {if (a==null) {a="";} return a }
+
+try {
+  j = JSON.parse(@[All of JSON-Data](out_136113702_136112743));
+  k = j;
+  // Name
+  out += "**Name:** | "; 
+  out += stripStr(k.Anrede) + " " + stripStr(k.Titel) + " " 
+  out +=  stripStr(k.Vorname) + " " + stripStr(k.Nachname)
+  out += "| | |\n";
+
+  // Überschrift
+  out += "**Tel:** | | | **E-Mail:** | \n"
+  
+  if (k.tel != null) { 
+    count = k.tel.length;
+  } else { count = 0; }
+
+  if (k.Email != null) {
+    if (k.Email.length > count) {
+      count = k.Email.length
+    }
+  }
+
+  // Baue 2 Spaltig jew. Tel und E-Mail
+  for (i=0; i<count; i++) {
+    // Tel in linken beiden Spalten
+    if ((k.tel != null) && (i<k.tel.length)) {
+      out += k.tel[i].type + ":";
+      out += " | " + k.tel[i].value + " | | ";
+    } else {
+      out += " | | | "
+    }
+    // E-Mail in den rechten beiden Spalten
+    if ((k.Email != null) && (i<k.Email.length)) {
+      out += k.Email[i].type + ":";
+      out += " | " + k.Email[i].value + "\n";
+    } else {
+      out += " | \n"
+    }
+  }
+  
+  var myGeb_datum = j.Geb_Datum;
+  var my2teSpalte_Geburt = ""
+  if (myGeb_datum == null) {
+    my2teSpalte_Geburt = " | | | "
+  } else {
+    my2teSpalte_Geburt = " | | **Geboren:** | " + moment(j.Geb_Datum).format("DD.MM.YY")
+  }  
+  out += "**Adresse:** | " + k.Adresse + my2teSpalte_Geburt
+
+  //out += JSON.stringify(j.Adresse)
+} catch (e) {
+  "Could not parse JSON"
+}
+// test
+out

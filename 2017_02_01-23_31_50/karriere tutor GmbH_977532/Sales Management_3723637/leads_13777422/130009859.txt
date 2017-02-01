@@ -1,0 +1,52 @@
+label: JSON-Leads
+field_id: 130009859
+type: calculation
+script: var jsn        = @[All of JSON-FinanceUbersicht](out_124761567_108285774);
+var oSDate     = @[Startdatum Lehrgang](field_108029027) || null;
+var myArray    = Array();
+var tmpObj     = {};
+var numOfWeeks = 0;
+var oDt        = null;
+
+var t='~~';
+
+try{
+ if(jsn && jsn!='{}' && jsn!='[]'){ 
+
+  jsn.sort(function(a, b) {
+    var js1 = JSON.parse(a); 
+    var js2 = JSON.parse(b); 
+    var aa  = js1.Maßnahmentitel;
+    var bb  = js2.Maßnahmentitel;
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+
+   for (var i=0; i<jsn.length; i++){ 
+     var js = JSON.parse(jsn[i]);  
+     if(oSDate){
+        oDt = (oDt == null)? oSDate : getDt(oDt,numOfWeeks);
+     }
+     numOfWeeks          = (js.Wochen)? parseInt(js.Wochen):0;
+     tmpObj["Mabnahmen"] = js.Maßnahmentitel;
+     tmpObj["StartDate"] = oDt;
+     myArray[i]          = tmpObj; 
+     tmpObj              = {};
+   }
+ }
+
+}catch (e) {
+  "Could not parse JSON";
+}
+
+function getDt(oD,Nweeks){
+
+  var oDtStartDate = new Date(oD);
+  if(Nweeks > 0){
+     oDtStartDate.setDate(oDtStartDate.getDate() + Nweeks*7);    
+  }
+  return oDtStartDate;
+}
+
+
+JSON.stringify(myArray);

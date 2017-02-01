@@ -1,0 +1,3 @@
+label: Location Count
+field_id: 136686288
+type: number

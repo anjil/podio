@@ -1,0 +1,33 @@
+label: JSON-Banktransaktionen
+field_id: 125051274
+type: calculation
+script: var z = {};
+z["Kontonummer"] = @[Kontonummer](field_124021915);
+z["Buchungstag"] = @[Buchungstag](field_124021916);
+z["Wertstellung"] = @[Wertstellung](field_124021917);
+z["Auftraggeber"] = @[Auftraggeber/Empfänger](field_124021918);
+z["Buchungstext"] = @[Buchungstext](field_124021919);
+z["VWZ1"] = @[VWZ1](field_124021920);
+z["VWZ2"] = @[VWZ2](field_124021921);
+z["VWZ3"] = @[VWZ3](field_124021922);
+z["VWZ4"] = @[VWZ4](field_124021924);
+z["VWZ5"] = @[VWZ5](field_124021925);
+z["VWZ6"] = @[VWZ6](field_124021923);
+z["VWZ7"] = @[VWZ7](field_124021926);
+z["VWZ8"] = @[VWZ8](field_124021927);
+z["VWZ9"] = @[VWZ9](field_124021928);
+z["VWZ10"] = @[VWZ10](field_124021930);
+z["VWZ11"] = @[VWZ11](field_124021929);
+z["VWZ12"] = @[VWZ12](field_124021932);
+z["VWZ13"] = @[VWZ12](field_124021932);
+z["VWZ14"] = @[VWZ14](field_124021931);
+z["Betrag"] = @[Betrag](field_124035570);
+z["Finance-ubersicht"] = @[All of Title](out_124754928_124753397);
+z["Transaction Exception"] = @[All of Name](out_124987513_124988576);
+z["Transaction Report"] = @[All of Jahr](out_124034962_124031145);
+z["Customer ID"] = @[Customer ID](field_124674842);
+z["Transaction Year"] = @[Transaction Year](field_124034513);
+z["UniqueId"] = @[Unique ID](item_app_item_id)
+
+
+JSON.stringify(z);

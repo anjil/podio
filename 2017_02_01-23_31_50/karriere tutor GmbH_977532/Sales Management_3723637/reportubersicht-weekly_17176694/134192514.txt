@@ -1,0 +1,12 @@
+label: Ansicht Titel
+field_id: 134192514
+type: calculation
+script: var oYear = @[Jahresauswahl](field_134089175)||'';
+var oWeek = @[Week](field_134089176)||'';
+var oRange= @[Week Range](field_135499794);
+var oShow = '';
+
+if(oYear && oWeek){
+  oShow = oYear+' | '+oRange+' | Week: '+oWeek;
+}
+oShow;

@@ -1,0 +1,20 @@
+label: JSON-Data-Buecher
+field_id: 118100909
+type: calculation
+script: var j = {};
+j["ID"]= @[Unique ID](item_app_item_id);
+j["Titel"]= @[Titel](field_116410435);
+j["ISBN"]= @[ISBN](field_116410475);
+j["ISBN-13"]= @[ISBN-13](field_116410637);
+//j["Beschreibung"]= String(@[Beschreibung](field_116410476)).replace(/\\/g, "\\\\").replace(/\n/g,"\\\\n").replace(/\\\\-/g,"-");
+//j["Beschreibung"]= String(@[Beschreibung](field_116410476)).replace(/\\./g, );
+j["Beschreibung"]= String(@[Beschreibung](field_116410476));
+j["Preis"]= @[Preis](field_116410477);
+j["Bestellung"]= @[Bestellung](field_116410478);
+j["Anzahl bestellt"]= @[Anzahl bestellt](field_116410479);
+j["Anzahl versendet"]= @[Anzahl versendet](field_118100512);
+j["Anzahl benötigt"]= @[Anzahl benötigt](field_118100513);
+j["Anzahl im Lager"]= @[Anzahl im Lager](field_118100514);
+
+
+JSON.stringify(j)

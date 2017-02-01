@@ -1,0 +1,3 @@
+label: Weihnachtszeit in Kursnet angepasst
+field_id: 134308396
+type: category

@@ -1,0 +1,3 @@
+label: Buchungstext
+field_id: 124021919
+type: text

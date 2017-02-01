@@ -1,0 +1,48 @@
+label: InfoName
+field_id: 113524346
+type: calculation
+script: var out = ""
+var first = true
+var second = true
+if (@[Vorname](field_99547597) != null) {
+  out += @[Vorname](field_99547597)
+  first = false
+}
+if (@[Nachname](field_99547598) != null) {
+  if (first == false) { out += " " }
+  out += @[Nachname](field_99547598)
+  first = false
+}
+if (@[Anrede](field_113524348) != null) {
+  if (first == false) { out = @[Anrede](field_113524348) + " " + out }
+}
+if (@[City](field_113524352) != null) {
+  if (first == false) { out += " -- " }
+  out += @[City](field_113524352)
+  second = false
+}
+if (@[Zipcode](field_113524351) != null) {
+  if (second) {
+    if (first == false) { out += " -- " }
+    out += "PLZ:"+@[Zipcode](field_113524351)
+    second = false
+  }
+}
+if (@[Email](field_99547599) != null) {
+  if (second) {
+    var my_email2 = @[Email](field_99547599).map( function (obj) {return obj.value});
+    var my_email = my_email2[0]
+    if (first == false) { out += " -- " }
+    out +=  my_email;
+    second = false
+  }
+}
+if (@[Organisation](field_99547596) != null) {
+  if (second) {
+    if (first == false) { out += " -- " }
+    out += @[Organisation](field_99547596)
+    second = false
+  }
+}
+
+out

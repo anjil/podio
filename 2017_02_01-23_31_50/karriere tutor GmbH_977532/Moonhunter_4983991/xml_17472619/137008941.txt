@@ -1,0 +1,3 @@
+label: XML File Size (KB)
+field_id: 137008941
+type: number

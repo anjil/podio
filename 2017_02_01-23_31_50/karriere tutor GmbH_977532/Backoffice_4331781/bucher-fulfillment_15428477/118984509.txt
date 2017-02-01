@@ -1,0 +1,3 @@
+label: Avendoo Kursfreigabe erstellt
+field_id: 118984509
+type: category

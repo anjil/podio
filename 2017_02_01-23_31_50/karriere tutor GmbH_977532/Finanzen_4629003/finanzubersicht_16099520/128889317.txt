@@ -1,0 +1,3 @@
+label: Remaining Expected Lizenze Fee 
+field_id: 128889317
+type: number

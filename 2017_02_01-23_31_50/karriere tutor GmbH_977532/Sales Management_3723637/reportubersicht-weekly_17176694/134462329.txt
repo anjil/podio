@@ -1,0 +1,191 @@
+label: Summary Report
+field_id: 134462329
+type: calculation
+script: var jsnL   = @[All of JSON-leads-und-anstehende-lehrgangsstarts](in_126634106_134090920);
+var oWeeks = @[Week](field_134089176);
+var oShow  = '';
+var oData  = '';
+
+
+var oItemsR = [];
+var oItemsN = [];
+var oItemsW = [];
+var oItemsV = [];
+
+var t='~~';
+try {
+  if(jsnL && jsnL != '{}' && oWeeks){
+     getDetailsReserviert(jsnL);
+     getDetailsNachster(jsnL);
+     getDetailsWahrschein(jsnL);
+     getDetailsVerkaufsschritte(jsnL);
+  }
+  if(oItemsR || oItemsN || oItemsW || oItemsV){  
+     printReport();
+  }
+       
+}catch (e) {
+  "Could not parse JSON";
+}
+
+function printReport(){  
+  var tuplesR = [];
+  var tuplesN = [];
+  var tuplesW = [];
+  var tuplesV = [];
+  for (var key in oItemsR) tuplesR.push([key, oItemsR[key]]);
+  for (var key in oItemsN) tuplesN.push([key, oItemsN[key]]);
+  for (var key in oItemsW) tuplesW.push([key, oItemsW[key]]);
+  for (var key in oItemsV) tuplesV.push([key, oItemsV[key]]);
+
+  tuplesR.sort(function(a, b) {
+    a = new Date(a['Reserviert']);
+    b = new Date(b['Reserviert']);
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+  oData     += '|**Reserviert für Lehrgangsstart**|&nbsp;|<br>';
+  oData     += '|--------|---------|<br>';
+  for (var i=0; i<tuplesR.length; i++) {
+    var oTKey      = tuplesR[i][0];  
+    var oTVal      = tuplesR[i][1]; 
+    var shwDt      = moment(oTKey).format("DD.MM.YYYY");    
+    var oCnt       = oTVal['Count'];
+    oData         += '|'+shwDt;
+    oData         += '|'+oCnt ; 
+    oData         += '|  <br>';
+  } 
+  
+  tuplesN.sort(function(a, b) {
+    a = new Date(a['Nachster']);
+    b = new Date(b['Nachster']);
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+  oData     += '|-|&nbsp;|<br>';
+  oData     += '|**Nächster Termin bei AA**|&nbsp;|<br>';  
+  for (var i=0; i<tuplesN.length; i++) {
+    var oTKey      = tuplesN[i][0];  
+    var oTVal      = tuplesN[i][1]; 
+    var shwDt      = moment(oTKey).format("DD.MM.YYYY");    
+    var oCnt       = oTVal['Count'];
+    oData         += '|'+shwDt;
+    oData         += '|'+oCnt ; 
+    oData         += '|  <br>';
+  } 
+
+  tuplesW.sort(function(a, b) {
+    a = new Date(a['Wahrschein']);
+    b = new Date(b['Wahrschein']);
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+  oData     += '|-|&nbsp;|<br>';
+  oData     += '|**Wahrscheinlichkeit**|&nbsp;|<br>';  
+  for (var i=0; i<tuplesW.length; i++) {
+    var oTKey      = tuplesW[i][0];  
+    var oTVal      = tuplesW[i][1]; 
+    var shwPer     = oTKey*100+'%';    
+    var oCnt       = oTVal['Count'];
+    oData         += '|'+shwPer;
+    oData         += '|'+oCnt ; 
+    oData         += '|  <br>';
+  } 
+
+  oData     += '|-|&nbsp;|<br>';
+  oData     += '|**Verkaufsschritte**|&nbsp|<br>';  
+  for (var i=0; i<tuplesV.length; i++) {
+    var oTKey      = tuplesV[i][0];  
+    var oTVal      = tuplesV[i][1]; 
+    var shwPer     = oTKey;    
+    var oCnt       = oTVal['Count'];
+    oData         += '|'+shwPer;
+    oData         += '|'+oCnt ; 
+    oData         += '|  <br>';
+  } 
+}   
+
+function getDetailsVerkaufsschritte(jsn){
+  for(var i=0; i<jsn.length; i++){
+    var jsArr  = JSON.parse(jsn[i]);           
+    if(jsArr['Verkaufsschritte']){    
+      var ostr = jsArr['Verkaufsschritte'];  
+      var tKey  = ostr;       
+      if(oItemsV[tKey]){
+        var arr           = oItemsV[tKey];
+        arr["Count"]      = parseInt(arr["Count"]) + 1;
+        oItemsV[tKey]     = arr;             
+      } 
+      else{
+        var arr           = [];
+        arr["Count"]      = 1;
+        oItemsV[tKey]     = arr; 
+      }       
+    }
+  }
+}
+
+function getDetailsReserviert(jsn){
+  for(var i=0; i<jsn.length; i++){
+    var jsArr  = JSON.parse(jsn[i]);            
+    if(jsArr['Reserviert']){        
+      var oDt  = new Date(jsArr['Reserviert']);  
+      var tKey = oDt;         
+      if(oItemsR[tKey]){
+        var arr           = oItemsR[tKey];
+        arr["Count"]      = parseInt(arr["Count"]) + 1;
+        oItemsR[tKey]     = arr;             
+      } 
+      else{
+        var arr           = [];
+        arr["Count"]      = 1;
+        arr["Reserviert"] = oDt;
+        oItemsR[tKey]     = arr; 
+      } 
+    }
+  }
+}
+
+function getDetailsNachster(jsn){
+  for(var i=0; i<jsn.length; i++){
+    var jsArr  = JSON.parse(jsn[i]);            
+    if(jsArr['Nachster']){        
+      var oDt  = new Date(jsArr['Nachster']);  
+      var tKey = oDt;         
+      if(oItemsN[tKey]){
+        var arr           = oItemsN[tKey];
+        arr["Count"]      = parseInt(arr["Count"]) + 1;
+        oItemsN[tKey]     = arr;             
+      } 
+      else{
+        var arr           = [];
+        arr["Count"]      = 1;
+        arr["Nachster"]   = oDt;
+        oItemsN[tKey]     = arr; 
+      } 
+    }
+  }
+}
+
+function getDetailsWahrschein(jsn){
+  for(var i=0; i<jsn.length; i++){
+    var jsArr  = JSON.parse(jsn[i]);           
+   // if(jsArr['Wahrschein']!=''){        
+      var oPer = jsArr['Wahrschein'];  
+      var tKey = oPer;         
+      if(oItemsW[tKey]){
+        var arr           = oItemsW[tKey];
+        arr["Count"]      = parseInt(arr["Count"]) + 1;
+        oItemsW[tKey]     = arr;             
+      } 
+      else{
+        var arr           = [];
+        arr["Count"]      = 1;
+        arr["Wahrschein"] = oPer;
+        oItemsW[tKey]     = arr; 
+      } 
+   // }
+  }
+}
+
+oShow = oData;

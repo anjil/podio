@@ -1,0 +1,13 @@
+label: Lehrgangsgebühren
+field_id: 118544328
+type: calculation
+script: var a = @[Calc_Lehrgangsgebuehren](field_113559188);
+var b = @[Sum of Gebühren](out_sum_108136589_108285774);
+var out = "";
+
+if (a != b) {
+  out = "**ACHTUNG:** abweichenden Lehrgangsgebühr: " + a + " €"
+} else {
+  out = a + " €"
+}
+out

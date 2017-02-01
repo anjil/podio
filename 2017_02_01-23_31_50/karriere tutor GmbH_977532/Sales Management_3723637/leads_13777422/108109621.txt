@@ -1,0 +1,3 @@
+label: Startdatum Bildungsgutschein
+field_id: 108109621
+type: date

@@ -1,0 +1,3 @@
+label: Name of KPI
+field_id: 138354270
+type: text

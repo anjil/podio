@@ -1,0 +1,7 @@
+label: JSON-Data2
+field_id: 118142856
+type: calculation
+script: var j = {};
+j["Titel"]= @[Titel](field_116411445);
+
+JSON.stringify(j)

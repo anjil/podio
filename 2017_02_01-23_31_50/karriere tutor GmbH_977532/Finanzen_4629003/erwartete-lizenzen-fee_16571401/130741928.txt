@@ -1,0 +1,8 @@
+label: Austrittsdatum
+field_id: 130741928
+type: calculation
+script: var out = null
+if (@[All of Vorzeitiges Ende](out_126242725_128884745).length >0) {
+ out = @[All of Vorzeitiges Ende](out_126242725_128884745)[0]
+}
+out

@@ -1,0 +1,3 @@
+label: Obstacle Type
+field_id: 116791046
+type: category

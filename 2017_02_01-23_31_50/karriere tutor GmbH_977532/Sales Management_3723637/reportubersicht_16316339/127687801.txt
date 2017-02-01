@@ -1,0 +1,171 @@
+label: Calculation
+field_id: 127687801
+type: calculation
+script: var jsn = @[All of JSON-leads-und-anstehende-lehrgangsstarts](in_126634106_127404044);
+var oQuarter = @[Quarter](field_127304155);
+var oShow = '';
+var oData = '';
+var oItems = [];
+
+var t='~~';
+var outputHeader = '| Mabnahmen| Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec | Total |<br>';
+outputHeader += '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|<br>';
+
+var monthArr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+var oArrSize                          = 0;
+var sortOrderArr                      = [];
+sortOrderArr['CTO']                   =  0;    oArrSize ++;
+sortOrderArr['Agile CTO']             =  1;    oArrSize ++;
+sortOrderArr['IT Medium']             =  2;    oArrSize ++;
+sortOrderArr['Agile IT Medium']       =  3;    oArrSize ++;
+sortOrderArr['IT Small']              =  4;    oArrSize ++;
+sortOrderArr['Agile IT Small']        =  5;    oArrSize ++;
+sortOrderArr['Scrum']                 =  6;    oArrSize ++;
+sortOrderArr['QMS IT']                =  7;    oArrSize ++;
+sortOrderArr['Agile QMS IT']          =  8;    oArrSize ++;
+sortOrderArr['QMS']                   =  9;    oArrSize ++;
+sortOrderArr['Agile QMS']             =  10;   oArrSize ++;
+sortOrderArr['OMM einzeln']           =  11;   oArrSize ++;
+sortOrderArr['Agile OMM']             =  12;   oArrSize ++;
+sortOrderArr['OMM Kombo']             =  13;   oArrSize ++;
+sortOrderArr['Agile OMM Kombo']       =  14;   oArrSize ++;
+sortOrderArr['OMM Sonst']             =  15;   oArrSize ++;
+sortOrderArr['Agile OMM Sonst']       =  16;   oArrSize ++;
+sortOrderArr['Agile OMM IT']          =  17;   oArrSize ++;
+sortOrderArr['Agile OMM Sonst IT']    =  18;   oArrSize ++;
+sortOrderArr['Management']            =  19;   oArrSize ++;
+sortOrderArr['Agile Management']      =  20;   oArrSize ++;
+sortOrderArr['Fachkraft']             =  21;   oArrSize ++;
+sortOrderArr['Sonst Kombo']           =  22;   oArrSize ++;
+sortOrderArr['Agile Sonst Kombo']     =  23;   oArrSize ++;
+
+try {
+  if(jsn && jsn != '{}'){
+     oItems = getDetails(jsn);
+     printReport();
+  }     
+}catch (e) {
+  "Could not parse JSON";
+}
+
+function printReport(){  
+  var tuples = [];
+  for (var key in oItems) tuples.push([key, oItems[key]]);
+
+  tuples.sort(function(aa, bb) {
+     var y1 = aa[1]['sortOrder'];
+     var y2 = bb[1]['sortOrder'];
+
+     if (y1 < y2) return -1;
+     if (y1 > y2) return 1;
+     return 0;
+
+  });
+
+  var oStart = 0;
+  var oEnd   = monthArr.length;
+  if(oQuarter){
+    if(oQuarter == 'Q1'){
+       oStart = 0;
+       oEnd   = 3;
+       outputHeader = '| Mabnahmen| Jan | Feb | Mar | Total |<br>';
+    }
+    if(oQuarter == 'Q2'){
+       oStart = 3;
+       oEnd   = 6;
+       outputHeader = '| Mabnahmen| Apr | May | Jun | Total |<br>';
+    }
+    if(oQuarter == 'Q3'){
+       oStart = 6;
+       oEnd   = 9;
+       outputHeader = '| Mabnahmen| Jul | Aug | Sep | Total |<br>';
+    }
+    if(oQuarter == 'Q4'){
+       oStart = 9;
+       oEnd   = 12;
+       outputHeader = '| Mabnahmen| Oct | Nov | Dec | Total |<br>';
+    }
+    outputHeader += '|---|---:|---:|---:|---:|<br>';
+ } 
+
+
+  var oRowTotal   = 0;
+  var oGrandTotal = 0;
+  var oColTotal   = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+
+  for (var i = 0; i < tuples.length; i++) {
+    var oCategory  = tuples[i][0];  
+    var oCount  = tuples[i][1];       
+    oRowTotal   = 0;
+    oData += '|**'+ oCategory +'**|';
+    for(var k=oStart; k<oEnd; k++){  
+      var oMTotal  = oCount[monthArr[k]];  
+      oData       += oCount[monthArr[k]]+'|'; 
+      oRowTotal   += parseInt(oCount[monthArr[k]]);
+      oColTotal[k] = parseInt(oColTotal[k]) +  parseInt(oMTotal);    
+    } 
+
+    oData+= '**'+oRowTotal +'**|'; 
+    oData+= '<br>';
+  }  
+   oData += '|**Total :**|**';
+   for(var j=oStart; j<oEnd; j++){
+      oData += oColTotal[j] +'**|**'; 
+      oGrandTotal += parseInt(oColTotal[j]);
+   }
+    oData += oGrandTotal  +'**|'; 
+    oData += '<br>';  
+}
+
+function getDetails(jsn){
+  var oDataArr = [];
+  for(var i=0; i<jsn.length; i++){
+    var jsArr = JSON.parse(jsn[i]);            
+    if( jsArr['Datam'] ){      
+       var oCategory = jsArr['category']||'';
+       var oDt = new Date(jsArr['Datam']);
+       var oMon = monthArr[oDt.getMonth()];
+
+       if(oCategory != ""){
+         var tempKey = oCategory; 
+         if(oDataArr[tempKey]){
+            var arr           = oDataArr[tempKey];
+            arr[oMon]         = parseInt(arr[oMon])+ 1;     
+            oDataArr[tempKey] = arr;                     
+         } 
+         else{
+           var ind = -1;
+
+           if(sortOrderArr[oCategory]> -1 ){
+              ind = sortOrderArr[oCategory];
+           }
+           else{
+              ind = oArrSize;
+           }
+
+            var arr = [];
+            arr["Jan"]        = (oMon == "Jan") ? 1 : 0; 
+            arr["Feb"]        = (oMon == "Feb") ? 1 : 0;
+            arr["Mar"]        = (oMon == "Mar") ? 1 : 0;
+            arr["Apr"]        = (oMon == "Apr") ? 1 : 0;
+            arr["May"]        = (oMon == "May") ? 1 : 0;
+            arr["Jun"]        = (oMon == "Jun") ? 1 : 0;
+            arr["Jul"]        = (oMon == "Jul") ? 1 : 0;
+            arr["Aug"]        = (oMon == "Aug") ? 1 : 0;
+            arr["Sep"]        = (oMon == "Sep") ? 1 : 0;
+            arr["Oct"]        = (oMon == "Oct") ? 1 : 0;
+            arr["Nov"]        = (oMon == "Nov") ? 1 : 0;
+            arr["Dec"]        = (oMon == "Dec") ? 1 : 0;            
+            arr["sortOrder"]  =  ind; 
+
+            oDataArr[tempKey] =  arr;
+        } 
+      }                   
+    }
+ }
+ return oDataArr;
+}
+
+oShow = outputHeader + oData;

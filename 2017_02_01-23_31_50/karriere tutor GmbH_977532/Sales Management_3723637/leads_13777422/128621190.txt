@@ -1,0 +1,26 @@
+label: Error Description
+field_id: 128621190
+type: calculation
+script: var oError = @[Error Code](field_128620137);
+var oShow  = ' ';
+
+if(oError == 1){
+  oShow = 'Mabnahmen Missing';
+}
+else if(oError == 2){
+  oShow = 'Leads Error';
+}
+else if(oError == 3){
+  oShow = 'Sales Error';
+}
+else if(oError == 4){
+  oShow = 'Fulfillment Missing';
+}
+else if(oError == 5){
+  oShow = 'Customer Name Missing';
+}
+else if(oError == 6){
+  oShow = 'Required dates are missing after sales';
+}
+
+oShow;

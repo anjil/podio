@@ -1,0 +1,4 @@
+label: Creation Date
+field_id: 136649226
+type: calculation
+script: @[Created On](item_created_on)

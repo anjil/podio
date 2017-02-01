@@ -1,0 +1,64 @@
+label: JSON-Data
+field_id: 118628182
+type: calculation
+script: var debug = "";
+var out = "";
+var x;
+var myKontakt;
+var APFirma_ary = Array();
+var Account_ary = Array();
+var weitereAPs_ary = Array();
+var Massnahmen_ary = Array();
+// Zur Sortierung der Reihenfolge der Massnahmen
+var myReihenfolge = Array();
+//JSON.parse(debug);
+
+try {
+  //Anzahl Massnahmen
+  for(i=0; i<@[All of JSON-FFMTData](out_118099011_108285774).length; i++) {
+    x = JSON.parse(@[All of JSON-FFMTData](out_118099011_108285774)[i]);
+    var objTemp = {};
+    objTemp.Reihenfolge = x.MinReihenfolge;
+    objTemp.ID = i;
+    myReihenfolge[i] = objTemp;
+  }
+
+  myReihenfolge.sort(function (a, b) {
+    if (a.Reihenfolge > b.Reihenfolge) { return 1; }
+    if (a.Reihenfolge < b.Reihenfolge) { return -1; }
+    // a must be equal to b
+    return 0;
+  });
+
+  for(i=0; i<myReihenfolge.length; i++) {
+    y = JSON.parse(@[All of JSON-FFMTData](out_118099011_108285774)[myReihenfolge[i].ID]);
+    Massnahmen_ary[i]=y;
+  }
+
+} catch (e) {
+  "Could not parse JSON"
+}
+
+var j = {};
+j["ID"] = @[Unique ID](item_app_item_id);
+j["Auftragsdatum"] = @[Auftragsdatum](field_108041451);
+j["StartLehrgang"] = @[Startdatum Lehrgang](field_108029027);
+j["StartBildungsgutschein"] = @[Startdatum Bildungsgutschein](field_108109621);
+j["Bildungsgutscheinnummer"] = @[Bildungsgutscheinnummer](field_122499056);
+j["AccountArt"] = @[Account Art](field_105889527);
+j["Verkaufsschritte"] = @[Verkaufsschritte](field_114376806);
+j["Wettbewerber"] = @[Wettbewerber](field_114377065);
+j["Status"] = @[Status](field_105473431);
+j["Avendoo_Account"] = @[Avendoo Account](field_105494745);
+j["Avendoo_Demo"] = @[Avendoo Demo](field_105494746);
+j["Wahrscheinlichkeit"] = @[Wahrscheinlichkeit](field_105473428)
+j["AufnahmeDatum"] = @[Aufnahme Datum](field_105490284)
+j["NextStepDatum"] = @[Nächster Schritt](field_105473432)
+j["NextStep2Do"] = @[Nächster Schritt ToDo](field_105489883)
+j["weitereNextSteps"] = @[weitere Nächste Schritte](field_114377066)
+j["LeadOwner"] = @[Lead owner](field_105473426);
+j["Lehrgangsgebuehren"] = @[Calc_Lehrgangsgebuehren](field_113559188)
+j["Massnahmen"] = Massnahmen_ary;
+
+out = JSON.stringify(j);
+out

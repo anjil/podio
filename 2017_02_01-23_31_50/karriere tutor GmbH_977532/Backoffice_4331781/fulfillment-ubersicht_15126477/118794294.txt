@@ -1,0 +1,43 @@
+label: cMax
+field_id: 118794294
+type: calculation
+script: var j;
+var t;
+var tutor = null;
+try {
+  j = JSON.parse(@[All of JSON-Data](in_118628182_117225519));
+  for(i=0;i<j.Massnahmen.length;i++) {
+    // Komponenten
+    for(k=0;k<j.Massnahmen[i].Komponenten.length;k++) {
+
+//MAx
+      //OMM
+      if (j.Massnahmen[i].Komponenten[k].ID == "FFMTC0020") {
+        tutor = 1;
+      }
+      //Suchmachinenmarketing
+      if (j.Massnahmen[i].Komponenten[k].ID == "FFMTC0021") {
+        tutor = 1;
+      }
+
+      //Social Media marketing
+//      if (j.Massnahmen[i].Komponenten[k].ID == "FFMTC0008") {
+//        tutor = 1;
+//      }
+// Max Ende
+/*
+// Antje
+      //Bilanzbuchhalter
+      if (j.Massnahmen[i].Komponenten[k].ID == "FFMTC0003") {
+        tutor = 1;
+      }
+*/
+    }
+  }
+
+  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+tutor

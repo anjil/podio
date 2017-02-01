@@ -1,0 +1,13 @@
+label: Expected Transaction Created(Yes=1)
+field_id: 125516421
+type: calculation
+script: var oTotalExpTran = @[Total Expected Transactions](field_125194065)||0;
+var oCreated = @[All of Unique Id](in_125198678_125193630);
+var oShow = 0;
+
+if (oCreated.length>0){
+  if(oCreated.length == oTotalExpTran){
+    oShow = 1;
+  }
+}
+oShow;

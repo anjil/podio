@@ -1,0 +1,25 @@
+label: JSON-Course
+field_id: 136999315
+type: calculation
+script: var myArray = Array();
+var tmpObj = {};
+var myDatum;
+
+try {
+ 
+ var jj=@[All of JSON-Course](out_130017801_120620379);
+
+ for (var ii=0; ii<jj.length; ii++){ 
+    var x = JSON.parse(jj[ii]);
+    tmpObj["Component"] = x["Component"];
+    tmpObj["Wochen"]    = x["Wochen"];
+    myArray[ii]         = tmpObj; 
+    tmpObj              = {};
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+
+JSON.stringify(myArray);

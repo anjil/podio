@@ -1,0 +1,5 @@
+label: Calculation
+field_id: 132077555
+type: calculation
+script: var u = @[Unique ID](item_app_item_id);
+u+'~~~~';

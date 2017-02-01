@@ -1,0 +1,11 @@
+label: Mismatch Lehrgangs (yes=1) 
+field_id: 133190013
+type: calculation
+script: var catLegrgang = @[Lehrgang](field_129630079) || '';
+var relLegrgang = @[All of Titel](out_116446197_133189946)+'' || '';
+var oShow       = 1;
+
+if(catLegrgang == relLegrgang)
+  oShow = 0;
+
+oShow;

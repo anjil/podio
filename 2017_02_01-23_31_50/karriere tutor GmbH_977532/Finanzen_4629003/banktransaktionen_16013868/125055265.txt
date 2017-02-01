@@ -1,0 +1,16 @@
+label: Duplicate (Yes=1)
+field_id: 125055265
+type: calculation
+script: var oDuplicate = @[All of Duplicate Banktransaktionen](out_125054846_124753397)||'';
+var oId = @[UniqueId](field_124675831);
+var oShow = 0;
+
+if(oDuplicate.length){
+  for(var i=0; i<oDuplicate.length; i++){
+     if(oDuplicate[i].indexOf(oId)>-1){
+       oShow = 1;
+       break;
+    }
+  }
+}
+oShow;

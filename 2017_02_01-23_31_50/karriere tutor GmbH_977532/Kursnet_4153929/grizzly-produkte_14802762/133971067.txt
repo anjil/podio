@@ -1,0 +1,4 @@
+label: Item Id
+field_id: 133971067
+type: calculation
+script: @[Unique ID](item_app_item_id)

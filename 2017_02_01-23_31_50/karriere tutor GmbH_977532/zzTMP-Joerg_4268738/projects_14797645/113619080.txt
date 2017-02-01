@@ -1,0 +1,3 @@
+label: Stage
+field_id: 113619080
+type: category

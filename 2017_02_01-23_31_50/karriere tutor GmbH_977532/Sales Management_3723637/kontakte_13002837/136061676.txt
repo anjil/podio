@@ -1,0 +1,4 @@
+label: Backoffice Account Id
+field_id: 136061676
+type: calculation
+script: @[All of Backoffice Account Id](out_136060316_114376100)+''

@@ -1,0 +1,9 @@
+label: Month-Year
+field_id: 130401598
+type: calculation
+script: var m = @[Month](field_130401484)||''
+var y = @[Jahresauswahl](field_130401483)||'';
+if(m && y)
+  m+'-'+y;
+else
+  '';

@@ -1,0 +1,3 @@
+label: Standortzugehörigkeit
+field_id: 124758110
+type: location

@@ -1,0 +1,340 @@
+label: Calculation
+field_id: 135509721
+type: calculation
+script: var jsnL = @[All of JSON-leads-und-anstehende-lehrgangsstarts](in_126634106_127404044);
+var jsnS = @[All of JSON-leads-und-anstehende-lehrgangsstarts](in_126634106_127404412);
+var oQuarter = @[Quartalsauswahl](field_127304155);
+var oShow = '';
+var oData = '';
+var outputHeader = '| Maßn. Kategorie| Jan | Feb | Mrz | Apr | Mai | Jun | Jul | Aug | Sep | Okt | Nov | Dez | Gesamt |<br>';
+outputHeader += '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|<br>';
+
+var monthArr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+
+var oArrSize                                    =  0;
+var sortOrderArr                                = [];
+sortOrderArr['IT Modular > 8K']                 =  0;    oArrSize ++;
+sortOrderArr['Scrum IT Modular > 8K']           =  1;    oArrSize ++;
+sortOrderArr['IT Modular 3-8K']                 =  2;    oArrSize ++;
+sortOrderArr['Scrum IT Modular 3-8K']           =  3;    oArrSize ++;
+sortOrderArr['IT Modular <3K']                  =  4;    oArrSize ++;
+sortOrderArr['Scrum IT Modular <3K']            =  5;    oArrSize ++;
+sortOrderArr['Scrum']                           =  6;    oArrSize ++;
+sortOrderArr['Six Sigma Green Belt IT']         =  7;    oArrSize ++;
+sortOrderArr['Six Sigma Black Belt IT']         =  8;    oArrSize ++;
+sortOrderArr['Scrum Six Sigma Green Belt IT']   =  9;    oArrSize ++;
+sortOrderArr['Scrum Six Sigma Black Belt IT']   =  10;   oArrSize ++;
+sortOrderArr['Six Sigma Green Belt']            =  11;   oArrSize ++;
+sortOrderArr['Six Sigma Black Belt']            =  12;   oArrSize ++;
+sortOrderArr['Scrum Six Sigma Green Belt']      =  13;   oArrSize ++;
+sortOrderArr['Scrum Six Sigma Black Belt']      =  14;   oArrSize ++;
+sortOrderArr['OMM einzeln']                     =  15;   oArrSize ++;
+sortOrderArr['Scrum OMM']                       =  16;   oArrSize ++;
+sortOrderArr['OMM Modular']                     =  17;   oArrSize ++;
+sortOrderArr['Scrum OMM Modular']               =  18;   oArrSize ++;
+sortOrderArr['OMM (ohne OMM)']                  =  19;   oArrSize ++;
+sortOrderArr['Modular OMM (Ohne OMM)']          =  21;   oArrSize ++;
+sortOrderArr['Scrum Modular OMM (Ohne OMM)']    =  22;   oArrSize ++;
+sortOrderArr['Scrum OMM IT']                    =  23;   oArrSize ++;
+sortOrderArr['Scrum Modular OMM (Ohne OMM) IT'] =  24;   oArrSize ++;
+sortOrderArr['OMM sonst']                       =  25;   oArrSize ++;
+sortOrderArr['BDM']                             =  26;   oArrSize ++;
+sortOrderArr['Scrum BDM']                       =  27;   oArrSize ++;
+sortOrderArr['BDM IT']                          =  28;   oArrSize ++;
+sortOrderArr['BDM Six Sigma Black Belt']        =  29;   oArrSize ++;
+sortOrderArr['BDM Six Sigma Green Belt']        =  30;   oArrSize ++;
+sortOrderArr['BDM sonst']                       =  31;   oArrSize ++;
+sortOrderArr['Finanzen']                        =  32;   oArrSize ++;
+sortOrderArr['Sonst Modular']                   =  33;   oArrSize ++;
+sortOrderArr['Scrum Sonst Modular']             =  34;   oArrSize ++;
+sortOrderArr['SAP']                             =  35;   oArrSize ++;
+sortOrderArr['Scrum SAP']                       =  36;   oArrSize ++;
+sortOrderArr['SAP Finanzen']                    =  37;   oArrSize ++;
+sortOrderArr['sonst']                           =  38;   oArrSize ++;
+var oItems = [];
+
+var t='~~';
+try {
+  if(jsnL && jsnL != '{}' && oQuarter){
+     getDetails(jsnL);
+  }
+  if(jsnS && jsnS != '{}' && oQuarter){
+     getDetails2(jsnS);
+     getDetails3(jsnS);
+  }
+  if( oItems ){  
+     printReport();
+  }
+       
+}catch (e) {
+  "Could not parse JSON";
+}
+
+function printReport(){  
+  var tuples = [];
+  for (var key in oItems) tuples.push([key, oItems[key]]);
+
+  tuples.sort(function(aa, bb) {
+     var y1 = aa[1]['sortOrder'];
+     var y2 = bb[1]['sortOrder'];
+
+     if (y1 < y2) return -1;
+     if (y1 > y2) return 1;
+     return 0;
+
+  });
+
+  var oStart = 0;
+  var oEnd   = monthArr.length;
+  if(oQuarter){
+    if(oQuarter == 'Q1'){
+      oStart = 0;
+      oEnd   = 3;
+      outputHeader = '|Maßn. Kategorie|Jan-L|Umsatz|Betrag|Feb-L|Umsatz|Betrag|Mrz-L|Umsatz|Betrag|Ges-L|Umsatz|Betrag|<br>';
+    }
+    if(oQuarter == 'Q2'){
+      oStart = 3;
+      oEnd   = 6;
+      outputHeader = '|Maßn. Kategorie|Apr-L|Umsatz|Betrag|Mai-L|Umsatz|Betrag|Jun-Lead|Umsatz|Betrag|Gesamt-L|U|Bet|<br>';
+    }
+    if(oQuarter == 'Q3'){
+      oStart = 6;
+      oEnd   = 9;     
+      outputHeader = '|Maßn. Kategorie|Jul-L|Umsatz|Betrag|Aug-L|Umsatz|Betrag|Sep-L|Umsatz|Betrag|Gesamt-L|U|Bet|<br>';
+    }
+    if(oQuarter == 'Q4'){
+      oStart = 9;
+      oEnd   = 12;
+      outputHeader = '|Maßn. Kategorie|Okt-L|Umsatz|Betrag|Nov-L|Umsatz|Betrag|Dez-Lead|Umsatz|Betrag|Gesamt-L|U|Bet|<br>';
+    }
+    outputHeader += '|--|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|<br>';
+
+
+  var oRowTotal   = 0;
+  var oGrandTotal = 0;
+  var oColTotal   = [0,0,0,0,0,0,0,0,0];
+  var oRowLead    = 0;
+  var oRowSales   = 0;
+  var oRowBet     = 0;
+  var oColLead    = 0;
+  var oColSales   = 0;
+  var oColBet     = 0;  
+
+
+  for (var i = 0; i < tuples.length; i++) {
+    oRowLead    = 0;
+    oRowSales   = 0;
+    oRowBet     = 0;
+    var col = 0;
+    var oCategory  = tuples[i][0];  
+    var oCount  = tuples[i][1];       
+    oData += '|**'+ oCategory +'**|';
+     
+    for(var k=oStart; k<oEnd; k++){  
+      var oRec  = oCount[monthArr[k]].split('-');
+      var oAmt  = oRec[2];
+      if(oAmt > 0){
+        oAmt = oAmt/1000;
+      } 
+
+      var oSAmt=parseFloat(oAmt);
+      oSAmt=oSAmt.toFixed(1).toString().replace(".", ",");
+     
+      oData    += oRec[0]+'|'; 
+      oData    += oRec[1]+'|'; 
+      oData    += oSAmt+'|'; 
+     
+      oColTotal [col] += parseInt(oRec[0]); col++;
+      oColTotal [col] += parseInt(oRec[1]); col++;
+      oColTotal [col] += parseFloat(oAmt);  col++;
+
+      oRowLead    += parseInt(oRec[0]);
+      oRowSales   += parseInt(oRec[1]);
+      oRowBet     += parseFloat(oAmt);
+       
+    } 
+    var oShowBet = parseFloat(oRowBet);
+    oShowBet = oShowBet.toFixed(1).toString().replace(".", ",");
+    oData    += oRowLead+'|'; 
+    oData    += oRowSales+'|'; 
+    oData    += oShowBet+'|'; 
+    oData+= '<br>';
+
+   oColLead    += oRowLead;
+   oColSales   += oRowSales;
+   oColBet     += oRowBet; 
+
+  }
+   oData += '|**Gesamt :**|';
+   var chk = 0;
+   for(var j=0; j < oColTotal.length; j++){
+      if(chk == 2 || chk ==5 || chk == 8 || chk == 11){
+         var oCAmt = parseFloat(oColTotal [j]);
+         oCAmt =oCAmt.toFixed(1).toString().replace(".", ",");
+
+         oData += '**'+oCAmt +'**|'; 
+         chk++;
+      }
+      else{
+         oData += '**'+parseInt(oColTotal [j]) +'**|'; 
+         chk++;
+      }  
+   } 
+   var oShowColBet = parseFloat(oColBet);
+   oShowColBet = oShowColBet.toFixed(1).toString().replace(".", ",");
+   oData += '**'+oColLead +'**|'; 
+   oData += '**'+oColSales +'**|'; 
+   oData += '**'+oShowColBet +'**|'; 
+  }
+}   
+
+function getDetails(jsn){
+  var oDataArr = [];
+  for(var i=0; i<jsn.length; i++){
+    var jsArr = JSON.parse(jsn[i]);            
+    if( jsArr['Datam'] ){      
+       var oCategory = jsArr['category']||'';
+       var oDt = new Date(jsArr['Datam']);
+       var oMon = monthArr[oDt.getMonth()];
+
+       if(oCategory != ""){
+         var tempKey = oCategory; 
+         if(oItems[tempKey]){
+            var arr           = oItems[tempKey];
+            var sArr          = arr[oMon].split('-');
+            var oVal          = parseInt(sArr[0]) + 1;
+            arr[oMon]         = oVal+'-0-0';     
+            oItems[tempKey]   = arr;                       
+         } 
+         else{
+            var ind = -1;
+            if(sortOrderArr[oCategory]> -1 ){
+               ind = sortOrderArr[oCategory];
+            }
+            else{
+               ind = oArrSize;
+            }
+            var arr = [];
+            arr["Jan"]        = (oMon == "Jan") ? '1-0-0' : '0-0-0'; 
+            arr["Feb"]        = (oMon == "Feb") ? '1-0-0' : '0-0-0';
+            arr["Mar"]        = (oMon == "Mar") ? '1-0-0' : '0-0-0';
+            arr["Apr"]        = (oMon == "Apr") ? '1-0-0' : '0-0-0';
+            arr["May"]        = (oMon == "May") ? '1-0-0' : '0-0-0';
+            arr["Jun"]        = (oMon == "Jun") ? '1-0-0' : '0-0-0';
+            arr["Jul"]        = (oMon == "Jul") ? '1-0-0' : '0-0-0';
+            arr["Aug"]        = (oMon == "Aug") ? '1-0-0' : '0-0-0';
+            arr["Sep"]        = (oMon == "Sep") ? '1-0-0' : '0-0-0';
+            arr["Oct"]        = (oMon == "Oct") ? '1-0-0' : '0-0-0';
+            arr["Nov"]        = (oMon == "Nov") ? '1-0-0' : '0-0-0';
+            arr["Dec"]        = (oMon == "Dec") ? '1-0-0' : '0-0-0';
+            arr["sortOrder"]  =  ind;
+
+            oItems[tempKey] =  arr;
+        } 
+      }                   
+    }
+  }
+}
+
+function getDetails2(jsn){
+  for(var i=0; i<jsn.length; i++){
+    var jsArr = JSON.parse(jsn[i]);            
+    if( jsArr['Auftragsdatum'] && (jsArr['Status'] == 'Auftrag' ||
+        jsArr['Status'] == 'Auftragsbearbeitung abgeschlossen' )){      
+       var oCategory = jsArr['category']||'';
+       var oDt = new Date(jsArr['Auftragsdatum']);
+       var oMon = monthArr[oDt.getMonth()];
+
+       if(oCategory != ""){
+         var tempKey = oCategory; 
+         if(oItems[tempKey]){        
+            var arr           = oItems[tempKey];
+            var sArr          = arr[oMon].split('-');
+            var oVal          = parseInt(sArr[1]) + 1;
+            arr[oMon]         = sArr[0]+'-'+oVal+'-0';     
+            oItems[tempKey]   = arr;                      
+         } 
+         else{
+            var ind = -1;
+            if(sortOrderArr[oCategory]> -1 ){
+               ind = sortOrderArr[oCategory];
+            }
+            else{
+               ind = oArrSize;
+            }
+            var arr = [];
+            arr["Jan"]        = (oMon == "Jan") ? '0-1-0' : '0-0-0'; 
+            arr["Feb"]        = (oMon == "Feb") ? '0-1-0' : '0-0-0';
+            arr["Mar"]        = (oMon == "Mar") ? '0-1-0' : '0-0-0';
+            arr["Apr"]        = (oMon == "Apr") ? '0-1-0' : '0-0-0';
+            arr["May"]        = (oMon == "May") ? '0-1-0' : '0-0-0';
+            arr["Jun"]        = (oMon == "Jun") ? '0-1-0' : '0-0-0';
+            arr["Jul"]        = (oMon == "Jul") ? '0-1-0' : '0-0-0';
+            arr["Aug"]        = (oMon == "Aug") ? '0-1-0' : '0-0-0';
+            arr["Sep"]        = (oMon == "Sep") ? '0-1-0' : '0-0-0';
+            arr["Oct"]        = (oMon == "Oct") ? '0-1-0' : '0-0-0';
+            arr["Nov"]        = (oMon == "Nov") ? '0-1-0' : '0-0-0';
+            arr["Dec"]        = (oMon == "Dec") ? '0-1-0' : '0-0-0';
+            arr["sortOrder"]  =  ind;
+
+            oItems[tempKey] =  arr;
+        } 
+      }                   
+    }
+  }
+}
+
+function getDetails3(jsn){
+  for(var i=0; i<jsn.length; i++){
+    var jsArr = JSON.parse(jsn[i]);            
+    if( jsArr['Auftragsdatum'] && (jsArr['Status'] == 'Auftrag' ||
+        jsArr['Status'] == 'Auftragsbearbeitung abgeschlossen' )){      
+       var oCategory = jsArr['category']||'';
+       var oDt = new Date(jsArr['Auftragsdatum']);
+       var oMon = monthArr[oDt.getMonth()];
+       var oAmount = parseFloat(jsArr['Amount']||0).toFixed(2);      
+
+       if(oCategory != ""){
+         var tempKey = oCategory; 
+         if(oItems[tempKey]){          
+            var arr           = oItems[tempKey];
+            var sArr          = arr[oMon].split('-');
+            var oVal          = parseFloat(sArr[2]) + parseFloat(oAmount);
+            arr[oMon]         = sArr[0]+'-'+sArr[1]+'-'+oVal;     
+            oItems[tempKey]   = arr;                    
+         } 
+         else{
+            var ind = -1;
+            if(sortOrderArr[oCategory]> -1 ){
+               ind = sortOrderArr[oCategory];
+            }
+            else{
+               ind = oArrSize;
+            }
+            var arr = [];
+            arr["Jan"]        = (oMon == "Jan") ? '0-0-'+oAmount : '0-0-0'; 
+            arr["Feb"]        = (oMon == "Feb") ? '0-0-'+oAmount : '0-0-0';
+            arr["Mar"]        = (oMon == "Mar") ? '0-0-'+oAmount : '0-0-0';
+            arr["Apr"]        = (oMon == "Apr") ? '0-0-'+oAmount : '0-0-0';
+            arr["May"]        = (oMon == "May") ? '0-0-'+oAmount : '0-0-0';
+            arr["Jun"]        = (oMon == "Jun") ? '0-0-'+oAmount : '0-0-0';
+            arr["Jul"]        = (oMon == "Jul") ? '0-0-'+oAmount : '0-0-0';
+            arr["Aug"]        = (oMon == "Aug") ? '0-0-'+oAmount : '0-0-0';
+            arr["Sep"]        = (oMon == "Sep") ? '0-0-'+oAmount : '0-0-0';
+            arr["Oct"]        = (oMon == "Oct") ? '0-0-'+oAmount : '0-0-0';
+            arr["Nov"]        = (oMon == "Nov") ? '0-0-'+oAmount : '0-0-0';
+            arr["Dec"]        = (oMon == "Dec") ? '0-0-'+oAmount : '0-0-0';
+            arr["sortOrder"]  =  ind;
+
+            oItems[tempKey] =  arr;
+        } 
+      }                   
+    }
+  }
+}
+if(oData){
+  oShow = outputHeader + oData;
+}
+
+oShow+' ';

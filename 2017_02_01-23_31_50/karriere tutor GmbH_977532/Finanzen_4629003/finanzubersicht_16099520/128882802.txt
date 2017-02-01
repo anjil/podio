@@ -1,0 +1,17 @@
+label: JSON-LizenzenData
+field_id: 128882802
+type: calculation
+script: var u=@[Unique ID](item_app_item_id)
+var j;
+var z = {};
+var js = ''//@All of JSON-LizenzenData[0]
+try {
+  j = JSON.parse(js);
+  z = j  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out = JSON.stringify(z);
+out
+

@@ -1,0 +1,3 @@
+label: Rate
+field_id: 130763189
+type: category

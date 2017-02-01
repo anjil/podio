@@ -1,0 +1,6 @@
+label: -
+field_id: 118642105
+type: calculation
+script: @[Status](field_118641735)
+out = "**INTERNES - bitte unterhalb alles ignorieren:**"+"\n\n"+ "----"
+out

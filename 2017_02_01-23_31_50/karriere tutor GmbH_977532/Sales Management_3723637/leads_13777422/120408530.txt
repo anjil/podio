@@ -1,0 +1,17 @@
+label: JSON-LeadStatistiken
+field_id: 120408530
+type: calculation
+script: var out;
+var x = @[All of Podio Tutordaten anlegen](out_119034171_117225519)[0]
+var y
+if (x == "Tutordaten wurden erstellt") { y=1 } else { y=0 } 
+
+var j = {};
+j["ID"] = @[Unique ID](item_app_item_id);
+j["TutorenDaten"] = y
+j["Fulfillment"] = @[All of Calc_Lehrgangsende](out_118640224_117225519).length
+j["Lehrgangsstart"] = @[Startdatum Lehrgang](field_108029027)
+j["Auftragsdatum"] = @[Auftragsdatum](field_108041451)
+
+out = JSON.stringify(j);
+out

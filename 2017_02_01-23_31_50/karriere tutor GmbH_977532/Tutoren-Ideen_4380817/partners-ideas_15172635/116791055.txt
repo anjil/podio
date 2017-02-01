@@ -1,0 +1,3 @@
+label: Outline of partnership
+field_id: 116791055
+type: text

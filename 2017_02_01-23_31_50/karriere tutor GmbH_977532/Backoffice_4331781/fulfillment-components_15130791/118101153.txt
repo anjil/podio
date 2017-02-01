@@ -1,0 +1,78 @@
+label: JSON-Data
+field_id: 118101153
+type: calculation
+script: var debug = "";
+var out = "";
+var x;
+var kurse_ary = Array();
+var webextraining_ary = Array();
+var Tutorium_ary = Array();
+var WebExTutorium_ary = Array();
+var Demo_ary = Array();
+var Coaching_ary =  Array();
+var Examen_ary = Array();
+//JSON.parse(debug);
+
+try {
+   //Anzahl Kursfreigaben
+  for(i=0; i<@[All of JSON-Data](out_118137226_116446406).length; i++) {
+    x = JSON.parse(@[All of JSON-Data](out_118137226_116446406)[i]);
+    kurse_ary[i]=x;
+  } 
+
+   //Anzahl WebEx Trainings
+  for(i=0; i<@[All of JSON-Data](out_118548420_118547799).length; i++) {
+    x = JSON.parse(@[All of JSON-Data](out_118548420_118547799)[i]);
+    webextraining_ary[i]=x;
+  } 
+
+   //Anzahl Tutorien
+  for(i=0; i<@[All of JSON-Data](out_118137226_116446407).length; i++) {
+    x = JSON.parse(@[All of JSON-Data](out_118137226_116446407)[i]);
+    Tutorium_ary[i]=x;
+  } 
+
+   //Anzahl WebEx Tutorien
+  for(i=0; i<@[All of JSON-Data](out_118548420_118547800).length; i++) {
+    x = JSON.parse(@[All of JSON-Data](out_118548420_118547800)[i]);
+    WebExTutorium_ary[i]=x;
+  } 
+
+   //Anzahl Demo
+  for(i=0; i<@[All of JSON-Data](out_118137226_116446408).length; i++) {
+    x = JSON.parse(@[All of JSON-Data](out_118137226_116446408)[i]);
+    Demo_ary[i]=x;
+  } 
+
+   //Anzahl Einzelcoaching
+  for(i=0; i<@[All of JSON-Data](out_118548420_118548316).length; i++) {
+    x = JSON.parse(@[All of JSON-Data](out_118548420_118548316)[i]);
+    Coaching_ary[i]=x;
+  } 
+
+   //Anzahl Examen
+  //for(i=0; i<@ALL of JS.length; i++) {
+  //  x = JSON.parse(@All of JSON-Data[i]);
+  //  Coaching_ary[i]=x;
+  //} 
+
+
+} catch (e) {
+  "Could not parse JSON"
+}
+
+var j = {};
+j["ID"]= @[Unique ID](item_app_item_id);
+j["Titel"]= @[Titel](field_116446197);
+j["Reihenfolge"]=@[Reihenfolge](field_116446843);
+j["Dauer"]=@[Dauer in Wochen](field_118878466);
+j["Kursfreigabe"]=kurse_ary;
+j["WebEx_Training"]= webextraining_ary;
+j["Tutorium"]= Tutorium_ary;
+j["WebEx_Tutorium"]= WebExTutorium_ary;
+j["Demo"]= Demo_ary;
+j["WebEx_Einzelcoaching"]= Coaching_ary;
+j["Examen"]= Examen_ary;
+j["LizenzID"]= @[All of LizenzID](out_129911783_128735467)[0] || null;
+
+out = JSON.stringify(j);

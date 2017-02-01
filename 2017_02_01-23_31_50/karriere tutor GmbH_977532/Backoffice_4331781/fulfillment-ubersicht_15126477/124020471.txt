@@ -1,0 +1,32 @@
+label: Email
+field_id: 124020471
+type: calculation
+script: var a = @[All of Kontaktdetails](in_113753142_117225519)
+var out = ""
+var t=''
+var ii = 0;
+var oArrEmail = [];
+if (a[0] != ""){
+  var oArr = a[0].split('\n');
+  for(var i = 0; i<oArr.length; i++){
+    if(oArr[i].indexOf('@') > -1){
+      oArrEmail[ii] = oArr[i];
+      ii++;
+    }
+  }
+} 
+if(oArrEmail.length>0){
+  for(var i=0;i<oArrEmail.length;i++){
+    var oArr = oArrEmail[i].split(' ');
+    for(var j=0;j<oArr.length;j++){
+      if(oArr[j].indexOf('@')>-1){  
+        out+=oArr[j]+',';
+      }  
+    }
+  }
+}
+if(out.length>0){
+  out = out.substr(0,(out.length)-1)
+}
+out
+

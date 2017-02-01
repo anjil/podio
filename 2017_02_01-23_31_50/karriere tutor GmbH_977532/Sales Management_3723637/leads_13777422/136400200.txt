@@ -1,0 +1,4 @@
+label: Leads CreatedON
+field_id: 136400200
+type: calculation
+script: @[Created On](item_created_on)

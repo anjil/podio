@@ -1,0 +1,4 @@
+label: Berechnung
+field_id: 113623751
+type: calculation
+script: (@[Dates](field_113619664))/1000/60/60/24

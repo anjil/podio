@@ -1,0 +1,16 @@
+label: JSON-FinanceUbersicht
+field_id: 124849442
+type: calculation
+script: var j;
+var z = {};
+
+try {
+  j = JSON.parse(@[All of JSON-FinanceUbersicht](in_124762989_124752897)[0]);
+  z = j  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out = JSON.stringify(z);
+out
+

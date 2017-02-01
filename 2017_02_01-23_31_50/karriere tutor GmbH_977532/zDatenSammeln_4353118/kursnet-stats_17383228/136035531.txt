@@ -1,0 +1,3 @@
+label: Kursnet Stats Report
+field_id: 136035531
+type: app

@@ -1,0 +1,3 @@
+label: geschätzter Aufwand
+field_id: 109287518
+type: category

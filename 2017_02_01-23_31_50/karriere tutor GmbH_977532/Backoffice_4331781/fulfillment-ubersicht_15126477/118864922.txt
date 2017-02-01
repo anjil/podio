@@ -1,0 +1,20 @@
+label: JSON-DataPerson
+field_id: 118864922
+type: calculation
+script: var j;
+var out;
+var z = {};
+
+try {
+  j = JSON.parse(@[All of JSON-DataPerson](in_118798421_117225519));
+  z = j;
+  // Für Tutoren Felder ausblenden, da nicht relevant
+  z["Historie"] = null;
+  z["weitereNextSteps"] = null;
+  z["NextStepDatum"] = null;
+  z["NextStep2Do"] = null;  
+} catch (e) {
+  "Could not parse JSON"
+}
+out = JSON.stringify(z);
+out

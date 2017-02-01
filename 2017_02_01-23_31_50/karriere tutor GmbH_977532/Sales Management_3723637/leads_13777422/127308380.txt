@@ -1,0 +1,11 @@
+label: ReportCount
+field_id: 127308380
+type: calculation
+script: var rCount = @[All of Jahr](out_126630578_126630716)
+var s = 0;
+if(rCount){
+  if(rCount.length == 5){
+    s=1;
+  }
+}
+s;

@@ -1,0 +1,275 @@
+label: Summary By Owner Report
+field_id: 134469108
+type: calculation
+script: var jsnL   = @[All of JSON-leads-und-anstehende-lehrgangsstarts](in_126634106_134090920);
+var oWeeks = @[Week](field_134089176);
+var oShow  = '';
+var oData  = '';
+
+
+var oItemsR = [];
+var oItemsN = [];
+var oItemsW = [];
+var oItemsV = [];
+var oLOwner = [];
+
+var t='~~';
+try {
+  if(jsnL && jsnL != '{}' && oWeeks){
+     getDetailsReserviert(jsnL);
+     getDetailsNachster(jsnL);
+     getDetailsWahrschein(jsnL);
+     getDetailsVerkaufsschritte(jsnL);
+  }
+  if(oItemsR || oItemsN || oItemsW || oItemsV){  
+     printReport();
+  }
+       
+}catch (e) {
+  "Could not parse JSON";
+}
+
+function printReport(){  
+  var tuplesR = [];
+  var tuplesN = [];
+  var tuplesW = [];
+  var tuplesV = [];
+  for (var key in oItemsR) tuplesR.push([key, oItemsR[key]]);
+  for (var key in oItemsN) tuplesN.push([key, oItemsN[key]]);
+  for (var key in oItemsW) tuplesW.push([key, oItemsW[key]]);
+  for (var key in oItemsV) tuplesV.push([key, oItemsV[key]]);
+  oLOwner.sort();
+
+  tuplesR.sort(function(a, b) {
+    a = new Date(a['Reserviert']);
+    b = new Date(b['Reserviert']);
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+  tuplesN.sort(function(a, b) {
+    a = new Date(a['Nachster']);
+    b = new Date(b['Nachster']);
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+  tuplesW.sort(function(a, b) {
+    a = new Date(a['Wahrschein']);
+    b = new Date(b['Wahrschein']);
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+ 
+
+  for(k=0; k<oLOwner.length; k++){
+    var rHasData = 0;
+    var nHasData = 0;
+    var wHasData = 0;
+    var vHasData = 0;
+    var rData    = '';
+    var nData    = '';
+    var wData    = '';
+    var vData    = '';
+    if(k==0){
+      oData     += '|**'+oLOwner[k]+'**|&nbsp;|<br>';
+      oData     += '|--------|---------|<br>';
+    }
+    else{
+      oData     += '|-------------------------------|&nbsp;|<br>';
+      oData     += '|**'+oLOwner[k]+'**|&nbsp;|<br>';      
+    }
+    
+    rData       += '|**Reserviert für Lehrgangsstart**|&nbsp;|<br>';
+    for (var i=0; i<tuplesR.length; i++) {
+      var oTKey      = tuplesR[i][0];  
+      var oTVal      = tuplesR[i][1]; 
+      if(oLOwner[k] == oTVal['leadOwner']){
+        rHasData       = 1;
+        var dt         = new Date(oTVal['Reserviert']);
+        var shwDt      = moment(dt).format("DD.MM.YYYY");    
+        var oCnt       = oTVal['Count'];
+        rData         += '|'+shwDt;
+        rData         += '|'+oCnt ; 
+        rData         += '|  <br>';
+      }
+    } 
+  
+    nData     += '|**Nächster Termin bei AA**|&nbsp;|<br>';  
+    for (var i=0; i<tuplesN.length; i++) {
+      var oTKey      = tuplesN[i][0];  
+      var oTVal      = tuplesN[i][1]; 
+      if(oLOwner[k] == oTVal['leadOwner']){
+        nHasData       = 1;
+        var dt         = new Date(oTVal['Nachster']); 
+        var shwDt      = moment(dt).format("DD.MM.YYYY");    
+        var oCnt       = oTVal['Count'];
+        nData         += '|'+shwDt;
+        nData         += '|'+oCnt ; 
+        nData         += '|  <br>';
+      }
+    } 
+
+    wData     += '|**Wahrscheinlichkeit**|&nbsp;|<br>';  
+    for (var i=0; i<tuplesW.length; i++) {
+      var oTKey      = tuplesW[i][0];  
+      var oTVal      = tuplesW[i][1]; 
+      var shwPer     = oTVal['Wahrschein']*100+'%';    
+      var oCnt       = oTVal['Count'];
+      if(oLOwner[k] == oTVal['leadOwner']){
+        wHasData       = 1;
+        wData         += '|'+shwPer;
+        wData         += '|'+oCnt ; 
+        wData         += '|  <br>';
+      }
+    }
+
+    vData     += '|**Verkaufsschritte**|&nbsp;|<br>';  
+    for (var i=0; i<tuplesV.length; i++) {
+      var oTKey      = tuplesV[i][0];  
+      var oTVal      = tuplesV[i][1]; 
+      var shwPer     = oTVal['Verkau'];    
+      var oCnt       = oTVal['Count'];
+      if(oLOwner[k] == oTVal['leadOwner']){
+        vHasData       = 1;
+        vData         += '|'+shwPer;
+        vData         += '|'+oCnt ; 
+        vData         += '|  <br>';
+      }
+    }
+
+    if(rHasData == 1){
+      oData += rData;
+    }
+    if(nHasData == 1){
+      oData += nData;
+    }
+    if(wHasData == 1){
+      oData += wData;
+    }
+    if(vHasData == 1){
+      oData += vData;
+    }
+  }
+}   
+
+function getDetailsVerkaufsschritte(jsn){
+  for(var i=0; i<jsn.length; i++){
+    var jsArr  = JSON.parse(jsn[i]);            
+    if(jsArr['Verkaufsschritte'] && jsArr['leadsOwner']){        
+      var ostr  = jsArr['Verkaufsschritte'];  
+      var tKey  = ostr+'^'+jsArr['leadsOwner'];        
+      if(oItemsV[tKey]){
+        var arr           = oItemsV[tKey];
+        arr["Count"]      = parseInt(arr["Count"]) + 1;
+        oItemsV[tKey]     = arr;             
+      } 
+      else{
+        var arr           = [];
+        arr["Count"]      = 1;
+        arr["leadOwner"]  = jsArr['leadsOwner'];
+        arr["Verkau"]     = jsArr['Verkaufsschritte'];
+        oItemsV[tKey]     = arr; 
+        if(oLOwner.length > 0){    
+          if(oLOwner.indexOf(jsArr['leadsOwner']) == -1){
+            oLOwner.push(jsArr['leadsOwner']); 
+          }  
+        } 
+        else{
+          oLOwner.push(jsArr['leadsOwner']); 
+        }  
+      }       
+    }
+  }
+}
+
+
+function getDetailsReserviert(jsn){
+  for(var i=0; i<jsn.length; i++){
+    var jsArr  = JSON.parse(jsn[i]);            
+    if(jsArr['Reserviert'] && jsArr['leadsOwner']){        
+      var oDt  = new Date(jsArr['Reserviert']);  
+      var tKey = oDt+'^'+jsArr['leadsOwner'];         
+      if(oItemsR[tKey]){
+        var arr           = oItemsR[tKey];
+        arr["Count"]      = parseInt(arr["Count"]) + 1;
+        oItemsR[tKey]     = arr;             
+      } 
+      else{
+        var arr           = [];
+        arr["Count"]      = 1;
+        arr["Reserviert"] = oDt;
+        arr["leadOwner"]  = jsArr['leadsOwner'];
+        oItemsR[tKey]     = arr; 
+        if(oLOwner.length > 0){    
+          if(oLOwner.indexOf(jsArr['leadsOwner']) == -1){
+            oLOwner.push(jsArr['leadsOwner']); 
+          }  
+        } 
+        else{
+          oLOwner.push(jsArr['leadsOwner']); 
+        }  
+      } 
+    }
+  }
+}
+
+function getDetailsNachster(jsn){
+  for(var i=0; i<jsn.length; i++){
+    var jsArr  = JSON.parse(jsn[i]);            
+    if(jsArr['Nachster']){        
+      var oDt  = new Date(jsArr['Nachster']);  
+      var tKey = oDt+'^'+jsArr['leadsOwner'];         
+      if(oItemsN[tKey]){
+        var arr           = oItemsN[tKey];
+        arr["Count"]      = parseInt(arr["Count"]) + 1;
+        oItemsN[tKey]     = arr;             
+      } 
+      else{
+        var arr           = [];
+        arr["Count"]      = 1;
+        arr["Nachster"]   = oDt;
+        arr["leadOwner"]  = jsArr['leadsOwner'];
+        oItemsN[tKey]     = arr; 
+        if(oLOwner.length > 0){    
+          if(oLOwner.indexOf(jsArr['leadsOwner']) == -1){
+            oLOwner.push(jsArr['leadsOwner']); 
+          }  
+        } 
+        else{
+          oLOwner.push(jsArr['leadsOwner']); 
+        }
+      } 
+    }
+  }
+}
+
+function getDetailsWahrschein(jsn){
+  for(var i=0; i<jsn.length; i++){
+    var jsArr  = JSON.parse(jsn[i]);            
+   // if(jsArr['Wahrschein']){        
+      var oPer = jsArr['Wahrschein'];  
+      var tKey = oPer+'^'+jsArr['leadsOwner'];         
+      if(oItemsW[tKey]){
+        var arr           = oItemsW[tKey];
+        arr["Count"]      = parseInt(arr["Count"]) + 1;
+        oItemsW[tKey]     = arr;             
+      } 
+      else{
+        var arr           = [];
+        arr["Count"]      = 1;
+        arr["Wahrschein"] = oPer;
+        arr["leadOwner"]  = jsArr['leadsOwner'];
+        oItemsW[tKey]     = arr; 
+        if(oLOwner.length > 0){    
+          if(oLOwner.indexOf(jsArr['leadsOwner']) == -1){
+            oLOwner.push(jsArr['leadsOwner']); 
+          }  
+        } 
+        else{
+          oLOwner.push(jsArr['leadsOwner']); 
+        } 
+      } 
+    //}
+  }
+}
+
+oShow = oData;

@@ -1,0 +1,39 @@
+label: Customer Name
+field_id: 128621106
+type: calculation
+script: var a = @[Kontaktdetails](field_113753142);
+var oShow =getName(a);
+
+
+
+function getName(a){
+  var out = ''
+  var oArrName = [];
+  var ii = 0;
+  if (a && a.length){
+    var oArr = a.split('\n');
+    for(var i = 0; i<oArr.length; i++){
+      if(oArr[i].indexOf('Name:') > -1){
+        oArrName[ii] = oArr[i]; 
+        ii++;
+      }
+    }
+  } 
+  if(oArrName.length>0){
+    for(var i=0;i<oArrName.length;i++){
+      var oArr = oArrName[i].split('|');
+      for(var j=0;j<oArr.length;j++){
+        if(oArr[j].indexOf('Name:')>-1){  
+          out+=oArr[j+1]+',';
+        }  
+      }
+    }
+  }
+  if(out.length>0){
+    out = out.substr(0,(out.length)-1)
+  }
+  return out;
+}
+
+
+oShow;

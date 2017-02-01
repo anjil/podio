@@ -1,0 +1,4 @@
+label: #Produkte
+field_id: 130875676
+type: calculation
+script: parseInt(@[All of Product](in_113666207_127785237).length)

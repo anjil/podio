@@ -1,0 +1,12 @@
+label: Mismatch Lizenze Report (yes=1)
+field_id: 139086688
+type: calculation
+script: var r1= @[Lizenze Report](field_128959851)+''
+var r2 = @[Lizenze Report Test](field_137434226)+'' 
+var oS = 0;
+
+if(r1 == r2)
+  oS = 0;
+else
+  oS = 1;
+oS;

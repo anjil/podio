@@ -1,0 +1,5 @@
+label: Calculation
+field_id: 125435179
+type: calculation
+script: var d=@[All of Startdatum Bildungsgutschein](out_125198557_125193630)[0];
+d

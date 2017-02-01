@@ -1,0 +1,25 @@
+label: Missing Report Lizenzen Month-Year
+field_id: 130411033
+type: calculation
+script: var oLizReportData = @[All of Month-Year](out_130401598_132143897)||[];
+var oLizMonYear    = @[Lizenze Month-Year](field_130404987) || '';
+var str            = '';
+
+
+if(oLizMonYear){
+  var oArr = oLizMonYear.split(',');
+  for(var ii=0; ii<oArr.length; ii++){
+    var oFind = 0;
+    for(var i=0; i<oLizReportData.length; i++){
+      if(oArr[ii] == oLizReportData[i]){
+        oFind = 1;
+        break;
+      }    
+    }
+    if(oFind == 0){
+      str += (str) ? ','+oArr[ii] : oArr[ii];
+    }
+  }
+}
+ 
+str;

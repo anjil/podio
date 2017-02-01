@@ -1,0 +1,4 @@
+label: LizenzID
+field_id: 130065756
+type: calculation
+script: @[All of LizenzID](out_129911783_128735467)+''

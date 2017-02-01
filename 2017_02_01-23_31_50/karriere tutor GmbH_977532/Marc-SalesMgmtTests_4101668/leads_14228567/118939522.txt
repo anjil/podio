@@ -1,0 +1,4 @@
+label: Calculation
+field_id: 118939522
+type: calculation
+script: @[Account Art](field_108902512)

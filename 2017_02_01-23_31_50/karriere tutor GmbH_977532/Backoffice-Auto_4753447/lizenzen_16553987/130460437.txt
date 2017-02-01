@@ -1,0 +1,3 @@
+label: Lizenz Status
+field_id: 130460437
+type: category

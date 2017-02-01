@@ -1,0 +1,71 @@
+label: Calculation
+field_id: 130460213
+type: calculation
+script: var oJson   = @[All of JSON-Lizenzen](out_130128007_129089854)[0];
+var oShow   = '~~~~~~';
+var oArr    = [];
+var oData   = '';
+
+var monthArr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+try {
+
+  if(oJson && oJson !='{}' && oJson !='[]'){
+    var oJsn     = JSON.parse(oJson);
+    var oD       =  null;
+
+    oJsn.sort(function(aa, bb) {
+        var d1 = new Date(aa.Date1);
+        var d2 = new Date(bb.Date1);
+
+        var dd1 = new Date(aa.Date2);
+        var dd2 = new Date(bb.Date2);
+
+        if (d1 < d2) return -1;
+        if (d1 > d2) return 1;
+        if (dd1 < dd2) return -1;
+        if (dd1 > dd2) return 1;
+        return 0;
+
+     });  
+
+    for (var ii=0; ii<oJsn.length; ii++){ 
+      if(oJsn[ii] && oJsn[ii]!='{}' && oJsn[ii]!='[]'){    
+        var oDatam  = oJsn[ii];               
+        var oRate   = parseInt(oDatam.Rate);  
+        for(var i=0; i<oRate; i++){          
+          if(i==0){
+            oD    = oDatam.Date1|| null;             
+          }
+          if(i==1){        
+            oD    = oDatam.Date2|| null;                
+          } 
+          
+          if(oD){      
+            oShow = getMonthYear(oD);         
+            if(oArr.length > 0){    
+              if(oArr.indexOf(oShow)== -1){         
+                oArr.push(oShow);  
+                 oData+= (oData)? ','+oShow : oShow;      
+              }
+            }
+            else{
+              oArr.push(oShow); 
+              oData +=  oShow;     
+            }       
+          }                              
+        }
+      }
+    }     
+  } 
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function getMonthYear(oDt){
+  var dt = new Date(oDt);
+  return monthArr[dt.getMonth()]+ '-' + dt.getFullYear(); 
+}
+
+oData;

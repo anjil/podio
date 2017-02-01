@@ -1,0 +1,20 @@
+label: Calculation
+field_id: 128898276
+type: calculation
+script: var oTotal  = 0;
+try {
+ 
+ var jj   = @[JSON-Lizenze](field_128882802);
+ var oJsn = JSON.parse(jj);   
+ for (var ii=0; ii<oJsn.length; ii++){ 
+    if(oJsn[ii] && oJsn[ii]!='{}'){       
+       oTotal += parseInt(oJsn[ii].Rate);       
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+var d= new Date();
+d

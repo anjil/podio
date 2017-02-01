@@ -1,0 +1,9 @@
+label: #P-in Grizzly deaktiviert
+field_id: 130876921
+type: calculation
+script: var out = 0
+var i = @[All of Status](in_113666520_127785237).length
+for (k=0; k<i; k++) {
+  if (@[All of Status](in_113666520_127785237)[k]=="in Grizzly deaktiviert") {out++}
+}
+out

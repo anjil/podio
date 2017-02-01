@@ -1,0 +1,10 @@
+label: Calc_Sale
+field_id: 136113910
+type: calculation
+script: var out = parseInt(0)
+if (@[All of Status](in_105473431_136112743).length > 0) {
+  if (@[All of Status](in_105473431_136112743)[0] == "Auftrag") { out=parseInt(1) }
+  if (@[All of Status](in_105473431_136112743)[0] == "Auftragsbearbeitung abgeschlossen") { out=parseInt(1) }
+}
+
+out

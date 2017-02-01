@@ -1,0 +1,11 @@
+label: Error Multiple Fin uberschit BankTransaction (Yes = 1)
+field_id: 126833342
+type: calculation
+script: var totalFinUberschit = @[All of Total finanzubersicht](in_126624830_124753397) || []
+var duplicate = 0;
+
+if(totalFinUberschit.length > 1) {
+ duplicate = 1;
+}
+
+duplicate

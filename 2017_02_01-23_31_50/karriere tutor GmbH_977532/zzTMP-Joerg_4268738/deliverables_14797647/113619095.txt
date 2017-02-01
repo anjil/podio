@@ -1,0 +1,3 @@
+label: Budget
+field_id: 113619095
+type: money

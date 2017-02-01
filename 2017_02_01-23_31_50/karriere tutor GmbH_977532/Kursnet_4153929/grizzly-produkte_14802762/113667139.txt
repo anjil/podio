@@ -1,0 +1,3 @@
+label: Kategorie Zuordnung
+field_id: 113667139
+type: category

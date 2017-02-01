@@ -1,0 +1,13 @@
+label: json-expTest
+field_id: 125711799
+type: calculation
+script: var oAmt = @[amount1](field_125710694);
+var oDate = @[Date1](field_125711621);
+var oShow = '';
+
+var j = {};
+j["Amount"] = oAmt;
+j["Date"]   = (oDate)? new Date(oDate): '';
+
+oShow = JSON.stringify(j);
+oShow;

@@ -1,0 +1,3 @@
+label: Telefon
+field_id: 108494152
+type: phone

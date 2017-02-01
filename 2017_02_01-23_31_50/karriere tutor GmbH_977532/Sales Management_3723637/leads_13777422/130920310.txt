@@ -1,0 +1,7 @@
+label: Verification Report - Temp
+field_id: 130920310
+type: calculation
+script: var a = @[Calc_Lehrgangsgebuehren](field_113559188)
+var items = @[All of Fulfillment-ubersicht ID](out_129123177_117225519) || []
+
+items.length

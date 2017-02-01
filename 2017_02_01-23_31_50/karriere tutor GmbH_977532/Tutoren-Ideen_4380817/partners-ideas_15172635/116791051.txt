@@ -1,0 +1,3 @@
+label: Partner type
+field_id: 116791051
+type: category

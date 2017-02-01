@@ -1,0 +1,4 @@
+label: Geburtsdatum
+field_id: 128727431
+type: calculation
+script: moment(@[All of Geburtsdatum](out_136107014_136112743)[0]).format("DD.MM.YYYY")

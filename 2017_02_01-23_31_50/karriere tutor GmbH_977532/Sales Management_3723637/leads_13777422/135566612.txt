@@ -1,0 +1,38 @@
+label: Test Sales Quarter
+field_id: 135566612
+type: calculation
+script: var oD    = @[Auftragsdatum](field_108041451);
+var oShow = ''
+if(oD){
+  var sDate  = getFLDate(oD);
+  var oMonth = sDate.getMonth();
+  if(oMonth<=2){
+    oShow += 'Q1';
+  }
+  if(oMonth>2 && oMonth<=5){
+    oShow += 'Q2';
+  }
+  if(oMonth>5 && oMonth<=8){
+    oShow += 'Q3';
+  }
+  if(oMonth>8){
+    oShow += 'Q4';
+  }  
+}
+
+
+function getFLDate(d){  
+var current   = new Date(d); 
+var weekstart = null;
+if(current.getDay() == 0){
+  weekstart = current.getDate() - 6;
+}
+else{
+  weekstart = current.getDate() - current.getDay() +1;    
+}
+var monday = new Date(current.setDate(weekstart));  
+return monday;
+
+}
+
+oShow;

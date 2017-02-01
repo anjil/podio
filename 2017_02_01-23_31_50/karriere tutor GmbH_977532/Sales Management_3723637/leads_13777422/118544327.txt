@@ -1,0 +1,4 @@
+label: Calc_Lehrgangsgebuehren_Komplett
+field_id: 118544327
+type: calculation
+script: @[Sum of Gebühren](out_sum_108136589_108285774)

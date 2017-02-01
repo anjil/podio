@@ -1,0 +1,77 @@
+label: Calculation
+field_id: 123252045
+type: calculation
+script: var u = @[Unique ID](item_app_item_id)
+var obj = '{"ID1":"FFMTC0010","Reihenfolge":1000,"Title":"ITIL Foundation - Modular","ID":"CRSE0016","AnzFulfillment":30,"AnzTutorenDaten":28,"weitereAnfangsdaten":["2016-05-30T00:00:00.000Z","2016-06-12T00:00:00.000Z","2016-06-12T00:00:00.000Z"]}';
+
+var oShow = '';
+var oShowData = '';
+var items = [];
+var oTitle = '';
+var json = JSON.parse(obj);
+try {
+
+ oTitle  = json.Title;
+ for(var j=0; j<json.weitereAnfangsdaten.length; j++){
+   var oDt = new Date(json.weitereAnfangsdaten[j]);
+   var oWeek = parseInt(getWeekNumber(oDt));
+   var tempKey = oWeek; 
+
+   if(items[tempKey]){
+      var arr = items[tempKey];
+      var oFlag = 0;
+      var ii = 0;
+
+      for(ii=0; ii<arr.length; ii++){
+        if(arr[ii]['title'] == oTitle){
+          arr[ii]['count'] = parseInt(arr[ii]['count'])+1;
+          items[tempKey] = arr;
+          oFlag = 1;
+          break;
+        }
+      }
+      if(oFlag == 0){ 
+         arr[ii] = [];
+         arr[ii]['title'] = oTitle;
+         arr[ii]['title'] = 1;
+         arr[ii]['title'] = 'Week '+ oWeek; 
+         items[tempKey] = arr;
+      }                   
+    } 
+    else{
+       var arr = [];
+       arr[0] = [];
+       arr[0]['title'] = oTitle;
+       arr[0]['count'] = 1;  
+       arr[0]['week'] = 'Week '+ oWeek;      
+       items[tempKey] = arr;
+    }      
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+
+for(key in items) { 
+  var oArr = items[key];
+  oShowData += '**'+oArr[0]['week'] + "**\n"; 
+  for(var i=0; i<oArr.length; i++){
+    oShowData += oArr[i]['title'] + "|"+ oArr[i]['count'] + "\n";
+  }  
+}
+
+
+function getWeekNumber(t) {
+  var date = new Date(t.getTime());
+  date.setHours(0, 0, 0, 0); 
+  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+  var week1 = new Date(date.getFullYear(), 0, 4); 
+  return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000- 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
+
+var oHeader = "** Datum** | **  Anzahl **\n";
+oHeader += "---|---\n";
+
+oShow = oHeader+oShowData;

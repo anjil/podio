@@ -1,0 +1,3 @@
+label: CourseStatus
+field_id: 113562930
+type: category

@@ -1,0 +1,3 @@
+label: Preis Staffel 2
+field_id: 129420905
+type: money

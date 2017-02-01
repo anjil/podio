@@ -1,0 +1,4 @@
+label: ReportingTile
+field_id: 131999440
+type: calculation
+script: @[Actions left for the current month](field_130701317)

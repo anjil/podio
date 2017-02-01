@@ -1,0 +1,27 @@
+label: Product Report
+field_id: 136999480
+type: calculation
+script: var oJson = @[All of JSON-Course](out_136999315_133618219)[0];
+var out   = "**Component**|**Wochen**\n";
+out      += "---|--- \n"
+
+  
+try {
+
+  if(oJson && oJson !='{}' && oJson !='[]'){
+    var oJsn     = JSON.parse(oJson);
+       
+    for (var ii=0; ii<oJsn.length; ii++){ 
+      if(oJsn[ii] && oJsn[ii]!='{}' && oJsn[ii]!='[]'){    
+        out    += oJsn[ii].Component +"|";     
+        out    += oJsn[ii].Wochen    +"\n";                   
+      }
+    } 
+  } 
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+out;
+

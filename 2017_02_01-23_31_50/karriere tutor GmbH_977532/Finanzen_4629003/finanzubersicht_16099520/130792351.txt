@@ -1,0 +1,11 @@
+label: Teilnehmer ID
+field_id: 130792351
+type: calculation
+script: var id = @[All of Teilnehmer ID](in_130785541_124752897) || [];
+var out = ' ';
+
+if(id.length > 0) {
+ out = id + '';
+}
+
+out

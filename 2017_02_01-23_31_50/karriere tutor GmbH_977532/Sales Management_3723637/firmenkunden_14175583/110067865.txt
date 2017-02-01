@@ -1,0 +1,3 @@
+label: Preis
+field_id: 110067865
+type: money

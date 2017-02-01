@@ -1,0 +1,5 @@
+label: BGS
+field_id: 124752446
+type: calculation
+script: var dt   = @[All of AktuellesDatum](out_128820243_128820289)[0];
+@[All of CustomerId](in_124665203_124752897)[0];

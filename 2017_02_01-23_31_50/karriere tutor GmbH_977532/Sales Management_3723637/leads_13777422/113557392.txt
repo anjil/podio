@@ -1,0 +1,3 @@
+label: LeadStatus
+field_id: 113557392
+type: category

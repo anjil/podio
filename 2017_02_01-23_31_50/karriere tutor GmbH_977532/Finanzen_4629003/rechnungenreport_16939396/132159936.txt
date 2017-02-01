@@ -1,0 +1,5 @@
+label: Calculation
+field_id: 132159936
+type: calculation
+script: var s = @[All of Calculation](in_132148137_132049808);
+s+'~~~'

@@ -1,0 +1,3 @@
+label: Dauer
+field_id: 134335857
+type: category

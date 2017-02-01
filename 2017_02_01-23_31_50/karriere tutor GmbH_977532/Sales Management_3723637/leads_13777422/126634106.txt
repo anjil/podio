@@ -1,0 +1,72 @@
+label: JSON-leads-und-anstehende-lehrgangsstarts
+field_id: 126634106
+type: calculation
+script: var oMabnahmen     = @[All of Maßnahmentitel](out_108135844_108285774);
+var oDatam         = @[Aufnahme Datum](field_105490284);
+var oCategory      = @[Category](field_127110688);
+var oAuftragsdatum = @[Auftragsdatum](field_108041451);
+var oStatus        = @[Status](field_105473431);
+var oAmount        = @[Calc_Lehrgangsgebuehren](field_113559188);
+var oReserviert    = @[Reserviert für Lehrgangsstart](field_134399100)||'';
+var oNachster      = @[Nächster Termin bei AA](field_134399101)||'';
+var oWahrschein    = @[Wahrscheinlichkeit](field_105473428)||0;
+var oleadOwner     = @[Lead owner](field_105473426)[0]||''
+var oVerkaufs      = @[Verkaufsschritte](field_114376806)+''||'';
+
+
+var myArray        = Array();
+var oShow          = '';
+var shwVerkaufs    = '';
+var t='~~';
+
+var VerkaufsArr = ['Tel Erstgespräch','Email Infopaket','Tel Erstberatung','Angebot erstellt','Nachfass Tel Erstberatung','Nachfass Email Infopaket','Demozugang'];
+
+try{
+
+ var tmpObj = {};
+ for (var i=0; i<oMabnahmen.length; i++){ 
+    tmpObj["Mabnahmen"] = oMabnahmen[i];
+    myArray[i]          = tmpObj; 
+    tmpObj              = {};
+  }
+
+}catch (e) {
+  "Could not parse JSON";
+}
+
+if(oVerkaufs && oVerkaufs!='null'){ 
+  if(oVerkaufs.indexOf(',')>-1){
+    var oArr = oVerkaufs.split(',');
+    var ind = -1;
+    for(var j=0; j<oArr.length; j++){
+      for(var i=6; i>=0; i--){
+        if(VerkaufsArr[i]==oArr[j]){
+          if(i > ind){
+            ind = i;
+            shwVerkaufs = VerkaufsArr[i]; 
+          }
+        }
+      }
+    }
+  }
+  else{
+    shwVerkaufs = oVerkaufs;
+  }  
+}
+
+var z={};
+z['category']            = oCategory;
+z['Datam']               = oDatam;
+z['Auftragsdatum']       = oAuftragsdatum;
+z['Status']              = oStatus;
+z['Amount']              = oAmount;
+z['Mabnahmen']           = myArray;
+z['Reserviert']          = oReserviert;
+z['Nachster']            = oNachster;
+z['Wahrschein']          = oWahrschein;
+z['leadsOwner']          = oleadOwner;
+z['Verkaufsschritte']    = shwVerkaufs;
+
+
+oShow = JSON.stringify(z);
+oShow;

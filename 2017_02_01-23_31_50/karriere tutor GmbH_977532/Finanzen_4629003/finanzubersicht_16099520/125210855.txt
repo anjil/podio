@@ -1,0 +1,62 @@
+label: JSON-ExpectedTransactions1
+field_id: 125210855
+type: calculation
+script: var oUniqueArr = @[All of Unique Id](in_125198678_125193630);
+var json = @[All of JSON-FinanceUbersicht](in_124762989_124752897)[0];
+var oDate = @[Adjusted Billing Start Date](field_125517113);
+var oDtS = @[Startdatum Bildungsgutschein](field_125198557);
+var oAmount = 0;
+var oShow = '';
+var jsonArr = [];
+var oArr = {};
+var oMonth = 1;
+var t='~~~';
+
+try {
+ var js = JSON.parse(json);
+
+ var oMonAdd = chkDateUse(oDate,oDtS);
+
+ for(var j=0; j<oUniqueArr.length; j++){
+   var oShowDate = null;
+   if(oDate){
+     oShowDate = new Date(oDate);
+     oShowDate.setMonth(oShowDate.getMonth() + oMonAdd);
+   }
+   oAmount = 0;
+   for (var i=0; i<js.length; i++){    
+     for(ii=0; ii<js[i].Datam.length; ii++){
+       var qty = js[i].Datam[ii].AnzahlRaten||0; 
+       var amt = js[i].Datam[ii].Rate||1;
+       if(qty > j){
+         oAmount += parseFloat(amt);
+       }
+     }
+   }
+ 
+  oArr['ExpectedId'] = oUniqueArr[j];
+  oArr['Amount'] = oAmount;
+  oArr['Date'] = oShowDate;
+  jsonArr[j] = oArr;
+  oArr = {};
+  oMonAdd++;
+ }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function chkDateUse(oDate,oDtS){
+  if(oDate && oDtS){
+    var d1 = new Date(oDate);
+    var d2 = new Date(oDtS);
+    if(d1.getTime() > d2.getTime()){
+      return 0;
+    }
+    else return 1;
+  }
+  return 0;
+}
+
+oShow= JSON.stringify(jsonArr);
+oShow

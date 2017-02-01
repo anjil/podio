@@ -1,0 +1,67 @@
+label: Kaufübersicht
+field_id: 124764482
+type: calculation
+script: var json = @[All of JSON-FinanceUbersicht](in_124762989_124752897)[0];
+var oTotalAmount = @[Total Amount](field_125744467);
+var oShowOutPutDetail = '';
+var outputHeader = '| Maßnahmentitel | Gebühren | Anzahl Raten | Rate |<br>';
+outputHeader += '|-----|-----:|-----:|-----:|<br>';
+var oShow = '';
+
+var oTotal = 0;
+
+try {
+
+ var js = JSON.parse(json); 
+ for (var i=0; i<js.length; i++){    
+   for(ii=0;ii<js[i].Datam.length;ii++){
+     var oQty = js[i].Datam[ii].AnzahlRaten || 0;
+
+     oShowOutPutDetail += '|' +            
+     DisplayName(js[i].Datam[ii].Maßnahmentitel) + '|' + 
+     DisplayData(js[i].Datam[ii].Gebuhren)+' €' + ' |' + 
+     oQty+ '|' + 
+     DisplayData(js[i].Datam[ii].Rate) + ' €' +' | <br>';
+
+     oTotal += js[i].Datam[ii].Gebuhren || 0;
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function DisplayData(str){
+  if(!str){
+   str = 0;
+   return str;
+  }
+  else {
+     str=str.toFixed(2).toString().replace(".", ",");
+     return str;
+  }
+}
+function DisplayName(str){
+  if(str == null || str == '' || str == 'null' || str == 'undefined')
+   return ""
+  else 
+  return str;
+}
+
+ if(oShowOutPutDetail){
+   var oRebate = oTotal - oTotalAmount;
+   oRebate = oRebate.toFixed(2).toString().replace(".", ",");
+
+   var oFAmount = parseFloat(oTotalAmount);
+   oFAmount = oFAmount.toFixed(2).toString().replace(".", ",");
+
+   oShowOutPutDetail += '|**' + "Rebatt" + '**|' +       
+         '-'+oRebate+' €' + ' |' +"&nbsp;"+ '|' + "&nbsp;" + ' | <br>';
+ 
+   oShowOutPutDetail += '|**' + "Gesamt" + '**|' +       
+       oFAmount+' €' + ' |' +"&nbsp;"+ '|' + "&nbsp;" + ' | <br>';
+ }
+
+oShow = outputHeader+oShowOutPutDetail;
+
+//comment for update

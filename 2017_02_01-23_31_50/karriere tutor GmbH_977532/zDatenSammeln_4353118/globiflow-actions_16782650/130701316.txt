@@ -1,0 +1,3 @@
+label: Actions left for the current hour
+field_id: 130701316
+type: number

@@ -1,0 +1,3 @@
+label: Kundenflag
+field_id: 139106650
+type: category

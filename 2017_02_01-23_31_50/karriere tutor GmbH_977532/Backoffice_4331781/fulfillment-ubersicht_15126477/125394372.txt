@@ -1,0 +1,93 @@
+label: Calculation
+field_id: 125394372
+type: calculation
+script: var out = ""
+var myDatum;
+var items = [];
+var oMn='';
+var t='';
+
+out = "**Art** | **Datum**\n";
+out += "---|---: \n"
+var jsPrufungn = @[All of JSON-Prufungen](out_123378265_118702791)
+
+
+try {
+  j = JSON.parse(@[JSON-Datum](field_118643640));
+
+  if(jsPrufungn && jsPrufungn !='[]'){  
+     items = getPrufArr(jsPrufungn);
+  } 
+    
+   for(i=0;i<j.Daten.length;i++) {
+     var oTag = new Date(j.Daten[i].Datum); 
+     myDatum = j.Daten[i].Datum;
+     if (j.Daten[i].Art == "Massnahme") {
+       out += "MN Start: "
+     }
+    // Hide Components
+     if (j.Daten[i].Art != "Komponente") {
+       oMn = j.Daten[i].Bezeichnung.substring(0,80);
+       out += j.Daten[i].Bezeichnung.substring(0,80) + "|";
+       out += moment(myDatum).format("dd DD.MM.YYYY")+"\n";
+      
+
+
+
+   for(var k=0; k<items.length; k++) { 
+     var oCalcLeh = items[k]['CalcLeh'];
+     if(oCalcLeh.indexOf(oMn) > -1){
+      var oPdate = new Date(items[k]['date']);
+      var oT=(items[k]['title'])? items[k]['title']+': ' : '';
+      out += oT +" : "+items[k]['status']+ "|";
+      out += moment(oPdate).format("dd DD.MM.YYYY")+"\n"; 
+    }
+  }
+        
+
+
+
+
+     } 
+   }
+} catch (e) {
+  "Could not parse JSON"
+}
+
+function DisplayName(str){
+  var ostr = str;
+  if(ostr == null || ostr == '' || ostr == 'null' || ostr == 'undefined' || ostr == undefined){
+   return "";
+  }
+  else {
+    return str;
+  }
+}
+
+function getPrufArr(jsPrufungn){
+
+  var oArr = [];
+  var tempArr ={};
+  var ii = 0;
+  jsPrArr = JSON.parse(jsPrufungn); 
+  for(var i=0; i<jsPrArr.length; i++){
+     var oDt = new Date(jsPrArr[i]['Prufungsdatum']);
+
+     if(!isNaN(oDt.getTime())){
+        var oStatus = DisplayName(jsPrArr[i]['Status']);
+        var oTitle = DisplayName(jsPrArr[i]['Title']); 
+        var oCalcLeh = jsPrArr[i]['CalcLehrgang']   
+        tempArr['title'] = oTitle;
+        tempArr['status'] = oStatus;  
+        tempArr['date'] = oDt; 
+        tempArr['CalcLeh'] = oCalcLeh;    
+        oArr[ii] = tempArr;
+        tempArr = {};
+        ii++;      
+     }
+  }
+   return oArr;
+}
+
+out
+

@@ -1,0 +1,10 @@
+label: Create Payment (yes=1)
+field_id: 131259074
+type: calculation
+script: var pid = @[All of Payment Id](in_131067729_131003524)[0]||'';
+var odt = @[Lizenz bezahlt wann](field_130667169)||'';
+
+if(!pid && odt)
+1
+else
+0

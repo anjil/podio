@@ -1,0 +1,9 @@
+label: Calculation
+field_id: 129834957
+type: calculation
+script: var a=@[All of JSON-Lehrgangs-Lizenze](in_129506424_128735467)
+//a.length
+a+''
+
+
+

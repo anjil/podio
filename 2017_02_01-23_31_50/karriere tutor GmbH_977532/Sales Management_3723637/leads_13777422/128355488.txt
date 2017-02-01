@@ -1,0 +1,3 @@
+label: Erstelldatum Angebot
+field_id: 128355488
+type: date

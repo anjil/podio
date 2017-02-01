@@ -1,0 +1,35 @@
+label: Mismatch Report (yes=1)
+field_id: 132664069
+type: calculation
+script: var oLizReportData = @[All of Month-Year](out_130401598_132143897)||[];
+var oLizMonYear    = @[Lizenze Month-Year](field_130404987) || '';
+var objArr         = [];
+var ind            = 0;
+var oShow          = 1;
+
+if(oLizMonYear){
+  var arr  =  oLizMonYear.split(','); 
+  for(var i=0; i<arr.length; i++){
+    objArr.push(arr[i]);
+  } 
+}            
+if(oLizReportData){ 
+  for(var i=0; i<oLizReportData.length; i++){
+    if(objArr.length > 0){    
+      if(objArr.indexOf(oLizReportData[i])> -1){         
+        ind++;                 
+      }
+    }
+  }
+} 
+
+if(oLizReportData){ 
+  if(ind == oLizReportData.length && 
+     objArr.length == oLizReportData.length) 
+     oShow =0; 
+}
+if(!oLizMonYear && !oLizReportData){
+  oShow = 0;
+}
+
+oShow;      

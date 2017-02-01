@@ -1,0 +1,7 @@
+label: Forderungsausfall (1=Ja)
+field_id: 139060979
+type: calculation
+script: var out=parseInt(0)
+var Data = @[All of Austrittsdatum](out_130741928_131003524)[0]
+if (Data != null) { out = parseInt(1)}
+out

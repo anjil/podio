@@ -1,0 +1,4 @@
+label: Zip
+field_id: 133681065
+type: calculation
+script: @[All of zip](out_136107023_136112743)[0]

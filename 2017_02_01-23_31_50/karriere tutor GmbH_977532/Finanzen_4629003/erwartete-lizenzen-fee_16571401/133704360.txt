@@ -1,0 +1,11 @@
+label: JSON-LizenzenPayment
+field_id: 133704360
+type: calculation
+script: var z                  = {};
+z['Lehrgang']          = @[All of Titel](out_116446197_133189946)[0]||'';
+z['paymentId']         = @[All of Payment Id](in_131067729_131003524)+'';
+z['Lizenzen']          = @[Lizenzen](field_129630080);
+z['PaymentDate']       = @[All of Lizenz bezahlt wann](in_131285056_131003524)[0]||'';
+
+
+JSON.stringify(z);

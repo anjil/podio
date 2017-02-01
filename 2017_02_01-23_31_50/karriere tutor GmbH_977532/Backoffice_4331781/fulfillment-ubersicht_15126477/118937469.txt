@@ -1,0 +1,22 @@
+label: CalcMN
+field_id: 118937469
+type: calculation
+script: var j;
+var out = "";
+var myBool = null;
+
+try {
+  j = JSON.parse(@[All of JSON-Data](in_118628182_117225519));
+  for(i=0;i<j.Massnahmen.length;i++) {
+    // Massnahmenstart
+    if (myBool!=null) {
+      out += ", ";
+      myBool = 1;
+      }
+    out += j.Massnahmen[i].Titel;
+  }
+} catch (e) {
+  "Could not parse JSON"
+}
+out += " ";
+out

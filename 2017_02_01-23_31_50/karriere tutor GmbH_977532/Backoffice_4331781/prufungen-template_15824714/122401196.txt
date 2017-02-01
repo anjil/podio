@@ -1,0 +1,3 @@
+label: Ergebnis
+field_id: 122401196
+type: category

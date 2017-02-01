@@ -1,0 +1,6 @@
+label: -
+field_id: 114376805
+type: calculation
+script: @[Auftragsdatum](field_108041451)
+out = "**Überblick:**"+"\n\n"+ "----"
+out

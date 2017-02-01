@@ -1,0 +1,18 @@
+label: JSON-Voucher
+field_id: 127692075
+type: calculation
+script: var z = {};
+var oModul = @[Modul](field_127692066)||'';
+var oName = @[Name](field_127692068)||'';
+var oStr = '';
+oStr = oModul;
+if(oStr){
+  if(oName){
+     oStr = oStr+', '+oName;
+  }
+}
+
+z["Title"] = oStr;
+z["GultigAb"]= @[Gültig ab](field_127692069);
+
+JSON.stringify(z);

@@ -1,0 +1,6 @@
+label: Missing Maßnahmen Details (yes=1)
+field_id: 124381840
+type: calculation
+script: var oerr = @[All of Missing Maßnahmen Details (yes=1)](out_124380270_118702791);
+
+parseInt(oerr);

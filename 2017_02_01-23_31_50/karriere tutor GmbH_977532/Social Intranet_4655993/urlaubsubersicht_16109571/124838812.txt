@@ -1,0 +1,3 @@
+label: Genehmigungsstatus
+field_id: 124838812
+type: category

@@ -1,0 +1,3 @@
+label: Urlaubstage
+field_id: 114228927
+type: number

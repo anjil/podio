@@ -1,0 +1,11 @@
+label: Transaction Year
+field_id: 124034513
+type: calculation
+script: var oD = @[Buchungstag](field_124021916);
+var oShow = ''
+if(oD){
+  var oDate = new Date(oD);
+  var oY = oDate.getFullYear();
+  oShow += oY;
+}
+oShow;

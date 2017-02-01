@@ -1,0 +1,3 @@
+label: Lehrgang
+field_id: 129630079
+type: category

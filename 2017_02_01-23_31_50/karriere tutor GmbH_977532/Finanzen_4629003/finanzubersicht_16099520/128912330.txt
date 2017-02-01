@@ -1,0 +1,31 @@
+label: Difference (Expected lizenzen vs Actual lizenzen)
+field_id: 128912330
+type: calculation
+script: var oTotal  = 0;
+try {
+
+ var jj   = @[All of JSON-Lizenzen](out_130128007_129089854)[0];
+ if(jj && jj!='{}' && jj!='[]'){
+   var oJsn = JSON.parse(jj);   
+   for (var ii=0; ii<oJsn.length; ii++){ 
+     if(oJsn[ii] && oJsn[ii]!='{}'){       
+        oTotal += parseInt(oJsn[ii].Rate);       
+     }
+   }
+ }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+var oExpectedTran = oTotal||0;
+var oActualTran = @[All of lizenzen Id](in_128895839_128884745)||[];
+var oShow = oExpectedTran;
+
+if(oActualTran){
+  if(parseInt(oActualTran.length) == parseInt(oExpectedTran))
+    oShow = 0;
+  else
+    oShow = oExpectedTran - oActualTran.length;
+}
+oShow;

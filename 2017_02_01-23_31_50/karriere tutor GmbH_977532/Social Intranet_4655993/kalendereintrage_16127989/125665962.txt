@@ -1,0 +1,4 @@
+label: Hidden Datum
+field_id: 125665962
+type: calculation
+script: @[All of Nächster Geburtstag](in_124788038_125001268)[0]

@@ -1,0 +1,3 @@
+label: Status Kursnet invertiert
+field_id: 131823679
+type: category

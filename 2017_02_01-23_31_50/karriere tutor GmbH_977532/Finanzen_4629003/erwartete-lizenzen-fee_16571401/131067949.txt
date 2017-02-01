@@ -1,0 +1,24 @@
+label: JSON-ErwarteteLiz-Payment
+field_id: 131067949
+type: calculation
+script: var oArrStatus = {};
+oArrStatus['erstellt']     = 'erstellt';
+oArrStatus['vor LG']       = 'Lehrgang noch nicht begonnen';
+oArrStatus['im LG']        = 'Im Lehrgang';
+oArrStatus['LG fertig']    = 'Lehrgang erfolgreich abgeschlossen'; 
+oArrStatus['LG NE fertig'] = 'Lehrgang nicht erfolgreich abgeschlossen';
+oArrStatus['Problem']      = 'Problem';
+
+
+var z                  = {};
+z['ExpId']             = @[Unique ID](item_app_item_id);
+z['paymentId']         = @[All of Payment Id](in_131067729_131003524)+'';
+z['LizBezahltWann']    = @[All of Lizenz bezahlt wann](in_131285056_131003524)[0];
+z['Lehrgang']          = @[All of Titel](out_116446197_133189946)[0];
+z['Lizenzen']          = @[Lizenzen](field_129630080);
+z['Status']            = @[Status](field_129777825);
+z['Rate']              = @[Rate](field_130763189);
+z['FullStatus']        = oArrStatus[@[Status](field_129777825)];
+
+
+JSON.stringify(z);

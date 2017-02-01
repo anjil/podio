@@ -1,0 +1,3 @@
+label: Kategorien
+field_id: 121121855
+type: category

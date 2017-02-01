@@ -1,0 +1,23 @@
+label: Sales Quarter
+field_id: 127404414
+type: calculation
+script: var oD = @[Auftragsdatum](field_108041451);
+var oShow = ''
+if(oD){
+  var oDate  = new Date(oD);
+  var oMonth = oDate.getMonth();
+  if(oMonth<=2){
+    oShow += 'Q1';
+  }
+  if(oMonth>2 && oMonth<=5){
+    oShow += 'Q2';
+  }
+  if(oMonth>5 && oMonth<=8){
+    oShow += 'Q3';
+  }
+  if(oMonth>8 && oMonth<=11){
+    oShow += 'Q4';
+  }
+  
+}
+oShow;

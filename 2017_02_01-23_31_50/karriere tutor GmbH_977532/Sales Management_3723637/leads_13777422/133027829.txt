@@ -1,0 +1,4 @@
+label: Maßnahmennummer
+field_id: 133027829
+type: calculation
+script: @[All of Maßnahmen Nr.](out_108136587_108285774)[0]

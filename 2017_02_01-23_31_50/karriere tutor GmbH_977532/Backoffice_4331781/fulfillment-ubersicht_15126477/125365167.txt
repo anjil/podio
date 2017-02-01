@@ -1,0 +1,82 @@
+label: Calculation
+field_id: 125365167
+type: calculation
+script: var items = [];
+var t='';
+var oShow=''
+
+var jsPrufungn = @[All of JSON-Prufungen](out_123378265_118702791)
+
+
+try {
+
+
+   if(jsPrufungn && jsPrufungn !='[]'){  
+     items = getPrufArr(jsPrufungn);
+     items.sort(function(a, b) {
+       a = a[0]['date'];
+       b = b[0]['date']
+       return a < b ? -1 : (a > b ? 1 : 0);
+    });
+   } 
+   
+} catch (e) {
+  "Could not parse JSON"
+}
+
+function DisplayName(str){
+  var ostr = str;
+  if(ostr == null || ostr == '' || ostr == 'null' || ostr == 'undefined' || ostr == undefined){
+   return "";
+  }
+  else {
+    return str;
+  }
+}
+
+function getPrufArr(jsPrufungn){
+
+  var oArr = [];
+   jsPrArr = JSON.parse(jsPrufungn); 
+
+   for(var i=0; i<jsPrArr.length; i++){
+     var oDt = new Date(jsPrArr[i]['Prufungsdatum']);
+
+     if(!isNaN(oDt.getTime())){
+        var oStatus = DisplayName(jsPrArr[i]['Status']);
+        var oTitle = DisplayName(jsPrArr[i]['Title']); 
+        var oCalcLeh = jsPrArr[i]['CalcLehrgang']       
+        //oDt = moment(oDt).format("dd DD.MM.YYYY"); 
+
+        var tempKey = oDt; 
+        if(oArr[tempKey]){
+           var arr = oArr[tempKey];
+           var j = arr.length;
+           arr[j] = [];
+           arr[j]['title'] = oTitle;
+           arr[j]['status'] = oStatus;  
+           arr[j]['date'] = oDt;     
+           oArr[tempKey] = arr;                     
+        } 
+        else{
+           var arr = [];
+           arr[0] = [];
+           arr[0]['title'] = oTitle;
+           arr[0]['status'] = oStatus;  
+           arr[0]['date'] = oDt;     
+           oArr[tempKey] = arr;
+        }      
+     }
+  }
+   return oArr;
+}
+
+
+for(key in items) { 
+  var oArr = items[key];
+  for(var k=0; k<oArr.length; k++){
+  oShow += '~~~~'+oArr[k]['title'] +oArr[k]['date'] + oArr[k]['status']+'<br>' ;
+           }
+         } 
+        
+oShow

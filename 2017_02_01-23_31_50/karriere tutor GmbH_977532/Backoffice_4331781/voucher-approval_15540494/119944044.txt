@@ -1,0 +1,3 @@
+label: Prüfungstyp
+field_id: 119944044
+type: category

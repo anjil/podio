@@ -1,0 +1,80 @@
+label: WeitereAnfangsdaten
+field_id: 123292291
+type: calculation
+script: var js = @[All of JSON-FFMTStatistiken](out_120624685_120622004);
+var oShow = '';
+var oShowData = '';
+var items = [];
+var oTitle = '';
+try {
+
+for(var jso=0; jso<js.length; jso++){
+  var json = JSON.parse(js[jso]);
+  oTitle  = json.Title;
+  for(var j=0; j<json.weitereAnfangsdaten.length; j++){
+    var oDt = new Date(json.weitereAnfangsdaten[j]);
+    var oWeek = parseInt(getWeekNumber(oDt));
+    var tempKey = oWeek; 
+
+     if(items[tempKey]){
+       var arr = items[tempKey];
+       var oFlag = 0;
+       var ii = 0;
+       for(ii=0; ii<arr.length; ii++){
+       if(arr[ii]['title'] == oTitle){
+           arr[ii]['count'] = parseInt(arr[ii]['count'])+1;
+           items[tempKey] = arr;
+           oFlag = 1;
+           break;
+       }
+      }
+      if(oFlag == 0){ 
+         arr[ii] = [];
+         arr[ii]['title'] = oTitle;
+         arr[ii]['count'] = 1;
+         arr[ii]['week'] = 'Week '+ oWeek; 
+         items[tempKey] = arr;
+      }                   
+     } 
+     else{
+       var arr = [];
+       arr[0] = [];
+       arr[0]['title'] = oTitle;
+       arr[0]['count'] = 1;  
+       arr[0]['week'] = 'Week '+ oWeek;      
+       items[tempKey] = arr;
+     }      
+   }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+
+for(key in items) { 
+  var oArr = items[key];
+  oShowData +=' |**' +oArr[0]['week'] +'** |<br>';
+  for(var i=0; i<oArr.length; i++){
+     oShowData += '| ' +oArr[i]['title']+ ' |' +oArr[i]['count'] +' |<br>';
+
+  }  
+}
+
+function getWeekNumber(t) {
+  var date = new Date(t.getTime());
+  date.setHours(0, 0, 0, 0); 
+  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+  var week1 = new Date(date.getFullYear(), 0, 4); 
+  return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000- 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
+if(oShowData != ''){
+
+  var oHeader = '|** Datum **|**  Anzahl **|<br>'
+  oHeader += '|------|-----|<br>'
+
+  oShow += oHeader+oShowData;
+}
+
+oShow+' ';

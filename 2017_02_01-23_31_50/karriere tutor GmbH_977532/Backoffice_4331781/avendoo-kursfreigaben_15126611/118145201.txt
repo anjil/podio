@@ -1,0 +1,4 @@
+label: JSON-TEST
+field_id: 118145201
+type: calculation
+script: '"' + @[Titel](field_116411445) + '"'

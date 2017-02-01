@@ -1,0 +1,3 @@
+label: Ergebnis Forderungsmanagement
+field_id: 128595749
+type: category

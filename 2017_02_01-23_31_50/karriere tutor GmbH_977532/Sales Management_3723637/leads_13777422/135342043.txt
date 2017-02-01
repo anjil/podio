@@ -1,0 +1,21 @@
+label: Error (Reportubersicht-weekly)
+field_id: 135342043
+type: calculation
+script: var leadsWeek  = @[Leads Week](field_134090455);
+var salesWeek  = @[Sales Week](field_134090584);
+var rLeadsWeek = @[All of Week](out_134089176_134090920)[0];
+var rSalesWeek = @[All of Week](out_134089176_134090921)[0];
+var oStatus    = @[Status](field_105473431);
+var Mabnahme   =  @[All of Maßnahmentitel](out_108135844_108285774)+'';
+var oShow      = 0;
+
+var hasSalesStatus = (oStatus == 'Auftrag' || oStatus == 'Auftragsbearbeitung abgeschlossen') ? 'y' : 'n'
+
+if(Mabnahme.length>0){
+  if(leadsWeek != rLeadsWeek) oShow = 1;
+  else if (hasSalesStatus == 'y'){
+    if(salesWeek != rSalesWeek) oShow = 2;
+  }
+}
+
+oShow;

@@ -1,0 +1,9 @@
+label: Total finanzubersicht
+field_id: 126624830
+type: calculation
+script: var oCust = @[All of Name](out_124789926_124753397)||[]
+var oShow = 0;
+if(oCust){
+  oShow = oCust.length;
+}
+oShow;

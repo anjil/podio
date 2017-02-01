@@ -1,0 +1,3 @@
+label: abgefragter 1. Geldeingang
+field_id: 109967407
+type: date

@@ -1,0 +1,264 @@
+label: Calculation
+field_id: 127244188
+type: calculation
+script: var oMabnahmen   = @[All of Maßnahmentitel](out_108135844_108285774);
+var oTotalAmt    = @[Calc_Lehrgangsgebuehren](field_113559188)||0;
+var myArray      = Array();
+var oItems       = '';
+var oCategory    = '';
+var oCatSummary  = ''; 
+var oAgile       = '';
+var oQMS         = '';
+var oITIL        = '';
+var oOMMeinzeln  = '';
+var oOMMKombo    = '';
+var oManagement  = '';
+var oFachkraft   = '';
+var oOthers      = '';
+var str          = '';
+var oFlag        = 0;
+
+var t='~~';
+
+for (var i=0; i<oMabnahmen.length; i++){ 
+  oFlag = 0;
+  myArray[i] = oMabnahmen[i]; 
+  str        = myArray[i];
+
+  if(oFlag == 0 && str.indexOf('Scrum')> -1){
+     oAgile        = (oAgile)? oAgile+','+str : str;
+     oFlag         =  1;
+  }
+
+  if(oFlag == 0 && str.indexOf('Six Sigma')> -1){
+     oQMS          = (oQMS)? oQMS+','+str : str;
+     oFlag         =  1;
+  } 
+
+  if(oFlag == 0 && (str.indexOf('ITIL')> -1 || 
+     str.indexOf('PRINCE2')> -1 || 
+     str.indexOf('CTO')> -1)){
+     oITIL         = (oITIL)? oITIL+','+str : str;
+     oFlag         = 1;
+  } 
+
+  if(oFlag == 0 && str.indexOf('Online Marketing Manager')> -1){
+     oOMMeinzeln   = (oOMMeinzeln)? oOMMeinzeln+','+str : str;
+     oFlag         = 1;
+  } 
+
+  if(oFlag == 0 && (str.indexOf('E-Commerce')> -1 || 
+     str.indexOf('Social Media Manager')> -1      ||
+     str.indexOf('Mobile Business')> -1           ||
+     str.indexOf('Suchmaschinenmarketing')> -1 )){
+     oOMMKombo     = (oOMMKombo)? oOMMKombo+','+str : str;
+     oFlag         = 1;
+  } 
+
+  if(oFlag == 0 && (str.indexOf('Vertriebsleiter')> -1 || 
+     str.indexOf('Business Development Manager')> -1   || 
+     str.indexOf('Vom Mitarbeiter zur Führungskraft')> -1 ||
+     str.indexOf('vom Mitarbeiter zur Führungskraft Management')> -1)){
+     oManagement   = (oManagement)? oManagement+','+str : str;
+     oFlag         = 1;
+  } 
+
+  if(oFlag == 0 && str.indexOf('Bilanzbuchhalter')> -1){
+     oFachkraft    = (oFachkraft)? oFachkraft+','+str : str;
+     oFlag         = 1;
+  }
+  
+  if(oFlag == 0){
+     oOthers       = (oOthers)? oOthers+','+str : str;
+     oFlag         = 1;
+  }
+
+}
+
+function chkCategory(oCategory, oNewCategory){
+
+  var oSetCategory = "";
+  var oCatArr      = [];
+  oCatArr[0]       = "QMS,QMS IT,IT Small,IT Medium,Agile,Scrum,CTO,             Agile IT Small,Agile IT Medium,Agile CTO,Agile QMS,Agile QMS IT";
+  oCatArr[1]       = "OMM einzeln,OMM Kombo,OMM sonst";
+  oCatArr[2]       = "Management";
+  oCatArr[3]       = "Fachkraft";
+
+
+  if(oCatArr[0].indexOf(oCategory)>-1){
+     if(oCatArr[0].indexOf(oNewCategory)>-1){
+        oSetCategory = oNewCategory;
+     }
+     else{
+        oSetCategory = "sonst Kombo";
+     }
+  }
+  else if(oCatArr[1].indexOf(oCategory)>-1){
+     if(oCatArr[1].indexOf(oNewCategory)>-1){
+        oSetCategory = oNewCategory;
+     }
+     else{
+        oSetCategory = "sonst Kombo";
+     }
+  }
+  else if(oCatArr[2].indexOf(oCategory)>-1){
+     if(oCatArr[2].indexOf(oNewCategory)>-1){
+        oSetCategory = oNewCategory;
+     }
+     else{
+        oSetCategory = "sonst Kombo";
+     }
+  }
+  else if(oCatArr[3].indexOf(oCategory)>-1){
+     if(oCatArr[3].indexOf(oNewCategory)>-1){
+        oSetCategory = oNewCategory;
+     }
+     else{
+        oSetCategory = "sonst Kombo";
+     }
+  }
+  else{
+     oSetCategory = "sonst Kombo";
+  }
+
+  return oSetCategory;
+ 
+}
+
+if(oQMS && !oOthers){ 
+  if(oCategory){
+     oCategory = chkCategory(oCategory,'QMS');
+  }
+  else{
+     oCategory = 'QMS';
+  }   
+}
+if(oAgile && !oOthers){ 
+  if(oCategory){
+     oCategory = chkCategory(oCategory,'Scrum');
+  }
+  else{
+     oCategory = 'Scrum';
+  } 
+}
+if(oOMMeinzeln && !oOthers){ 
+  if(oCategory){
+     oCategory = chkCategory(oCategory,'OMM einzeln');
+  }
+  else{
+    oCategory = 'OMM einzeln';
+  }   
+}
+if(oOMMeinzeln && oOMMKombo && !oOthers){ 
+  if(oCategory){
+     oCategory = chkCategory(oCategory,'OMM Kombo');
+  }
+  else{
+    oCategory = 'OMM Kombo';
+  }
+}
+if(!oOMMeinzeln && oOMMKombo && !oOthers){ 
+  if(oCategory){
+     oCategory = chkCategory(oCategory,'OMM sonst');
+  }
+  else{
+    oCategory = 'OMM sonst';
+  } 
+}
+if(oManagement && !oOthers){ 
+  if(oCategory){
+     oCategory = chkCategory(oCategory,'Management');
+  }
+  else{
+    oCategory = 'Management';
+  } 
+}
+if(oFachkraft && !oOthers){ 
+  if(oCategory){
+     oCategory = chkCategory(oCategory,'Fachkraft');
+  }
+  else{
+    oCategory = 'Fachkraft';
+  }    
+}
+if(oITIL && !oOthers && (parseFloat(oTotalAmt)< 3000)){ 
+  if(oCategory){
+     oCategory = chkCategory(oCategory,'IT Small');
+  }
+  else{
+    oCategory = 'IT Small';
+  } 
+}
+if(oITIL && !oOthers && (parseFloat(oTotalAmt)> 3000 && 
+   parseFloat(oTotalAmt)< 8000 )){ 
+   if(oCategory){
+      oCategory = chkCategory(oCategory,'IT Medium');
+   }
+   else{
+      oCategory = 'IT Medium';
+   }
+}
+if(oITIL && !oOthers && (parseFloat(oTotalAmt)> 8000)){ 
+   if(oCategory){
+      oCategory = chkCategory(oCategory,'CTO');
+   }
+   else{
+      oCategory = 'CTO';
+   }
+}
+if(oITIL && !oOthers && (parseFloat(oTotalAmt)< 3000) && oAgile){ 
+   if(oCategory){
+      oCategory = chkCategory(oCategory,'Agile IT Small');
+   }
+   else{
+      oCategory = 'Agile IT Small';
+   }   
+}
+if(oITIL && !oOthers && (parseFloat(oTotalAmt)> 3000 && 
+   parseFloat(oTotalAmt)< 8000 ) && oAgile){ 
+   if(oCategory){
+      oCategory = chkCategory(oCategory,'Agile IT Medium');
+   }
+   else{
+      oCategory = 'Agile IT Medium';
+   }    
+}
+if(oITIL && !oOthers && (parseFloat(oTotalAmt)> 8000) && oAgile){ 
+   if(oCategory){
+      oCategory = chkCategory(oCategory,'Agile CTO');
+   }
+   else{
+      oCategory = 'Agile CTO';
+   }     
+}
+if(oQMS && oITIL && !oOthers){ 
+   if(oCategory){
+      oCategory = chkCategory(oCategory,'QMS IT');
+   }
+   else{
+      oCategory = 'QMS IT';
+   }  
+}
+if(oQMS && oAgile && !oOthers){ 
+   if(oCategory){
+      oCategory = chkCategory(oCategory,'Agile QMS');
+   }
+   else{
+      oCategory = 'Agile QMS';
+   }    
+}
+if(oQMS && oITIL && oAgile && !oOthers){ 
+   if(oCategory){
+      oCategory = chkCategory(oCategory,'Agile QMS IT');
+   }
+   else{
+      oCategory = 'Agile QMS IT';
+   }
+}
+
+if(oCategory == "" && oOthers){ 
+   oCategory = 'sonst Kombo';
+}
+
+
+oCategory+'';

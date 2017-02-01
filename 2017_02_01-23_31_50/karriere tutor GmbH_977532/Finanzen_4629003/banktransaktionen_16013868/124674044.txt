@@ -1,0 +1,32 @@
+label: CustomerID
+field_id: 124674044
+type: calculation
+script: var oStr = @[VWZ1](field_124021920)+@[VWZ2](field_124021921)+@[VWZ3](field_124021922)+@[VWZ4](field_124021924)+@[VWZ5](field_124021925);
+var oShow = getCustId(oStr);
+
+function getCustId(oStr){
+  var oResult = '';
+  var regex=/^[0-9]+$/;
+  var cregex=/^[a-zA-Z]+$/;
+  var ii = 0;
+  for(var i=0; i<oStr.length; i++){
+    if(oStr[i].match(regex) && ii != 3){
+       oResult += oStr[i];
+       ii++;
+    }  
+    else if(oStr[i].match(cregex) && ii==3){
+       oResult += oStr[i];
+       ii++;
+    } 
+    else{
+       ii = 0;
+       oResult = '';
+    }
+    if(oResult.length == 10){
+      break;
+    }
+  }
+  return oResult;
+}
+
+oShow;

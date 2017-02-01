@@ -1,0 +1,3 @@
+label: Partnership likelihood
+field_id: 116791057
+type: progress

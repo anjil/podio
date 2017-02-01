@@ -1,0 +1,23 @@
+label: JSON-Module Details
+field_id: 137681390
+type: calculation
+script: var myArray = Array();
+var tmpObj  = {};
+try {
+ 
+ var json= @[All of JSON-Module Details](in_137681314_118873889);
+ for (var ii=0; ii<json.length; ii++){ 
+   var x = JSON.parse(json[ii]);  
+   tmpObj["ComponentName"] = x["ComponentName"];
+   tmpObj["OutOfTime"]     =  x["OutOfTime"];
+   tmpObj["EndDate"]       =  x["EndDate"];
+   myArray[ii]             = tmpObj; 
+   tmpObj = {};
+ }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+
+JSON.stringify(myArray);

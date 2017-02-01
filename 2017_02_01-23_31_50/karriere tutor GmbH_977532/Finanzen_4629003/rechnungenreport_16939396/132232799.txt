@@ -1,0 +1,5 @@
+label: Calculation
+field_id: 132232799
+type: calculation
+script: var s=@[All of JSON-Erwartete-Zahlungseingange](in_125563047_132230279)
+s.length+'~~~'

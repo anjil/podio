@@ -1,0 +1,9 @@
+label: Systematik Data for API
+field_id: 134122516
+type: calculation
+script: var data = {};
+
+data['Systematik ID'] = @[Systematik ID](field_127782452)
+data['Systematik Name'] = @[Systematik Name](field_127782561)
+
+JSON.stringify(data)

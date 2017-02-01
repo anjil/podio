@@ -1,0 +1,21 @@
+label: Alter (wird)
+field_id: 124789473
+type: calculation
+script: var out = @[Geburtsdatum](field_124762358)
+var myMonth = @[Geburtsdatum](field_124762358).getMonth()
+var myDay = @[Geburtsdatum](field_124762358).getDate()
+var  oAktuellesDatum = @[All of AktuellesDatum](out_128820243_129328929)[0];
+var d = new Date();
+var myCurrYear = d.getFullYear()
+var myNewDate = new Date(myCurrYear, myMonth, myDay, 0, 0, 0, 0);
+var myDiff = 0
+if (myNewDate < d) {
+  myNewDate = new Date(myCurrYear+1, myMonth, myDay, 0, 0, 0, 0);
+  myDiff = 1
+} 
+out = myNewDate
+//
+//
+var myYear = @[Geburtsdatum](field_124762358).getFullYear()
+out = myCurrYear - myYear + myDiff
+//out.toFixed(0)

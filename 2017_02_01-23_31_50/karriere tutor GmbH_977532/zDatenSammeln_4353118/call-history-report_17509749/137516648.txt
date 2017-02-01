@@ -1,0 +1,149 @@
+label: Report
+field_id: 137516648
+type: calculation
+script: var oJsn      = @[All of JSON-CallHistory](in_137506428_137013915);
+var fDate     = @[From Date](field_137610928) ||'';
+var tDate     = @[To Date](field_137610929)   ||'';
+var oShow     = '';
+var oData     = '';
+oData        += '|**LocalURI**|**Missed**|**Incoming**|<br>';
+oData        += '|--------|---------|---------|<br>';
+
+var oItems    = [];
+var t='~~~'
+try {
+  if(oJsn && oJsn!='{}' && oJsn!='[]'){
+    getDetails(oJsn);
+  }
+  if(oItems){  
+    printReport();
+  }
+}catch (e) {
+  "Could not parse JSON";
+}
+
+function printReport(){  
+  var tuples = [];
+  for (var key in oItems) tuples.push([key, oItems[key]]);
+
+  for (var i=0; i<tuples.length; i++) {
+    var oTKey      = tuples[i][0];  
+    var oTVal      = tuples[i][1];  
+
+    oData         += '|'+oTKey;
+    oData         += '|'+oTVal['Missed']; 
+    oData         += '|'+oTVal['Incoming']; 
+    oData         += '| <br>';
+  } 
+}   
+
+
+function getDetails(DArr){
+  for(var i=0; i<DArr.length; i++){
+    if(DArr[i]){        
+      var js   = JSON.parse(DArr[i]);  
+      var dt   = js.Timestamp || ''; 
+      var chk  = 0;
+
+      if(dt){
+        if(fDate && tDate){
+          chk = dateCompair1(fDate,tDate, dt);
+        }
+        else if(!fDate && tDate){
+          chk = dateCompair22(tDate, dt);
+        }
+        else if(fDate && !tDate){
+          chk = dateCompair3(fDate, dt);
+        }
+        else if(!fDate && !tDate){
+          chk = 1;
+        }
+      }
+      else if(!dt){
+        if(!fDate && !tDate){
+          chk = 1;
+        }
+      }
+
+      if(chk == 1){
+        var tKey = js.LocalUri;      
+        if(oItems[tKey]){
+          var arr           = oItems[tKey];
+          if(js.Status == 'Missed'){
+            arr["Missed"] = parseInt(arr["Missed"]) + 1;
+          }
+          else if(js.Status == 'Incoming'){
+            arr["Incoming"] = parseInt(arr["Incoming"]) + 1;
+          }
+          else if(js.Status == 'Outgoing'){
+            arr["Outgoing"] = parseInt(arr["Outgoing"]) + 1;
+          }        
+          oItems[tKey]      = arr;          
+        } 
+        else{
+          var arr           = [];
+          arr["Missed"]     = (js.Status == 'Missed')   ? 1 : 0;
+          arr["Incoming"]   = (js.Status == 'Incoming') ? 1 : 0;
+          arr["Outgoing"]   = (js.Status == 'Outgoing') ? 1 : 0;
+          oItems[tKey]      = arr; 
+        }   
+      } 
+    }
+  }
+}
+ 
+
+function dateCompair1(fD,tD, dd){
+  var d  = new Date(dd);
+  var d1 = new Date(fD.getFullYear(),fD.getMonth(),fD.getDate());  
+  var d2 = new Date(tD.getFullYear(),tD.getMonth(),tD.getDate()); 
+  var d3 = new Date(d.getFullYear(),d.getMonth(),d.getDate()); 
+            
+  if (d3.getTime() >= d1.getTime() && d3.getTime() <= d2.getTime()){
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+function dateCompair2(tD, d){
+  var d2 = new Date(tD);  
+  var d3 = new Date(d);               
+  if (d3.getTime() <= d2.getTime()){
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+
+function dateCompair22(tD, dd){
+  var d  = new Date(dd);
+  var d2 = new Date(tD.getFullYear(),tD.getMonth(),tD.getDate());   
+  var d3 = new Date(d.getFullYear(),d.getMonth(),d.getDate());  
+      
+  if (d3.getTime() <= d2.getTime()){
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+function dateCompair3(fD, dd){
+  var d  = new Date(dd);
+  var d2 = new Date(fD.getFullYear(),fD.getMonth(),fD.getDate());   
+  var d3 = new Date(d.getFullYear(),d.getMonth(),d.getDate()); 
+
+  if (d3.getTime() >= d1.getTime()){
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+
+oShow = oData;

@@ -1,0 +1,16 @@
+label: JSON-Test
+field_id: 137434123
+type: calculation
+script: var j;
+var jsn = @[All of JSON-Test](out_137434116_129089854)[0];
+var z = {};
+
+try {
+  j = JSON.parse(jsn);
+  z = j  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out = JSON.stringify(z);
+out

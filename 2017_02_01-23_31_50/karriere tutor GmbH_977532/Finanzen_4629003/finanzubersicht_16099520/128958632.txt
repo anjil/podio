@@ -1,0 +1,24 @@
+label: Eingegangene Zahlungen
+field_id: 128958632
+type: calculation
+script: var amount = 0
+
+var j;
+var z = {};
+
+try {
+  j = JSON.parse(@[JSON-ubersicht-zuflusse](field_126744005));
+  z = j.Datam
+  for(i=0;i<z.length;i++) {
+    amount += z[i].BankingAmount 
+  }   
+  //amount = 11
+  //amount = parseFloat(j[0].Lehrgangsgebühren)
+} catch (e) {
+  "Could not parse JSON"
+}
+
+
+out = JSON.stringify(z);
+out = parseFloat(amount)
+out 

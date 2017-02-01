@@ -1,0 +1,12 @@
+label: Mismatch Zahlungsübersicht nach Datum (yes=1)
+field_id: 139037812
+type: calculation
+script: var r1  = @[Zahlungsübersicht nach Datum](field_125520033)+'';
+var tr1 = @[Zahlungsübersicht nach Datum Test](field_139033405)+'';
+var oS  = 0;
+
+if(r1 == tr1)
+  oS = 0;
+else
+  oS = 1;
+oS;

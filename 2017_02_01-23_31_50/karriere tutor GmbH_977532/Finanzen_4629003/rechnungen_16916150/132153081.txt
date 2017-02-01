@@ -1,0 +1,32 @@
+label: Calculation
+field_id: 132153081
+type: calculation
+script: var oName     = @[Gegenstand](field_131848452)||'';
+var oAmt      = @[Rechnungsbetrag](field_131848598)||0;
+var oDt       = @[Rechnungsdatum](field_131848596) || '';
+var cnt       = 10;
+var myArray   = Array();
+
+var monthArr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+var t='~~~';
+
+
+  if(oDt){
+    var d    = new Date(oDt);
+    var tKey = '';
+ var arr       = {};
+    for(var i=0; i<=cnt; i++){   
+       
+       
+        arr['Name']   = 'aa'; 
+        arr['Amount'] = 55;
+       
+        myArray[i] = arr;
+      arr = {};
+      
+    }
+  }
+
+
+JSON.stringify(myArray);

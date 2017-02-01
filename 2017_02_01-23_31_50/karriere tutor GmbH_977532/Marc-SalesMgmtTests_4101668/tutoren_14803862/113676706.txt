@@ -1,0 +1,3 @@
+label: Newsletter
+field_id: 113676706
+type: category

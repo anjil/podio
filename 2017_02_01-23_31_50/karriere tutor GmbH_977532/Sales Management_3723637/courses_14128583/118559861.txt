@@ -1,0 +1,25 @@
+label: Fulfillment Reihenfolge
+field_id: 118559861
+type: calculation
+script: var x;
+var myReihenfolge = Array();
+var out = " "
+out =  "Komponente | Reihenfolge | I | ID \n";
+out += "---|---|---|---\n";
+
+try {
+  x = JSON.parse(@[JSON-FFMTData](field_118099011));
+    
+  for(i=0; i<x.Komponenten.length;i++) {
+    out += String(x.Komponenten[i].Titel) + "|"
+    out += String(x.Komponenten[i].Reihenfolge) + "|"
+    out +=  i + "|" 
+    out += String(x.Komponenten[i].ID) +  "\n";
+  }
+
+
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out

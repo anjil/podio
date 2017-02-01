@@ -1,0 +1,18 @@
+label: JSON-Data
+field_id: 136105484
+type: calculation
+script: var out = ""
+var j =  {};
+j["ID"] = @[Unique ID](item_app_item_id);
+j["Name"] = @[Name](field_136105474);
+j["Adresse_Impressum"] = @[Adresse Impressum](field_136105475);
+j["Adresse_Rechnung"] = @[Rechnungsanschrift](field_136105476);
+j["Tel"] = @[Telefon](field_136105477);
+j["Branche"] = @[Branche](field_136105478);
+j["Webseite"] = @[Webseite](field_136105479);
+j["URL"] = @[URLs](field_136105480);
+j["Tag"] = @[Tags](field_136105481);
+j["PLZStadt"] = @[CPLZStadt](field_136105482);
+
+out = JSON.stringify(j);
+out;

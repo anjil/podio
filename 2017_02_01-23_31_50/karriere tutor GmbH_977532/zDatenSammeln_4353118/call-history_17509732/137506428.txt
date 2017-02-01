@@ -1,0 +1,17 @@
+label: JSON-CallHistory
+field_id: 137506428
+type: calculation
+script: var localURI = @[LocalUri](field_137013903)||'';
+if(localURI){
+  if(localURI.indexOf(':')>-1){
+    localURI = localURI.substr(localURI.indexOf(':')+1);
+  }
+  if(localURI.indexOf('@')>-1){
+    localURI = localURI.substr(0,localURI.indexOf('@'));
+  }
+}
+var z         = {};
+z['LocalUri'] = localURI;
+z['Status']   = @[Status](field_137013906)||'';
+z['Timestamp']= @[Timestamp](field_137013902)||'';
+JSON.stringify(z);

@@ -1,0 +1,85 @@
+label: Mismatch Category(yes=1)
+field_id: 129632305
+type: calculation
+script: var oUniqueId  = @[lizenzen Id](field_128895839);
+var oJson      = @[All of Json-ExpectedLizenzenFee](out_128908966_128884745);
+var oLeh       = @[All of Titel](out_116446197_133189946)[0]||'';
+var oCalLeh    = '';
+var oLiz       = @[Lizenzen](field_129630080)||'';
+var oCalLiz    = '';
+var oStatus    = @[Status](field_129777825)||'';
+var oCalSat    = '';
+var oRate      = @[Rate](field_130763189)||'';
+var oCalRate   = '';
+var oShow      = 1;
+
+try {
+
+  if(oJson && oJson !='[]' && oJson !='{}'){
+    var jsn = JSON.parse(oJson); 
+    for(var i=0; i<jsn.length; i++){
+      if(jsn[i]['ExpectedId'] == oUniqueId){
+         oCalLiz     = jsn[i]['Lizenzname']||'';
+         oCalLeh     = jsn[i]['LehrgangName']||'';
+         oCalSat     = jsn[i]['FullStatus']||'';
+         oCalRate    = jsn[i]['RStatus']||'';
+         break;
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+
+/*if(oCalLeh && oCalLiz ){
+  if(oCalLeh == oLeh && oCalLiz == oLiz && oCalRate == oRate){
+    if(oCalSat){
+      if(oCalSat == oStatus){
+        oShow = 0;
+      }
+      else{
+        oShow = 1;
+      }
+    }
+    else{
+      oShow = 0;
+    }   
+  }
+  else{
+    oShow = 1;
+  }
+}*/
+
+var t=''
+
+if(oCalLeh == oLeh){
+  t+='0';
+}
+else{
+  t+='1';
+}
+if(oCalLiz == oLiz){
+  t+='0';
+}
+else{
+  t+='1';
+}
+if(oCalRate == oRate){
+  t+='0';
+}
+else{
+  t+='1';
+}
+if(oCalSat == oStatus){
+  t+='0';
+}
+else{
+  t+='1';
+}
+
+if(t=='0000') oShow = 0;
+else oShow = 1;
+
+ oShow;

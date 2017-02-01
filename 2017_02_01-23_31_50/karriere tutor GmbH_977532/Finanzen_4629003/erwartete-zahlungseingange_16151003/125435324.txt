@@ -1,0 +1,23 @@
+label: Calculation
+field_id: 125435324
+type: calculation
+script: var oUniqueId = @[Unique ID](item_app_item_id);
+var oJson = @[All of JSON-ExpectedTransactions](out_125210855_125193630);
+var oShow = null;
+
+try {
+  if(oJson && oJson !='[]'){
+    var jsn = JSON.parse(oJson); 
+    for(var i=0; i<jsn.length; i++){
+      if(jsn[i]['ExpectedId'] == oUniqueId){
+        oShow = jsn[i]['Date'];  
+        break;    
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+oShow;

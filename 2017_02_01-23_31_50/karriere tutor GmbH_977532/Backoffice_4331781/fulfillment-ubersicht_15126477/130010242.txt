@@ -1,0 +1,26 @@
+label: JSON-Leads
+field_id: 130010242
+type: calculation
+script: var jsn       = @[All of JSON-Leads](in_130009859_117225519);
+var myArray   = Array();
+var ind       = 0;
+var t='~~~';
+try{
+
+  for(var i=0; i<jsn.length; i++){
+    var js   =  JSON.parse(jsn[i]);    
+    for(var j=0; j<js.length; j++){
+      var temp          = {};
+      temp['Mabnahmen'] = js[j].Mabnahmen;
+      temp['StartDate'] = js[j].StartDate;
+      myArray[ind]      = temp;
+      temp              = {};
+      ind++;
+    }   
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+JSON.stringify(myArray);

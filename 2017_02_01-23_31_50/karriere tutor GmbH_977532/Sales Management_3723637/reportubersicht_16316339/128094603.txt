@@ -1,0 +1,4 @@
+label: Reportubersicht Jahresauswahl
+field_id: 128094603
+type: calculation
+script: @[Jahresauswahl](field_126630403)

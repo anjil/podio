@@ -1,0 +1,3 @@
+label: Bild
+field_id: 127895584
+type: image

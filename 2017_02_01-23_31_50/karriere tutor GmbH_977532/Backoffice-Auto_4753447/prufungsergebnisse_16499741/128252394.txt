@@ -1,0 +1,3 @@
+label: Anzahl Kandidaten
+field_id: 128252394
+type: number

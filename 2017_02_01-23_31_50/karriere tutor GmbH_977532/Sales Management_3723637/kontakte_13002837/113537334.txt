@@ -1,0 +1,21 @@
+label: Calc_Zip1
+field_id: 113537334
+type: calculation
+script: var out = null
+if (@[zip](field_128727989) == null) {
+  out = parseInt('99999')
+} else {
+  out_tmp = @[zip](field_128727989).substring(0,1)
+  if (out_tmp == '1') { out = parseInt('1')}
+  if (out_tmp == '2') { out = parseInt('2')}
+  if (out_tmp == '3') { out = parseInt('3')}
+  if (out_tmp == '4') { out = parseInt('4')}
+  if (out_tmp == '5') { out = parseInt('5')}
+  if (out_tmp == '6') { out = parseInt('6')}
+  if (out_tmp == '7') { out = parseInt('7')}
+  if (out_tmp == '8') { out = parseInt('8')}
+  if (out_tmp == '9') { out = parseInt('9')}
+  if (out_tmp == '0') { out = parseInt('0')}
+}
+
+out

@@ -1,0 +1,6 @@
+label: -
+field_id: 114373962
+type: calculation
+script: @[Vorname](field_99547597)
+out = "**Kontaktmöglichkeiten:**"+"\n\n"+ "----"
+out

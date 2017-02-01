@@ -1,0 +1,14 @@
+label: JSON-Rechnungen
+field_id: 132051963
+type: calculation
+script: var oName     = @[Gegenstand](field_131848452)||'';
+var oAmt      = @[Rechnungsbetrag](field_131848598)||0;
+var oDt       = @[Rechnungsdatum](field_131848596) || '';
+
+var z         = {};
+z["Name"]     = oName;
+z["Amount"]   = oAmt;
+z["Date"]     = oDt;
+
+
+JSON.stringify(z);

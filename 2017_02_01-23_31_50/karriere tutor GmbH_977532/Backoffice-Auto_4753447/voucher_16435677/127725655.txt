@@ -1,0 +1,10 @@
+label: Voucher Name
+field_id: 127725655
+type: calculation
+script: var oName = @[Name](field_127692068);
+oShow = '';
+if(oName){
+  oShow = oName.split(' ').join('_');
+}
+
+oShow;

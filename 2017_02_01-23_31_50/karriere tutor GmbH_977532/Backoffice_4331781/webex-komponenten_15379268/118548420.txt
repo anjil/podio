@@ -1,0 +1,14 @@
+label: JSON-Data
+field_id: 118548420
+type: calculation
+script: var j = {};
+j["ID"]= @[Unique ID](item_app_item_id);
+j["Titel"]= @[Titel](field_118547808);
+j["WebEx URL"]= @[WebEx URL](field_118548047);
+j["Kategorie"]= @[Kategorie](field_118548048);
+j["Dauer"]= @[Dauer in Std](field_118548049);
+j["Preis"]= @[Dozent](field_118548088);
+j["Beschreibung"]= @[Beschreibung](field_118548421);
+
+
+JSON.stringify(j)

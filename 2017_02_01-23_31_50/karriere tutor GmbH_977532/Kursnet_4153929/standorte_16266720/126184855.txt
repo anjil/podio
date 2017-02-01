@@ -1,0 +1,3 @@
+label: Status Kursnet
+field_id: 126184855
+type: category

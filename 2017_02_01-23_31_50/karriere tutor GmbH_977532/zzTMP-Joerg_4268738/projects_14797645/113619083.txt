@@ -1,0 +1,4 @@
+label: Deliverables budget
+field_id: 113619083
+type: calculation
+script: "$" + @[Sum of Budget](in_sum_113619095_113619096)

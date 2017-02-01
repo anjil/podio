@@ -1,0 +1,10 @@
+label: Calculation
+field_id: 125210856
+type: calculation
+script: var od = new Date(@[Startdatum Bildungsgutschein](field_125198557))
+
+var CurrentDate = new Date(od);
+CurrentDate.setMonth(CurrentDate.getMonth() + 1);
+
+
+CurrentDate

@@ -1,0 +1,6 @@
+label: -
+field_id: 118984508
+type: calculation
+script: @[Status](field_118984505)
+out = "**Komponenten:**"+"\n\n"+ "----"
+out

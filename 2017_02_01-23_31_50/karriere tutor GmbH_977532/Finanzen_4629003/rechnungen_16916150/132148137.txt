@@ -1,0 +1,362 @@
+label: JSON-Rechnungen
+field_id: 132148137
+type: calculation
+script: var oName         = @[Gegenstand](field_131848452)||'';
+var oAmt          = @[Rechnungsbetrag](field_131848598)||0;
+var oGZdatum      = @[Geplantes Zahlungsdatum](field_131848592)||'';
+var AktuelDatum   = @[All of AktuellesDatum](out_128820243_132146328)[0];
+var serie         = @[Serie](field_131848593)+'';
+var oEndSerieDate = @[End Serie Date](field_132224519)||'';
+var id            = @[Rechnungen ID](field_132447081)
+var bezahlt       = @[Bezahlt](field_131848706) || '';
+var oKreditor     = @[Kreditor](field_131848595)||'';
+var oKreditorau   = @[Kreditorauswahl](field_133633971)||'';
+var oRecdatum     = @[ Series date paid until](field_134377490)||'';
+var oOption       = @[Option](field_134818505)||'';
+var cnt           = 10;
+var chkEndDate    = 0;
+var myArray       = [];
+var oOriginalArr  = [];
+
+var monthArr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+var t='~~~';
+
+if(oKreditorau){   
+  oName += ' - '+oKreditorau;
+  oName  = (oOption == 'Abbuchung') ? "*"+oName+"*-$" : oName;
+}
+else if(oKreditor){
+  oName += ' - '+oKreditor;
+  oName  = (oOption == 'Abbuchung') ? "*"+oName+"*-$" : oName;
+}
+if(serie == 'Ohne' || serie == 'Sonst'){
+  var arr            = {};
+  arr['Name']        = oName; 
+  arr['Amount']      = oAmt;
+  arr['Date']        = oGZdatum;
+  if(oRecdatum){
+    var oRDate = new Date(oRecdatum);
+    var oDDate = new Date(oGZdatum);
+    if(oRDate.getTime()>=oDDate.getTime()){
+      arr['PayDate']  = oRecdatum;
+    }
+    else{
+      arr['PayDate']  = '';
+    }
+  }
+  else{
+    arr['PayDate']  = '';
+  }
+  arr['id']          = id;
+  arr['bezahlt']     = bezahlt;
+  myArray[0]         = arr;      
+  arr                = {};   
+}
+
+if(serie == 'Wöchentlich'){
+  if(oGZdatum){
+    var tKey        = '';
+    var arr         = {};
+    for(var i=0; i <= cnt; i++){     
+      chkEndDate    = 0;     
+      var dNext     = setNextWeeklyDate(oGZdatum,i);
+      tKey          = getWeeklyKey(oGZdatum,i); 
+      chkEndDate    = checkForEndDate(dNext);
+      if(chkEndDate == 1){
+        oOriginalArr.push(tKey);      
+        arr['Name']     = oName; 
+        arr['Amount']   = oAmt;
+        arr['Date']     = new Date(dNext);
+        if(oRecdatum){
+          var oRDate = new Date(oRecdatum);
+          var oDDate = new Date(dNext);
+          if(oRDate.getTime()>=oDDate.getTime()){
+            arr['PayDate']  = oRecdatum;
+          }
+          else{
+            arr['PayDate']  = '';
+          }
+        }
+        else{
+           arr['PayDate']  = '';
+        }
+        arr['id']       = id;
+        arr['bezahlt']  = checkPaymentStatus(dNext);
+        myArray[i]      = arr;      
+        arr             = {};   
+      }               
+    }
+  }
+  if(AktuelDatum && AktuelDatum.getTime()>=oGZdatum.getTime()){
+    var tKey        = '';
+    var arr         = {};
+    var oFlag       = 0;
+    for(var i=0; i <= cnt; i++){ 
+      chkEndDate    = 0;     
+      oFlag         = 0;  
+      tKey          = getWeeklyKey(AktuelDatum,i); 
+      if(oOriginalArr.length > 0){    
+        if(oOriginalArr.indexOf(tKey) > -1){
+          oFlag = 1;
+        } 
+      }     
+     
+      if(oFlag == 0){ 
+        var ii        = myArray.length;    
+        var dNext     = setNextWeeklyDate(AktuelDatum,i);
+        chkEndDate    = checkForEndDate(dNext);
+        if(chkEndDate == 1){
+          oOriginalArr.push(tKey);      
+          arr['Name']     = oName; 
+          arr['Amount']   = oAmt;
+          arr['Date']     = new Date(dNext);
+          if(oRecdatum){
+            var oRDate = new Date(oRecdatum);
+            var oDDate = new Date(dNext);
+            if(oRDate.getTime()>=oDDate.getTime()){
+              arr['PayDate']  = oRecdatum;
+            }
+            else{
+              arr['PayDate']  = '';
+            }
+          }
+          else{
+             arr['PayDate']  = '';
+          }
+          arr['id']       = id;
+          arr['bezahlt']  = checkPaymentStatus(dNext);
+          myArray[ii]     = arr;      
+          arr             = {};   
+        }      
+      }         
+    }
+  }
+}
+
+if(serie == 'Vierteljährlich'){
+  if(oGZdatum){
+    var tKey        = '';
+    var arr         = {};
+    for(var i=0; i <= cnt; i++){      
+      chkEndDate    = 0;         
+      var dNext     = setNextQuarterlyDate(oGZdatum,i);
+      tKey          = getQuarterlyKey(oGZdatum,i); 
+      chkEndDate    = checkForEndDate(dNext);
+      if(chkEndDate == 1){
+        oOriginalArr.push(tKey);      
+        arr['Name']     = oName; 
+        arr['Amount']   = oAmt;
+        arr['Date']     = new Date(dNext);
+        if(oRecdatum){
+          var oRDate = new Date(oRecdatum);
+          var oDDate = new Date(dNext);
+          if(oRDate.getTime()>=oDDate.getTime()){
+            arr['PayDate']  = oRecdatum;
+          }
+          else{
+            arr['PayDate']  = '';
+          }
+        }
+        else{
+           arr['PayDate']  = '';
+        }
+        arr['id']       = id;
+        arr['bezahlt']  = checkPaymentStatus(dNext);
+        myArray[i]      = arr;      
+        arr             = {};      
+      }            
+    }
+  }
+  if(AktuelDatum && AktuelDatum.getTime()>=oGZdatum.getTime()){
+    var tKey        = '';
+    var arr         = {};
+    var oFlag       = 0;
+    for(var i=0; i <= cnt; i++){ 
+      chkEndDate    = 0;  
+      oFlag         = 0;  
+      tKey          = getQuarterlyKey(AktuelDatum,i); 
+      if(oOriginalArr.length > 0){    
+        if(oOriginalArr.indexOf(tKey) > -1){
+          oFlag = 1;
+        } 
+      }     
+     
+      if(oFlag == 0){ 
+        var ii        = myArray.length;    
+        var dNext     = setNextQuarterlyDate(AktuelDatum,i);
+        chkEndDate    = checkForEndDate(dNext);
+        if(chkEndDate == 1){
+          oOriginalArr.push(tKey);      
+          arr['Name']     = oName; 
+          arr['Amount']   = oAmt;
+          arr['Date']     = new Date(dNext);
+          if(oRecdatum){
+            var oRDate = new Date(oRecdatum);
+            var oDDate = new Date(dNext);
+            if(oRDate.getTime()>=oDDate.getTime()){
+              arr['PayDate']  = oRecdatum;
+            }
+            else{
+              arr['PayDate']  = '';
+            }
+          }
+          else{
+             arr['PayDate']  = '';
+          }
+          arr['id']       = id;
+          arr['bezahlt']  = checkPaymentStatus(dNext);
+          myArray[ii]     = arr;      
+          arr             = {};         
+        }
+      }         
+    }
+  }
+}
+
+
+if(serie == 'Monatlich'){
+  if(oGZdatum){
+    var tKey        = '';
+    var arr         = {};
+    for(var i=0; i <= cnt; i++){     
+      chkEndDate    = 0;      
+      var dNext     = setNextMonthlyDate(oGZdatum,i);
+      tKey          = getMonthlyKey(oGZdatum,i); 
+      chkEndDate    = checkForEndDate(dNext);
+      if(chkEndDate == 1){
+        oOriginalArr.push(tKey);       
+        arr['Name']     = oName; 
+        arr['Amount']   = oAmt;
+        arr['Date']     = new Date(dNext);
+        if(oRecdatum){
+          var oRDate = new Date(oRecdatum);
+          var oDDate = new Date(dNext);
+          if(oRDate.getTime()>=oDDate.getTime()){
+            arr['PayDate']  = oRecdatum;
+          }
+          else{
+            arr['PayDate']  = '';
+          }
+        }
+        else{
+           arr['PayDate']  = '';
+        }
+        
+        arr['id']       = id;
+        arr['bezahlt']  = checkPaymentStatus(dNext);
+        myArray[i]      = arr;      
+        arr             = {};   
+      }               
+    }
+  }
+  if(AktuelDatum && AktuelDatum.getTime()>=oGZdatum.getTime()){
+    var tKey        = '';
+    var arr         = {};
+    var oFlag       = 0;
+    for(var i=0; i <= cnt; i++){ 
+      chkEndDate    = 0;      
+      oFlag         = 0;  
+      tKey          = getMonthlyKey(AktuelDatum,i); 
+      if(oOriginalArr.length > 0){    
+        if(oOriginalArr.indexOf(tKey) > -1){
+          oFlag = 1;
+        } 
+      }     
+     
+      if(oFlag == 0){ 
+        var ii        = myArray.length;    
+        var dNext     = setNextMonthlyDate(AktuelDatum,i);
+        chkEndDate    = checkForEndDate(dNext);
+        if(chkEndDate == 1){
+          oOriginalArr.push(tKey);      
+          arr['Name']     = oName; 
+          arr['Amount']   = oAmt;
+          arr['Date']     = new Date(dNext);
+          if(oRecdatum){
+            var oRDate = new Date(oRecdatum);
+            var oDDate = new Date(dNext);
+            if(oRDate.getTime()>=oDDate.getTime()){
+              arr['PayDate']  = oRecdatum;
+            }
+            else{
+              arr['PayDate']  = '';
+            }
+          }
+          else{
+             arr['PayDate']  = '';
+          }
+          arr['id']       = id;
+          arr['bezahlt']  = checkPaymentStatus(dNext);
+          myArray[ii]     = arr;      
+          arr             = {};   
+        }      
+      }         
+    }
+  }
+}
+
+
+function checkPaymentStatus(dNext){
+  if(oRecdatum){
+    var rDa  = new Date(oRecdatum); 
+    var odt  = new Date(dNext);
+    if(rDa.getTime()>= odt.getTime())
+      return 'Bezahlt';
+    else
+      return 'Offen';
+  }
+  return 'Offen';
+}
+
+
+function checkForEndDate(dNext){
+  if(oEndSerieDate){
+    var d1 = new Date(dNext);
+    var d2 = new Date(oEndSerieDate);
+    if(d1.getTime()<= d2.getTime())
+      return 1;
+    else
+      return 0;
+  }
+  else
+    return 1;
+}
+
+function getWeeklyKey(oDt,i){
+  var dt = new Date(oDt);
+  dt.setDate(dt.getDate() + (i*7));
+  return dt.getDate()+'^'+monthArr[dt.getMonth()]+'^'+dt.getFullYear(); 
+}
+
+function setNextWeeklyDate(oDt,i){
+  var dt = new Date(oDt); 
+  return dt.setDate(dt.getDate() + (i*7));
+}
+
+
+function getQuarterlyKey(oDt,i){
+  var dt = new Date(oDt);
+  dt.setMonth(dt.getMonth() + (i*3));
+  return monthArr[dt.getMonth()]+ '^' + dt.getFullYear(); 
+}
+
+function setNextQuarterlyDate(oDt,i){
+  var dt = new Date(oDt); 
+  return dt.setMonth(dt.getMonth() + (i*3));
+}
+
+
+function getMonthlyKey(oDt,i){
+  var dt = new Date(oDt);
+  dt.setMonth(dt.getMonth() + i);
+  return monthArr[dt.getMonth()]+ '^' + dt.getFullYear(); 
+}
+
+function setNextMonthlyDate(oDt,i){
+  var dt = new Date(oDt); 
+  return dt.setMonth(dt.getMonth() + i);
+}
+
+
+JSON.stringify(myArray);

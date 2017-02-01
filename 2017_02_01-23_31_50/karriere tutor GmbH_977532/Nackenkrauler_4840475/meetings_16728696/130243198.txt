@@ -1,0 +1,3 @@
+label: Meeting pictures
+field_id: 130243198
+type: image

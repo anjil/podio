@@ -1,0 +1,3 @@
+label: Contact Groups
+field_id: 108494148
+type: category

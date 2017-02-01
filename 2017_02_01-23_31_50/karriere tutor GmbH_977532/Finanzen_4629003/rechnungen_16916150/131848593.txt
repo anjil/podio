@@ -1,0 +1,3 @@
+label: Serie
+field_id: 131848593
+type: category

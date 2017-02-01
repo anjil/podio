@@ -1,0 +1,24 @@
+label: Email
+field_id: 136107026
+type: calculation
+script: var emails = @[E-Mail](field_136107011)
+
+var value = ''
+
+var workEmail = '', otherEmail = ''
+for(var i = 0; i < emails.length; i++) {
+ if(emails[i].type == 'work') {
+  workEmail = emails[i].value;
+  break;
+ } else if(otherEmail == '') {
+  otherEmail = emails[i].value;
+ }
+}
+
+if(workEmail) {
+ value = workEmail 
+} else {
+ value = otherEmail;
+} 
+
+value + ''

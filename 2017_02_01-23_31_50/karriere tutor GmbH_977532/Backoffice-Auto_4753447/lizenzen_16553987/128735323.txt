@@ -1,0 +1,3 @@
+label: Lizenzbetrag
+field_id: 128735323
+type: money

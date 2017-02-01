@@ -1,0 +1,11 @@
+label: JSON-FinanceUbersicht
+field_id: 124761567
+type: calculation
+script: var z = {};
+z["Maßnahmentitel"] = @[Maßnahmentitel](field_108135844);
+z["Gebuhren"] = @[Gebühren](field_108136589);
+z["AnzahlRaten"] = @[Anzahl Raten](field_108136590);
+z["Rate"] = @[Rate](field_108137432);
+z["Wochen"]=@[Maßnahmendauer in Wochen](field_108136810);
+
+JSON.stringify(z);

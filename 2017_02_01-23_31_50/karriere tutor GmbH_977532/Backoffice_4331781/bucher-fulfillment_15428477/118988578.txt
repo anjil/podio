@@ -1,0 +1,31 @@
+label: JSON-DataBookStatus
+field_id: 118988578
+type: calculation
+script: var j;
+var out = "";
+var buchArray = Array();
+try {
+  j = JSON.parse(@[All of JSON-Data](out_118101153_118984501));
+  if((j.Bücher!=null) && (j.Bücher.length>0)) {
+    for (i=0; i<j.Bücher.length; i++) {
+      tmpObj = {};
+      tmpObj["BuchID"] = j.Bücher[i].ID;
+      tmpObj["Titel"] = j.Bücher[i].Titel
+      tmpObj["FfmtKomponente"] = j.Titel;
+      buchArray[i] = tmpObj; 
+    }
+  }
+
+  out += "";
+  //out = j.Kontaktdetails
+} catch (e) {
+  "Could not parse JSON"
+}
+
+var z = {};
+z["ID"] = @[Unique ID](item_app_item_id);
+z["Buecher"] = buchArray;
+z["Status"] = @[Buch versendet](field_118984506);
+out = JSON.stringify(z);
+
+out

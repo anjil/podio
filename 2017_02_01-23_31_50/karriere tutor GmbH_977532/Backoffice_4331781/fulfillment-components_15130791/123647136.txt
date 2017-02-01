@@ -1,0 +1,61 @@
+label: Calculation1
+field_id: 123647136
+type: calculation
+script: var myArray = Array();
+var tmpObj = {};
+var iInd = 0;
+var oCd = new Date();
+var oEd = new Date();
+var tt = '';
+try {
+ 
+ var json=@[All of JSON-Datum2](in_121361740_118873889);
+ for (var ii=0; ii<json.length; ii++){ 
+    var oArr = JSON.parse(json[ii]);
+if(oArr["EndDate"] !='' || oArr["EndDate"] !=null){
+
+tt+='@@'+oArr["EndDate"]+'<br>';
+    oEd = new Date(oArr["EndDate"]);
+    var oEndDate = moment(oEd).format("YYYY.MM.DD");
+    var oCDate = moment(oCd).format("YYYY.MM.DD");
+    if(oEndDate != null || oEndDate != ''){
+
+    var oChkDate = dateCompair(oEndDate,oCDate);
+    if(oChkDate == 1){
+    tmpObj["CalcLehrgang"] = oArr["CalcLehrgang"];
+   
+    tmpObj["EndDate"] =  oArr["EndDate"];
+    myArray[iInd] = tmpObj; 
+    tmpObj = {};
+    iInd++;
+}}
+
+    }
+    
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function dateCompair(oE,oC){
+
+
+var d1 = new Date(oE);
+var d2 = new Date(oC);
+
+   tt+='^^'+d1+'<br>';
+
+if (d1.getTime() < d2.getTime()) {
+
+
+
+    return 1;
+}
+   
+   else{
+      return 0;
+   }
+}
+ 
+JSON.stringify(myArray)+'<br>~~~~~'+tt

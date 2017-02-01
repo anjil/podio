@@ -1,0 +1,102 @@
+label: Cal
+field_id: 124141731
+type: calculation
+script: var js = @[All of JSON-Transaction](in_124039546_124031145);
+var oShow = '';
+var oShowData = '';
+var oHeader = '';
+var items = [];
+var oTotAmt = 0;
+var oRow = 0;
+
+try{
+
+  for(var jso=0; jso<js.length; jso++){
+    var json = JSON.parse(js[jso]);
+    var oDt = new Date(json.Date);
+    var oAmt = json.Amount;
+    var oStName = json.StdName;
+    var oCid = json.Bildungsgutschein;
+    var oWeek = parseInt(getWeekNumber(oDt));
+
+    var tempKey = oWeek; 
+    if(items[tempKey]){
+       var arr = items[tempKey];
+       var ii = arr.length;
+       arr[ii] = [];
+       arr[ii]['StdName'] = oStName;
+       arr[ii]['Bildungsgutschein'] = oCid; 
+       arr[ii]['Amount'] = oAmt;
+       arr[ii]['Date'] = oDt;
+       arr[ii]['week'] = 'Week '+ oWeek; 
+       items[tempKey] = arr;                  
+     } 
+     else{
+       var arr = [];
+       arr[0] = [];
+       arr[0]['StdName'] = oStName;
+       arr[0]['Bildungsgutschein'] = oCid;  
+       arr[0]['Amount'] = oAmt;
+       arr[0]['Date'] = oDt;
+       arr[0]['week'] = 'Week '+ oWeek;   
+       items[tempKey] = arr;
+    }      
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function getWeekNumber(t) {
+  var date = new Date(t.getTime());
+  date.setHours(0, 0, 0, 0); 
+  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+  var week1 = new Date(date.getFullYear(), 0, 4); 
+  return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000- 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
+function DisplayData(str){
+  if(str == null || str == '' || str == 'NAN' || str == 'undefined')
+   return 0
+  else 
+  return parseFloat(str);
+}
+
+
+
+for(key in items) { 
+  var oArr = items[key];
+  var oWk = oArr[0]['week'];
+  oTotAmt = 0;
+ 
+  if(oRow == 0){
+    oHeader = '|**'+oWk+'**|**Bildungsgutschein No **|**Amount**|**Date**|\n';
+    oHeader += '|------|-----|----|----|\n';
+
+   }
+   else{
+     oHeader = '|**'+oWk+'**|**Bildungsgutschein No **|**Amount**|**Date**|\n';
+   }
+
+  oShowData += oHeader;
+  for(var i=0; i<oArr.length; i++){
+    var odt = oArr[i]['Date'];
+    var od = moment(odt).format("DD.MM.YYYY");
+    var oAmt = DisplayData(oArr[i]['Amount']);
+
+    oShowData += '| ' +oArr[i]['StdName']+ ' |' +oArr[i]['Bildungsgutschein'] +' |'+oAmt+'|'+od+'|\n';
+
+    oTotAmt += DisplayData(oArr[i]['Amount']);
+  }
+ 
+ oHeader = '|**Total of '+oWk+'**|**&nbsp; **|**'+parseFloat(oTotAmt).toFixed(2)+'**|**&nbsp;**|\n';
+ // oHeader += '|------|-----|----|----|\n';
+
+//oHeader += "\n--------\n\n"; 
+oShowData += oHeader;
+
+ oRow++;
+  
+}
+
+oShow = oShowData;

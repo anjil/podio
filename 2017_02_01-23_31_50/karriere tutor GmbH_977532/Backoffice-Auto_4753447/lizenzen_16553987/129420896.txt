@@ -1,0 +1,3 @@
+label: Rabattstaffel
+field_id: 129420896
+type: category

@@ -1,0 +1,3 @@
+label: erfolgter 1. Geldeingang
+field_id: 109967408
+type: date

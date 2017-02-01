@@ -1,0 +1,240 @@
+label: Report1
+field_id: 132071356
+type: calculation
+script: var json       = @[All of JSON-Report Lizenze Data](in_130406759_130405638); 
+var monYr      = @[Month-Year](field_130401598);
+var oTitleArr  = [];
+var oCnt       = 0;
+var oTotal     = 0;
+var oData      = '';
+var oShow      = '';
+var locationId = @[Unique ID](item_app_item_id);
+var monthArr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+
+var olink   = 'https://podio.com/karrieretutorde/finance/apps/finanzubersicht/items/';
+
+try{
+  if(monYr){
+    if(json && json!='{}' && json!='[]'){
+      var myArray = getData(json);
+      printData(myArray);
+    }
+  }
+}catch (e) {
+  "Could not parse JSON";
+}
+
+function printData(myArray){
+  oTitleArr.sort();
+  var oHeaderCnt = 0;
+  var tuples = Array();
+  for (var key in myArray) tuples.push([key, myArray[key]]);
+   for(var tArr=0; tArr<oTitleArr.length; tArr++){   
+    for(var ii=0; ii<tuples.length; ii++){
+      var oKey = tuples[ii][0];  
+      var oArr = tuples[ii][1]; 
+      oTotal   = 0;
+      if(oKey == oTitleArr[tArr]){
+
+    
+       oArr.sort(function(aa, bb) {
+           var r1 = aa['rForSort'];
+           var r2 = bb['rForSort'];
+
+           var n1 = aa['Name'].toUpperCase();
+           var n2 = bb['Name'].toUpperCase();
+
+           n1 = n1.trim();
+           n2 = n2.trim();
+
+           if (r1 < r2) return -1;
+           if (r1 > r2) return  1;
+           if (n1 < n2) return -1;
+           if (n1 > n2) return  1;
+           return 0;
+
+       });  
+
+    
+        var kArr = oKey.split('^');
+ 
+        if(kArr[0].length > 22){
+          kArr[0] = kArr[0].substr(0,21);
+        }
+         if(kArr[1].length > 22){
+          kArr[1] = kArr[1].substr(0,21);
+        }
+ 
+if(oHeaderCnt == 0){
+ oData += '|'+kArr[0]+'|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|<br>';
+ oData += '|-----|-----|-----|-----|-----|-----|-----|<br>';
+ oData += '|'+kArr[1]+'|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|<br>';
+
+}
+else{
+ oData += '|'+kArr[0]+'|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|<br>';
+ oData += '|'+kArr[1]+'|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|<br>';
+ 
+}
+oHeaderCnt++;
+oData +=   '|**Name**|**Bild#**|**Status**|**Amount**|**Rate**|**Date**|**Payment**|<br>'; 
+             
+        for(var i=0; i<oArr.length; i++){
+          var oDt      = new Date(oArr[i]['Date']);
+          var od       = moment(oDt).format("DD.MM.YYYY");  
+          var oid      = oArr[i]['Itemid'];
+          var oBid     = oArr[i]['id'];
+          var oStatus  = oArr[i]['Status'];
+          var oLehName = oArr[i]['LehName'];
+          var oName    = oArr[i]['Name'];
+          var oExpId   = oArr[i]['ExpectedId'];
+          var opayId   = oArr[i]['PaymentId'];
+          var oAmt     = parseFloat(oArr[i]['Amt']);
+          oTotal      += oAmt;
+          oAmt         = oAmt.toFixed(2).toString().replace(".", ","); 
+          
+
+
+          if(oBid){
+            if(oBid.toLowerCase() == 'selbstzahler/rechnung'){
+              oBid = 'Selbstzahler';
+            }
+          }
+          
+          if(oName.length > 22){
+             oName= oName.substr(0,21);
+          }         
+
+         var oUrl = olink + oid;   
+         var oPay = '';
+var pURL = 'http://www.globiflow.com/catch/0xvn4a4i02990p7?ExpId='+ oExpId;
+          
+          if(opayId){
+            var p = 'Paid'; 
+            oPay  = p;                      
+          }
+          else{
+            var p = 'Payment';
+            oPay  = p.link(pURL); 
+          }          
+
+          oData   +='|'+oName.link(oUrl)         +'|';
+          oData   += oBid                        +'|';
+          oData   += oStatus                     +'|';
+          oData   += oAmt                        +'€|'; 
+          oData   += oArr[i]['RStatus']          +'|'; 
+          oData   += od                          +'|'; 
+          oData   += oPay                        +'|<br>'; 
+
+        } 
+oTotal = parseFloat(oTotal).toFixed(2).toString().replace(".", ",");
+oData +='|**Total**|&nbsp;|&nbsp;|**'+ oTotal+' €**|&nbsp;|&nbsp;|&nbsp;|<br>'; 
+oData += '|-------------|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|<br>';
+      }
+    }
+  }
+}
+
+
+function getData(json){
+  var tempMyArray = [];
+  for(var i=0; i<json.length; i++){
+    var jsn     = JSON.parse(json[i]);
+    var oName   = jsn.Name;   
+    var oId     = jsn.id;
+    var oItemId = GetId(jsn.Itemid);   
+
+    if(oName.indexOf('Frau') > -1){
+      oName = oName.substr(oName.indexOf('Frau')+5);
+    }
+    if(oName.indexOf('Herr') > -1){
+      oName = oName.substr(oName.indexOf('Herr')+5);
+    }
+    if(oName.indexOf('Herrn') > -1){
+      oName = oName.substr(oName.indexOf('Herrn')+6);
+    }
+
+
+
+    for(var j=0;j<jsn.Lizenze.length; j++){
+      var oDt      = jsn.Lizenze[j].Date;  
+      var oAmt     = jsn.Lizenze[j].Amount;  
+      var oLehName = jsn.Lizenze[j].LehrgangName; 
+      var oStatus  = jsn.Lizenze[j].LehrgangStatus;          
+      var oLizName = jsn.Lizenze[j].LizenzeName; 
+      
+      var rForSort = 0;
+      if((jsn.Lizenze[j].RStatus) == 'Rate1') rForSort = 1;
+      if((jsn.Lizenze[j].RStatus) == 'Rate2') rForSort = 2;
+      if(oDt){
+        var oMonYear = getMonYear(oDt);  
+        if(oMonYear == monYr){  
+          var tKey   = oLizName+'^'+oLehName;            
+          if(tempMyArray[tKey]){
+            var arr = tempMyArray[tKey];
+            var ii                = arr.length;
+            arr[ii]               = [];
+            arr[ii]['Name']       = oName;
+            arr[ii]['Itemid']     = oItemId; 
+            arr[ii]['id']         = oId; 
+            arr[ii]['LehName']    = oLehName;
+            arr[ii]['Status']     = oStatus;
+            arr[ii]['Amt']        = oAmt;
+            arr[ii]['Date']       = oDt;
+            arr[ii]['LizName']    = oLizName; 
+            arr[ii]['RStatus']    = jsn.Lizenze[j].RStatus; 
+            arr[ii]['rForSort']   = rForSort;
+            arr[ii]['ExpectedId'] = jsn.Lizenze[j].ExpectedId; 
+            arr[ii]['PaymentId']  = jsn.Lizenze[j].PaymentId; 
+            tempMyArray[tKey]     = arr;
+          }
+          else{ 
+            var arr              = [];
+            arr[0]               = [];                            
+            arr[0]['Name']       = oName;
+            arr[0]['Itemid']     = oItemId; 
+            arr[0]['id']         = oId;
+            arr[0]['LehName']    = oLehName;
+            arr[0]['Status']     = oStatus;
+            arr[0]['Amt']        = oAmt;
+            arr[0]['Date']       = oDt;
+            arr[0]['LizName']    = oLizName;
+            arr[0]['RStatus']    = jsn.Lizenze[j].RStatus; 
+            arr[0]['rForSort']   = rForSort;
+            arr[0]['ExpectedId'] = jsn.Lizenze[j].ExpectedId; 
+            arr[0]['PaymentId']  = jsn.Lizenze[j].PaymentId; 
+            tempMyArray[tKey]    = arr; 
+            oTitleArr[oCnt]      = tKey; 
+          
+            oCnt++;
+          }          
+        }          
+      }
+    }
+  } 
+  return tempMyArray;   
+}
+
+  
+function GetId(oUniqueId){
+ if(oUniqueId){
+   var regex=/^[0-9]+$/;
+   var oShow = '';
+   for(var i=0;i<oUniqueId.length;i++){
+     if(oUniqueId[i].match(regex)){
+       oShow+= oUniqueId[i];
+     } 
+   }
+  return parseInt(oShow);
+ }
+}
+
+
+function getMonYear(oDt){
+  var dt = new Date(oDt);
+  return monthArr[dt.getMonth()]+ '-' + dt.getFullYear(); 
+}
+
+oShow = oData;
+

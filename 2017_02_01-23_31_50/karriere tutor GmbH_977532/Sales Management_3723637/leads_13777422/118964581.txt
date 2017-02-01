@@ -1,0 +1,26 @@
+label: Kontaktdetails-TMP
+field_id: 118964581
+type: calculation
+script: var anrede = @[All of Anrede](out_113524348_113531840);
+var anrede2 = anrede[0];
+if (anrede2 == null) {anrede2 = "" };
+var titel = @[All of Titel](out_113524347_113531840);
+var titel2 = titel[0];
+if (titel2 == null) { titel2 = "" };
+var vn = @[All of Vorname](out_99547597_113531840);
+var vn2 = vn[0];
+if (vn2 == null) { vn2="" };
+var nn = @[All of Nachname](out_99547598_113531840);
+
+var a = @[All of Tel](out_99547600_113531840);
+var a2 = a.map(function (obj) { return obj.value});
+
+var b = @[All of E-Mail](out_99547599_113531840);
+var b2 = b.map(function (obj) { return obj.value});
+
+var d = @[All of Anschrift](out_116317290_113531840)
+
+out = "**Name:** " + anrede2 + " " + titel2 +" " + vn[0] + " " + nn[0] + "\n\n"
+out += "**Tel:** " + a2 + " - - - **E-Mail:** " + b2 + "\n\n"
+out += "**Adresse:** " + d[0]
+out

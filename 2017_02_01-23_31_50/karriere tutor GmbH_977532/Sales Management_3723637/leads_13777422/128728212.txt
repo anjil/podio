@@ -1,0 +1,4 @@
+label: PLZ1
+field_id: 128728212
+type: calculation
+script: @[All of Calc_Zip1](out_136107022_136112743)[0]

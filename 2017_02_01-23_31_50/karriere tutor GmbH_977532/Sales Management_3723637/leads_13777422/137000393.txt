@@ -1,0 +1,13 @@
+label: Calculation
+field_id: 137000393
+type: calculation
+script: @[Unique Id](field_127417049)
+var s= '';
+s+='* test1\n';
+s+='* test1\n';
+s+='* test1\n';
+s+='* test1\n';
+s+='* test1\n';
+s+='* test1\n';
+
+s;

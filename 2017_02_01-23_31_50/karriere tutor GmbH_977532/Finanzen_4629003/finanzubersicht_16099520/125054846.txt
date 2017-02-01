@@ -1,0 +1,35 @@
+label: Duplicate Banktransaktionen
+field_id: 125054846
+type: calculation
+script: var oJson = @[All of JSON-Banktransaktionen](in_125051274_124753397);
+var oShow = '';
+var oOriginalArr = [];
+var ii = 0;
+try{
+
+  for(var i =0; i<oJson.length; i++){
+    var oFlag = 0;
+    var js = oJson[i]+'';
+    var oStr = js.substr(0,js.indexOf('UniqueId'));
+    if(oOriginalArr.length > 0){    
+      if(oOriginalArr.indexOf(oStr) > -1 && oFlag == 0){
+         oFlag = 1;
+         var jsn = JSON.parse(oJson[i]);
+         oShow = (oShow =='')? jsn['UniqueId']:oShow +','+ jsn['UniqueId'];
+       }      
+      if(oFlag == 0){
+         oOriginalArr.push(oStr);
+         ii++;
+      }
+    }
+    else{
+       oOriginalArr.push(oStr);
+       ii++;
+    }
+  }
+} 
+catch (e) {  
+  "Could not parse JSON"; 
+}
+
+oShow

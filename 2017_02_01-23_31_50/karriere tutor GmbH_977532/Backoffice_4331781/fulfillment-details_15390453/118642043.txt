@@ -1,0 +1,43 @@
+label: Übersicht Fullfillment Details
+field_id: 118642043
+type: calculation
+script: @[Status](field_118641735)
+var avKursStatus = "";
+
+//
+// Stati der Komponenten berechnen
+//
+if (@[Avendoo Kursfreigabe erstellt](field_118641738)=="Kursfreigabe abgeschlossen") {
+  avKursStatus = "erledigt"
+} else { avKursStatus = "offen" };
+var out = "Komponente | Name | Status\n"
+out += "---|---|---\n"
+try {
+  j = JSON.parse(@[All of JSON-Data](out_118101153_118641736));
+  if(j.Bücher.length>0) {
+  }
+
+  // Avendoo Kursfreigabe
+  if(j.Kursfreigabe.length>0) {
+    for(i=0;i<j.Kursfreigabe.length;i++) {
+      out += "Avendoo Kurs | " + j.Kursfreigabe[i].Titel;
+      out += "| " + avKursStatus + "\n";
+    }
+  }
+
+  // WebExTraining
+  if(j.WebEx_Training.length>0) {
+    for(i=0;i<j.WebEx_Training.length;i++) {
+      out += "WebEx Training | " + j.WebEx_Training[i].Titel;
+      out += "| " + wxKursStatus + "\n";
+    }
+  }
+
+  out += "";
+  //out = j.Kontaktdetails
+} catch (e) {
+  "Could not parse JSON"
+}
+
+
+out

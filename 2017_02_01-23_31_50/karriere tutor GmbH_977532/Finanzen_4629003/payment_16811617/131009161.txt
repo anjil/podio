@@ -1,0 +1,4 @@
+label: Lehrgang StartDate
+field_id: 131009161
+type: calculation
+script: @[All of Lehrgang StartDate](out_130764185_131003524)[0];

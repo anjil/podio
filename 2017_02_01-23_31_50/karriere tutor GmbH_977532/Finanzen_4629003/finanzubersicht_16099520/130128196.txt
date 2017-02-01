@@ -1,0 +1,15 @@
+label: JSON-Lizenzen
+field_id: 130128196
+type: calculation
+script: var j;
+var z = {};
+
+try {
+  j = JSON.parse(@[All of JSON-Lizenzen](out_130128007_129089854)[0]);
+  z = j  
+} catch (e) {
+  "Could not parse JSON"
+}
+
+out = JSON.stringify(z);
+out

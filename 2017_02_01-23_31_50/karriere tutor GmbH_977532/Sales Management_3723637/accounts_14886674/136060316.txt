@@ -1,0 +1,4 @@
+label: Backoffintce Account Id
+field_id: 136060316
+type: calculation
+script: @[All of Account Id](in_136058238_136058241)[0]

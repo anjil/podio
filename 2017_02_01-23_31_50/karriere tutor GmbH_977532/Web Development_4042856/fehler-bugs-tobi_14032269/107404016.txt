@@ -1,0 +1,3 @@
+label: Art des Fehlers
+field_id: 107404016
+type: category

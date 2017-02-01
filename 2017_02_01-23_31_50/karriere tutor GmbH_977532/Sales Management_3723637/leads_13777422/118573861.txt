@@ -1,0 +1,7 @@
+label: JSON-Massnahmen
+field_id: 118573861
+type: calculation
+script: var a = @[Kontaktdetails](field_113753142)
+var out= "aaa"
+
+out

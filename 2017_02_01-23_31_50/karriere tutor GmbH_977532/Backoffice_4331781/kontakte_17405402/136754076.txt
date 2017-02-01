@@ -1,0 +1,35 @@
+label: Marketing Campaign Report
+field_id: 136754076
+type: calculation
+script: var json    = @[All of JSON-Marketing Campaign](in_136754070_136543251);
+var oShow   = '';
+var oData   = '';
+var oHeader ='|**Title**|<br>';
+oHeader    +='|---------|<br>';
+
+var t='~~'
+
+try { 
+  printData();
+} 
+catch (e){
+  "Could not parse JSON"
+}
+
+function printData(){
+
+ for(var i=0; i<json.length; i++){
+   var jsnArr = JSON.parse(json[i]); 
+   var oTitle = jsnArr['Title'];
+   var oId    = jsnArr['id'];
+   var oLink  = 'Link';
+              
+   var oUrl = 'https://podio.com/karrieretutorde/sales-management/apps/marketing-campaign/items/'+oId;
+     
+   oData      += '|';
+   oData      += oTitle.link(oUrl)  +'|';
+   oData      += '<br>';  
+ }
+}
+
+oShow = oHeader + oData;

@@ -1,0 +1,3 @@
+label: Anzahl versendet
+field_id: 118100512
+type: number

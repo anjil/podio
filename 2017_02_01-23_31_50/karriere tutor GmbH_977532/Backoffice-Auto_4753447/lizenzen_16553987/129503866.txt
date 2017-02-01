@@ -1,0 +1,19 @@
+label: JSON-LizenzenData
+field_id: 129503866
+type: calculation
+script: var z = {};
+var oRate           = @[Rate](field_128735324)||0;
+var oRate1          = @[Fälligkeit in Tagen 1.Rate](field_128735325)||0;
+var oRate1Mon       = @[Fälligkeit 1.Rate Monat](field_128735930) || 0;
+var oRate2          = @[Fälligkeit in Tagen 2.Rate](field_128735326) || 0;
+var oRate2Mon       = @[Fälligkeit 2. Rate Monat](field_128735931) || 0;
+var oLizName        = @[Lizenzname](field_128735220);
+
+z["Lizenzname"]     = oLizName;
+z["Rate"]           = oRate;
+z["Rate1"]          = oRate1;
+z["Rate1Mon"]       = oRate1Mon;
+z["Rate2"]          = oRate2;
+z["Rate2Mon"]       = oRate2Mon; 
+
+JSON.stringify(z);

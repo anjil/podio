@@ -1,0 +1,14 @@
+label: Check Date
+field_id: 125562378
+type: calculation
+script: var oStartdatum = @[Startdatum Bildungsgutschein](field_125198557);
+var oAdjustedDatam = @[Adjusted Billing Start Date](field_125517113);
+var oShow = 0;
+var oShowDate = new Date(oStartdatum);
+oShowDate.setMonth(oShowDate.getMonth() + 1);
+
+if(oAdjustedDatam.getDate() == oShowDate.getDate())
+  oShow = 0;
+else
+  oShow = 1;
+

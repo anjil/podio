@@ -1,0 +1,11 @@
+label: Sales Year
+field_id: 127404413
+type: calculation
+script: var oD = @[Auftragsdatum](field_108041451);
+var oShow = ''
+if(oD){
+  var oDate = new Date(oD);
+  var oY = oDate.getFullYear();
+  oShow += oY;
+}
+oShow;

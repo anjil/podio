@@ -1,0 +1,5 @@
+label: Calculation
+field_id: 137618791
+type: calculation
+script: var j = @[All of JSON-CallHistory](in_137506428_137013915)+''
+j

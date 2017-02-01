@@ -1,0 +1,4 @@
+label: LizenzID
+field_id: 129896065
+type: calculation
+script: @[Unique ID](item_app_item_id)

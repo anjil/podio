@@ -1,0 +1,10 @@
+label: IstGeburtstag
+field_id: 125007166
+type: calculation
+script: var out = 0
+try{
+ if (@[All of Nächster Geburtstag](in_124788038_125001268).length > 0 ) {out = 1}
+} catch (e) {
+  out = 0
+}
+out

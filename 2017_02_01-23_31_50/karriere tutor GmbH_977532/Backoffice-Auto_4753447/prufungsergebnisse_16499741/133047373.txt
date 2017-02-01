@@ -1,0 +1,24 @@
+label: Modul,  Email and sessionId
+field_id: 133047373
+type: calculation
+script: var oModul     = @[Testmodul](field_128252396);
+var oEmail     = @[Kandidaten email](field_128252399)
+var oSessionId = @[Examens Sitzungs ID](field_128252393);
+var oShow = '';
+
+oShow;
+
+if(oModul){
+   oShow+=oModul+'[CB]';
+}
+if(oEmail){
+  oShow += oEmail;
+}
+if(oSessionId){
+  oShow += oSessionId;
+}
+
+if(oShow){
+  oShow = oShow.split(' ').join('');
+}
+oShow;

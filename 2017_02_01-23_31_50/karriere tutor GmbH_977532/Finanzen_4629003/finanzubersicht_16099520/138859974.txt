@@ -1,0 +1,72 @@
+label: Total Expected Transactions Test
+field_id: 138859974
+type: calculation
+script: var AktuellesDatum = @[All of AktuellesDatum](out_128820243_128820289)[0];
+var json1 = @[JSON-ExpectedTransactions](field_125894124);
+var json = @[All of JSON-FinanceUbersicht](in_124762989_124752897)[0];
+var jsonTransaction = @[All of JSON-Transaction](in_124039546_124753397)||[];
+var oShow = 0;
+
+var t='~~~';
+
+var GebuhrenTotal = 0;
+var totalWochen   = 0;
+var maxRate       = 0;
+var oZeiteinsatz  = @[All of Zeiteinsatz](in_133706683_124752897)[0]||'';
+
+try {
+
+  if(jsonTransaction.length == 0){
+    var js = JSON.parse(json); 
+    for (var i=0; i<js.length; i++){    
+      for(ii=0;ii<js[i].Datam.length;ii++){
+        var tot = js[i].Datam[ii].Gebuhren || 0;
+        GebuhrenTotal += parseFloat(tot);
+        totalWochen   += parseInt(js[i].Datam[ii].Wochen);
+   
+   
+        var mRate = js[i].Datam[ii].AnzahlRaten || 0;
+        if(mRate > maxRate){
+          maxRate = mRate;
+        }
+      }
+    }
+    
+    var gTotal  = GebuhrenTotal / 1900;
+    gTotal      = Math.round(gTotal);
+
+    if(oZeiteinsatz == 'Teilzeit' || oZeiteinsatz == 'Berufsbegleitend'){
+      maxRate = parseInt(maxRate)*2;
+    }
+    
+    
+    if(gTotal > maxRate){
+      oShow = gTotal;
+    }
+    else{
+      oShow = maxRate;
+    }
+
+    if(totalWochen > 28){
+      var tempMon = totalWochen / 4;
+      oShow = Math.ceil(parseFloat(tempMon));     
+    }
+  }
+  else if(jsonTransaction.length > 0 && jsonTransaction !='[]'){   
+    oShow = 0;   
+    if(json1 && json1!='[]'){
+      var js = JSON.parse(json1); 
+      for (var i=0; i<js.length; i++){    
+        var oAmount = parseInt(js[i]['Amount']);
+        if(oAmount > 0){
+          oShow++;
+        }
+      }
+    }
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+oShow;

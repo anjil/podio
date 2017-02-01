@@ -1,0 +1,14 @@
+label: Difference (Expected Transaction vs Actual Transaction)
+field_id: 125623682
+type: calculation
+script: var oExpectedTran = @[Total Expected Transactions](field_125194065)||0;
+var oActualTran = @[All of Unique Id](in_125198678_125193630)||[];
+var oShow = oExpectedTran;
+
+if(oActualTran){
+  if(parseInt(oActualTran.length) == parseInt(oExpectedTran))
+    oShow = 0;
+  else
+    oShow = oExpectedTran - oActualTran.length;
+}
+oShow;

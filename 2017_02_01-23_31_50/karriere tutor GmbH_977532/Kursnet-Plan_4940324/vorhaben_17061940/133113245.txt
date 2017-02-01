@@ -1,0 +1,3 @@
+label: Aktueller Stand
+field_id: 133113245
+type: text

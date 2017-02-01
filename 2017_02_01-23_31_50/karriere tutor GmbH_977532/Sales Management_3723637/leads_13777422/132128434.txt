@@ -1,0 +1,4 @@
+label: Calculation
+field_id: 132128434
+type: calculation
+script: @[Created On](item_created_on)

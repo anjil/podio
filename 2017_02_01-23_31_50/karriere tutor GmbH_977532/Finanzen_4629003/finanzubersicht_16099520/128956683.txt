@@ -1,0 +1,6 @@
+label: -
+field_id: 128956683
+type: calculation
+script: @[Name](field_124789926)
+out = "**Forderungsmanagement:**"+"\n\n"+ "----"
+out

@@ -1,0 +1,6 @@
+label: -
+field_id: 114377063
+type: calculation
+script: @[Auftragsdatum](field_108041451)
+out = "**Lehrgang:**"+"\n\n"+ "----"
+out

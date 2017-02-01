@@ -1,0 +1,10 @@
+label: Report (NotSet=0)
+field_id: 127116883
+type: calculation
+script: var oReprt = @[All of Jahr](out_126630578_126630716)||[];
+var oYear = @[Year](field_126631179)||'';
+
+if(oYear && oReprt)
+ 1
+else 
+ 0

@@ -1,0 +1,3 @@
+label: IE 10 test
+field_id: 107404042
+type: category

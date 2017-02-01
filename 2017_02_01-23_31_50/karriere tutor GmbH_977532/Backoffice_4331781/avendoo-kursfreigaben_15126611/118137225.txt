@@ -1,0 +1,7 @@
+label: -
+field_id: 118137225
+type: calculation
+script: var a = @[Titel](field_116411445)
+out = "**Internes, alles darunter bitte IGNORIEREN:** \n\n"
+out += "----"
+out

@@ -1,0 +1,5 @@
+label: Total Banking Transaction Amount
+field_id: 125846309
+type: calculation
+script: var oTotalBankingAmount = @[Sum of Betrag](in_sum_124035570_124753397);
+oTotalBankingAmount;

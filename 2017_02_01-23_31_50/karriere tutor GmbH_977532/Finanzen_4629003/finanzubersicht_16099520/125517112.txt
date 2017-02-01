@@ -1,0 +1,15 @@
+label: Calculation
+field_id: 125517112
+type: calculation
+script: var oTransactionDate = @[All of Buchungstag](in_124021916_124753397);
+var oStartdatum = @[All of Startdatum Bildungsgutschein](in_121119108_124752897)[0];
+var oShow = null;
+
+if(oTransactionDate){
+
+
+}
+else
+  oShow = oStartdatum;
+
+oShow;

@@ -1,0 +1,6 @@
+label: JSON-Data1
+field_id: 118165636
+type: calculation
+script: var a = @[Maßnahmentitel](field_108135844)
+var b = @[All of JSON-Data](out_118101153_116414764)[0]
+b

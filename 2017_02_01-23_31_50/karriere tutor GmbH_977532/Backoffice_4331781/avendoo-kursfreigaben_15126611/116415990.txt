@@ -1,0 +1,3 @@
+label: Kursfreigabe Art
+field_id: 116415990
+type: category

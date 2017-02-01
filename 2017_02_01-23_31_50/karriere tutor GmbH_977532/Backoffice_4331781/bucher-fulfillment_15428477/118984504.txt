@@ -1,0 +1,6 @@
+label: -
+field_id: 118984504
+type: calculation
+script: @[Status](field_118984505)
+out = "**Organisatorisches:**"+"\n\n"+ "----"
+out

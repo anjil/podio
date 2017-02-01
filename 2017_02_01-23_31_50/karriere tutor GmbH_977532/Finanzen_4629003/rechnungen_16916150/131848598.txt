@@ -1,0 +1,3 @@
+label: Rechnungsbetrag
+field_id: 131848598
+type: money

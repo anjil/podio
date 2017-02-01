@@ -1,0 +1,4 @@
+label: Backoffice Kontakte Id
+field_id: 136068749
+type: calculation
+script: @[All of Kontakte Id](in_136068369_136061766)[0];

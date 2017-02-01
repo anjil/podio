@@ -1,0 +1,3 @@
+label: Betrag
+field_id: 124021934
+type: number

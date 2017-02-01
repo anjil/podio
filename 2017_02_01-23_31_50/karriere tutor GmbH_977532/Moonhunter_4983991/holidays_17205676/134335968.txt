@@ -1,0 +1,3 @@
+label: Dauer in Tagen
+field_id: 134335968
+type: number

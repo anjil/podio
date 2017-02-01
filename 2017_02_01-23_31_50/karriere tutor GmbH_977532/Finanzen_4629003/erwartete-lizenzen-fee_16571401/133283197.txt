@@ -1,0 +1,6 @@
+label: LizPayment
+field_id: 133283197
+type: calculation
+script: var x = parseInt(0)
+x = parseInt(@[All of Status](in_130949518_131003524).length)
+x

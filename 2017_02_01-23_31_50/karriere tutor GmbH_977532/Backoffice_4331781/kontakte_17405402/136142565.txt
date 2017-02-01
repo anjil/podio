@@ -1,0 +1,6 @@
+label: Temp Address
+field_id: 136142565
+type: calculation
+script: var address = @[Anschrift](field_136107009)
+
+address + ''

@@ -1,0 +1,4 @@
+label: Error Multiple Fin uberschit BankTransaction (Yes = 1)
+field_id: 126833345
+type: calculation
+script: (@[All of Error Multiple Fin uberschit BankTransaction (Yes = 1)](out_126833342_125193630) || [])[0]

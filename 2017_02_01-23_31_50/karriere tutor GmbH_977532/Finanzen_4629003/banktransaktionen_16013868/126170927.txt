@@ -1,0 +1,25 @@
+label: JSON-Transaction Details
+field_id: 126170927
+type: calculation
+script: var oCustId = @[Customer ID](field_124674842)
+var oAmt = @[Betrag](field_124035570);
+var oDate = @[Buchungstag](field_124021916)||'';
+var oStdName = @[All of Customer Name](out_124789926_124753397)[0]
+var ofinanzubersichtID = @[All of Unique Id](out_126377252_124753397)[0];
+var oShow = '';
+var oUniqueId = @[UniqueId](field_124675831);
+var oExpAmt = @[Expected Amount](field_126165277);
+var oExpId  = @[Expected Id](field_126378223);
+
+var j = {};
+j["StdName"]           = oStdName;
+j["finanzID"]          = ofinanzubersichtID;
+j["Bildungsgutschein"] = oCustId;
+j["Amount"]            = oAmt;
+j["Date"]              = new Date(oDate);
+j["uniqueId"]          = oUniqueId;
+j["ExpectedAmount"]    = oExpAmt;
+j["ExpectedId"]        = oExpId;
+
+oShow = JSON.stringify(j);
+oShow;

@@ -1,0 +1,35 @@
+label: Leads Error(Yes=1)
+field_id: 128150399
+type: calculation
+script: var oLeadsYear = @[All of Reportubersicht Jahresauswahl](out_128094603_127404044)[0]||'';
+var oLeadsQua  = @[All of Reportubersicht Quartalsauswahl ](out_128094604_127404044)[0]||'';
+var oLY        = @[Leads Year](field_126631179)||'';
+var oLQ        = @[Leads Quarter](field_127404045)||'';
+
+var oShowY     = 1;
+var oShowQ     = 1;
+var oShow      = 1;
+
+if(oLeadsYear && oLY){
+  if(oLeadsYear == oLY){
+    oShowY = 0;
+  }
+}
+else if(!oLeadsYear && !oLY){
+  oShowY = 0;
+}
+
+if(oLeadsQua && oLQ){
+  if(oLeadsQua == oLQ){
+    oShowQ = 0;
+  }
+}
+else if(!oLeadsQua && !oLQ){
+  oShowQ = 0;
+}
+
+if(oShowY == 0 && oShowQ == 0){
+  oShow = 0;
+}
+
+oShow;

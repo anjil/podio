@@ -1,0 +1,7 @@
+label: Hat#
+field_id: 133060487
+type: calculation
+script: var my1stLetter = @[Product](field_113666207).substring(0,1)
+var out = parseInt(0)
+if (my1stLetter == "#") { out = parseInt(1) }
+out

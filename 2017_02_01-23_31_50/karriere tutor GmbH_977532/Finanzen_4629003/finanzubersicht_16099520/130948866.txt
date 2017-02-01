@@ -1,0 +1,61 @@
+label: Calculation
+field_id: 130948866
+type: calculation
+script: var oJson      = @[Json-ExpectedLizenzenFee](field_128908966);
+var myArray    = Array();
+var oArr       = {};
+var ind        = 0;
+
+var t='~~~~';
+
+try {
+
+  if(oJson && oJson !='{}' && oJson !='[]'){
+    var oJsn     = JSON.parse(oJson);
+    oJsn.sort(function(aa, bb) {
+        var d1 = new Date(aa.Date);
+        var d2 = new Date(bb.Date);
+        if (d1 < d2) return -1;
+        if (d1 > d2) return 1;        
+        return 0;
+
+     });  
+
+    for (var ii=0; ii<oJsn.length; ii++){ 
+      if(oJsn[ii] && oJsn[ii]!='{}' && oJsn[ii]!='[]'){
+
+        var oDatam   = oJsn[ii];
+        var lehName  = oDatam.LehrgangName;  
+        var lehSt    = oDatam.Status;
+        var lizName  = oDatam.Lizenzname;
+        var oRStatus = oDatam.RStatus;
+        var oD       = oDatam.Date;             
+        var oAmt     = oDatam.Amount;          
+                            
+        if(oAmt > 0 && oD){t+='^^^';  
+          oAmt                    = oAmt;   
+          oArr['LizenzeName']     = lizName;
+          oArr['Amount']          = oAmt;  
+          oArr['Date']            = oD;
+          oArr['LehrgangName']    = lehName;
+          oArr['LehrgangStatus']  = lehSt;
+          oArr['RStatus']         = oRStatus;
+          myArray[ind]            = oArr;
+          oArr                    = {}; 
+          ind++;         
+        }
+      }
+    } 
+  } 
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+var z = {};
+z["Name"]     = @[Name](field_124789926);
+z["id"]       = @[BGS](field_124752446);
+z["Itemid"]   = @[Unique Id](field_126377252);
+z["Lizenze"]  = myArray;
+
+JSON.stringify(z);

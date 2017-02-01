@@ -1,0 +1,3 @@
+label: Foto von Firmenschild
+field_id: 126184864
+type: image

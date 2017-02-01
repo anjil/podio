@@ -1,0 +1,3 @@
+label: Anzahl max TN Staffel 2
+field_id: 129420902
+type: number

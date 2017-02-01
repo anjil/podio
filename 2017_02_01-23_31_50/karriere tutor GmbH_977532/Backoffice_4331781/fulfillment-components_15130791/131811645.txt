@@ -1,0 +1,4 @@
+label: CalcTutor Id
+field_id: 131811645
+type: calculation
+script: @[All of Kontaktliste Id](out_131485171_131560603)+''

@@ -1,0 +1,19 @@
+label: Calculation
+field_id: 135945861
+type: calculation
+script: var color = @[Color](field_135945906)
+var s   = ' ';
+var text = @[Text](field_135957798) || 'Please enter text'
+if(color){
+  if(color == '1'){
+  s+='![](http://dummyimage.com/800x40/d8e82a/0a090a&text=' + text + ')'
+  }
+  else if(color == '2'){
+  s+='![](http://dummyimage.com/800x40/2ac425/0a090a&text=' + text + ')'
+  }
+  else if(color == '3'){
+  s+='![](http://dummyimage.com/800x40/f50000/0a090a&text=' + text + ')'
+  }
+}
+
+s;

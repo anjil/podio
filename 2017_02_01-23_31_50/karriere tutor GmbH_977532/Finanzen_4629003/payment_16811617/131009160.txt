@@ -1,0 +1,4 @@
+label: Lizenzabrechnungs Datum
+field_id: 131009160
+type: calculation
+script: @[All of Lizenzabrechnungs Datum](out_128910102_131003524)[0];

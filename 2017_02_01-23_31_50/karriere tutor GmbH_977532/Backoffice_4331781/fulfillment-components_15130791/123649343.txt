@@ -1,0 +1,67 @@
+label: Calculation2
+field_id: 123649343
+type: calculation
+script: var items = [];
+var oShow = '';
+var oShowData = '';
+var tt='';
+try {
+ 
+ var json=@[All of JSON-Datum2](in_121361740_118873889);
+ for (var ii=0; ii<json.length; ii++){ 
+    var oArr = JSON.parse(json[ii]);  
+    var oEndDate = oArr["EndLeh"]; 
+    var oCalcLeh = oArr["CalcLehrgang"];
+    var oStatus = oArr["StatusShortName"];
+    if(oEndDate){
+       var oChkDate = dateCompair(oEndDate);
+       if(oChkDate == 1){
+          var tempKey = oCalcLeh+'^'+oStatus;
+          if(items[tempKey]){
+             var arr = items[tempKey];      
+             arr['count'] = parseInt(arr['count'])+1;
+             items[tempKey] = arr; 
+tt+='^^^^'+arr['count']+'<br>';         
+          }     
+          else{
+             var arr = [];
+             arr['CalcLehrgang'] = oCalcLeh;         
+             arr['StatusShortName'] = oStatus;
+             arr['count'] = 1;
+             items[tempKey] = arr;
+tt+='~~~'+oCalcLeh+'<br>';
+          }      
+       }
+     }
+   }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+
+function dateCompair(oE){
+  var d1 = new Date(oE);
+  var d2 = new Date();
+  if (d2.getTime() > d1.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+ 
+for(key in items) { 
+  var oArr = items[key];
+  oShowData +=' |' +oArr['CalcLehrgang'] +'| '+oArr['StatusShortName'] +'| ' +oArr['count']+ '|<br>';
+ 
+}
+
+var oHeader = '|** Lehname**|**  status**|**count**|<br>'
+  oHeader += '|------|-----|-----|<br>'
+
+  oShow += oHeader+oShowData;
+
+
+oShow+' ';
+
+//JSON.stringify(items)+'****'+tt;

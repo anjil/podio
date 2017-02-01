@@ -1,0 +1,6 @@
+label: zip
+field_id: 136107023
+type: calculation
+script: var out = @[Anschrift](field_136107009).join().replace(/[^0-9]/g,"").substr(-5)
+if (out == null) { out="" }
+out

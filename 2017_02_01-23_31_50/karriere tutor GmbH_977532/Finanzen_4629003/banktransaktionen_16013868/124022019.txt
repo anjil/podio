@@ -1,0 +1,13 @@
+label: Customer-ID
+field_id: 124022019
+type: calculation
+script: var ovW = @[VWZ1](field_124021920)
+//ovW = '361/1238/15 REDEMSKE, OLAF';
+var oShow = '';
+if(ovW){
+  if(ovW.indexOf('/')>-1){
+    var oArr = ovW.split('/');
+    oShow = oArr[0];
+  }
+}
+oShow

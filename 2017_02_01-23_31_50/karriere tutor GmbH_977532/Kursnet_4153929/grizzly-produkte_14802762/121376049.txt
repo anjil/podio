@@ -1,0 +1,3 @@
+label: Maßnahmendauer (Wochen)
+field_id: 121376049
+type: number

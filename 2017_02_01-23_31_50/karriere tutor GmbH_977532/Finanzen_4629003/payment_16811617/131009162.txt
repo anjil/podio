@@ -1,0 +1,4 @@
+label: Austrittsdatum
+field_id: 131009162
+type: calculation
+script: @[All of Austrittsdatum](out_130741928_131003524)[0];

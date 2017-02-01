@@ -1,0 +1,21 @@
+label: Inhalt (lang)
+field_id: 136999521
+type: calculation
+script: var txtInhalt = @[All of Inhalt (lang)](out_127786727_133618219)[0];
+var InhaltArr = txtInhalt.split('\n');
+var oShow     = '';
+
+for(var i=0; i<InhaltArr.length; i++){
+  var txt = InhaltArr[i];
+  if(txt.indexOf('!') > -1){
+    txt = txt.substr(1);
+    txt = '**'+txt+'**';
+  }
+  else if(txt.indexOf('*') > -1){
+    txt = txt.substr(1);
+    txt = '* '+txt;
+  }
+  oShow+=txt+'\n';
+}
+
+oShow;

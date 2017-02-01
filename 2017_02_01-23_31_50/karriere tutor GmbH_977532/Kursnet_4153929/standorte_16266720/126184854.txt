@@ -1,0 +1,3 @@
+label: Status Allgemein
+field_id: 126184854
+type: category

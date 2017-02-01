@@ -1,0 +1,12 @@
+label: Calc_Lehrgangsgebuehren
+field_id: 113559188
+type: calculation
+script: var gebuehr_komplett = @[Sum of Gebühren](out_sum_108136589_108285774);
+var gebuehr_abweichend = @[Abweichende_Lehrgangsgebühren](field_105473427);
+var gebuehr_neu = gebuehr_komplett;
+
+if (gebuehr_abweichend != null) {
+  gebuehr_neu = gebuehr_abweichend;
+}
+
+gebuehr_neu

@@ -1,0 +1,8 @@
+label: Check bank Exception
+field_id: 132235362
+type: calculation
+script: var bgs = @[BGS](field_124752446)
+if(bgs == '559D093626' || bgs == '427D117429')
+ 1
+else
+ 0

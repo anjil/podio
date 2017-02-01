@@ -1,0 +1,350 @@
+label: Calculation
+field_id: 134953545
+type: calculation
+script: var json       = @[All of JSON-Rechnungen](in_132148137_132049808)||[];
+var jsExpTR    = @[All of JSON-Erwartete-Zahlungseingange](in_125563047_132230279)||[];
+var jsExpLZ    = @[All of JSON-RechnungenReport](in_132709250_132703747)||[];
+var bnkAmt     = @[Banking Amount](field_132049710)||0;
+var showExpLz  = @[ Show Expected License ](field_134819905)  ||'';
+var oData      = '';
+var oShow      = '';
+var oBalance   = bnkAmt;
+var oHeader ='|**Name**|**Date**|**Amount**|**Balance**|<br>';
+oHeader +='|--------|--------:|----------:|-----------:|<br>';
+
+var t='~~~'
+
+try{   
+   var myArray = getData(json,jsExpTR);
+   printData(myArray);   
+  
+}catch (e) {
+  "Could not parse JSON";
+}
+
+function printData(myArray){       
+  
+  myArray.sort(function(a, b) {
+    a = new Date(a['Date']);
+    b = new Date(b['Date']);
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+  var oPrvDate   = null;  
+  var od         = null;
+  var bnkAmt     = 0;  
+  var showBill   = '';
+          
+  for(var i=0; i<myArray.length; i++){                   
+    var oName    = myArray[i]['Name'];
+    var oAmt     = myArray[i]['Amount'];
+    var oDate    = myArray[i]['Date'];
+    var oTag     = myArray[i]['Tag'];
+    var oid      = myArray[i]['id']; 
+    if(oName){
+      if(oName.length>50){
+        oName = oName.substring(0,50);
+      }
+    }
+                     
+    if(oDate){ 
+      var odts = new Date(oDate);
+      if(oPrvDate){ 
+        if(oPrvDate.getTime() < odts.getTime()){
+          var sAmt = 0;
+          var sBal = 0;
+          var setD = null;
+          var shwDt= null;
+          if(bnkAmt > 0){
+            oBalance = oBalance + bnkAmt;
+            sAmt     = '+'+currencyFormatDE(bnkAmt); 
+            sBal     = currencyFormatDE(oBalance);
+            setD     = oPrvDate//getWeekStart(oPrvDate);   
+            shwDt    = moment(setD).format("DD.MM.YY");
+            oData   += '|';
+            oData   += 'Expected banking amount'  +'|';
+            oData   += shwDt  +'|';
+            oData   += sAmt   +'|'; 
+            oData   += sBal   +'|<br>'; 
+          }          
+          if(showBill){
+            oData   += showBill;
+          }         
+
+          bnkAmt   = 0;
+          oPrvDate = null;
+          showBill = '';
+        }
+      } 
+
+      if(oTag == 'Lic'){
+        var oChkDate = dateCompair(oDate); 
+        if(oChkDate == 1){
+          var sAmt = 0; 
+          var sBal = 0;
+          var setD = null;
+          var shwDt= null;
+          oBalance = oBalance - oAmt;  
+
+          sAmt     = '-'+currencyFormatDE(oAmt); 
+          sBal     = currencyFormatDE(oBalance);
+          setD     = oDate//getWeekStart(oDate);   
+          shwDt    = moment(setD).format("DD.MM.YY");
+
+          od       = new Date(oDate);
+          if(!oPrvDate || oPrvDate.getTime() == od.getTime()){
+            oPrvDate    = od;
+            showBill   += '|';
+            showBill   += oName             +'|';
+            showBill   += shwDt             +'|';
+            showBill   += sAmt              +'|'; 
+            showBill   += sBal              +'|<br>'; 
+          }
+        }
+      }
+          
+      if(oTag == 'Bill'){
+        var oChkDate = dateCompairBill(oDate);
+        if(oChkDate == 1){
+          var sAmt = 0;
+          var sBal = 0;
+          var setD = null;
+          var shwDt= null;
+          oBalance = oBalance - oAmt;
+
+          sAmt     = '-'+currencyFormatDE(oAmt); 
+          sBal     = currencyFormatDE(oBalance);
+          setD     = oDate//getWeekStart(oDate);   
+          shwDt    = moment(setD).format("DD.MM.YY");
+ var oUrl = 'https://podio.com/karrieretutorde/finance/apps/rechnungen/items/'+oid;
+        
+          od       = new Date(oDate);
+          if(!oPrvDate || oPrvDate.getTime() == od.getTime()){
+            oPrvDate    = od;
+            showBill   += '|';
+            showBill   += oName.link(oUrl)  +'|';
+            showBill   += shwDt             +'|';
+            showBill   += sAmt              +'|'; 
+            showBill   += sBal              +'|<br>'; 
+          }
+        }
+      }
+
+      if(oTag == 'Bank'){
+        var oChkDate = dateCompair(oDate);
+        if(oChkDate == 1){
+          var sAmt = 0;
+          var sBal = 0;
+          var setD = null;
+          var shwDt= null;
+          od       = new Date(oDate);          
+          if(!oPrvDate || oPrvDate.getTime() == od.getTime()){
+            oPrvDate = od;
+            bnkAmt  += oAmt;   
+          }      
+        }                      
+      }
+    }                     
+  } 
+  if(oPrvDate && oPrvDate.getTime() == od.getTime()){ 
+    var setD = null;
+    var shwDt= null;
+    if(bnkAmt > 0){
+      oBalance = oBalance + bnkAmt;
+      sAmt     = '+'+currencyFormatDE(bnkAmt); 
+      sBal     = currencyFormatDE(oBalance);
+      setD     = oPrvDate//getWeekStart(oPrvDate);   
+      shwDt    = moment(setD).format("DD.MM.YY");
+      oData   += '|';
+      oData   += 'Expected banking amount'  +'|';
+      oData   += shwDt  +'|';
+      oData   += sAmt   +'|'; 
+      oData   += sBal   +'|<br>'; 
+    }
+    if(showBill){
+      oData   +=showBill;
+    }
+    bnkAmt   = 0;
+    oPrvDate = null;
+    showBill ='';
+  }  
+}
+
+
+function getData(json,jsExpTR){
+  var tempArr     = [];
+  var arr         = {};
+  var ind         = 0;
+  if(json && json!='{}' && json!='[]'){
+    for(var i=0; i<json.length; i++){
+      if(json[i] && json[i]!='{}' && json[i]!='[]'){
+        var js           = JSON.parse(json[i]);
+        for(var k=0; k<js.length; k++){  
+          var disJson    = 1;
+          var bezahlt    = js[k].bezahlt;  
+          if(js[k].Date){
+            if(bezahlt){
+              if(bezahlt == 'Bezahlt') disJson = 0;
+              if(bezahlt == 'Offen')   disJson = 1;
+            }
+            var chkDisplay = checkForDispalyData(disJson, 
+                                                 js[k].Date,
+                                                 js[k].PayDate);
+            if(chkDisplay == 1){       
+              var odts       = new Date(js[k].Date);
+              var currDts    = new Date();          
+              arr['Name']    = js[k].Name;
+              arr['Amount']  = js[k].Amount; 
+              if(currDts.getTime() > odts.getTime()){
+                var setD     = getWeekStart(currDts);   
+                arr['Date']  = setD; 
+              }
+              else{
+                var setD     = getWeekStart(odts);  
+                arr['Date']  = setD; 
+              }
+              arr['id']      = js[k].id; 
+              arr['Tag']     = 'Bill';          
+              tempArr[ind]   = arr;
+              arr            = {}; 
+              ind++;  
+            }
+          }     
+        }
+      } 
+    }
+  }
+  if(jsExpTR && jsExpTR!='{}' && jsExpTR!='[]'){
+    for(var i=0; i<jsExpTR.length; i++){
+      if(jsExpTR[i] && jsExpTR[i]!='{}' && jsExpTR[i]!='[]'){
+        var js           = JSON.parse(jsExpTR[i]);  
+        var trPaid       = js.TransactionPaid;     
+        if(trPaid.trim() == 'n' && js.Date){ 
+           var setD       = getWeekStart(js.Date);          
+           arr['Name']    = js.Name;
+           arr['Amount']  = js.Amount; 
+           arr['Date']    = setD;
+           arr['id']      = ''; 
+           arr['Tag']     = 'Bank';  
+           tempArr[ind]   = arr;
+           arr            = {}; 
+           ind++;        
+        }    
+      }
+    } 
+  }
+  if(showExpLz == '' || showExpLz == 'On'){
+    if(jsExpLZ && jsExpLZ!='{}' && jsExpLZ!='[]'){
+      var tArr = Array();
+      for(var i=0; i<jsExpLZ.length; i++){
+        if(jsExpLZ[i] && jsExpLZ[i]!='{}' && jsExpLZ[i]!='[]'){
+          var js           = JSON.parse(jsExpLZ[i]); 
+          var licAmt       = js.Amount  || 0 ;
+          var Lizenze      = js.Lizenze || '';
+          var Rate         = js.Rate    || '';
+          if(js.Date){
+            if(Lizenze!='' || Rate!=''){
+              var oName        = js.Lizenzen+' : '+js.Rate;
+              var dt           = new Date(js.Date); 
+              var tKey         = js.Lizenzen+'^'+js.Rate+'^'+dt.getTime();     
+
+              if(tArr[tKey]){           
+                var z         = tArr[tKey]; 
+                z['Amount']   = parseFloat(z['Amount'])+parseFloat(licAmt);
+                tArr['Amount']= z;
+              } 
+              else{  
+                var z        = [];
+                z['Name']    = oName; 
+                z['Amount']  = js.Amount; 
+                z['Date']    = new Date(js.Date);          
+                tArr[tKey]   = z;
+              }
+            }   
+          }
+        }
+      }
+      if(tArr){
+        var tuples = [];
+        for (var key in tArr) tuples.push([key, tArr[key]]); 
+          for (var i = 0; i < tuples.length; i++) { 
+            var oTKey      = tuples[i][0];   
+            var oTVal      = tuples[i][1]; 
+            var setD       = getWeekStart(oTVal['Date']);   
+            arr['Name']    = oTVal['Name']; 
+            arr['Amount']  = parseFloat(oTVal['Amount'])||0;  
+            arr['Date']    = setD;
+            arr['id']      = ''; 
+            arr['Tag']     = 'Lic';          
+            tempArr[ind]   = arr;
+            arr            = {}; 
+            ind++;   
+          }
+        } 
+      }
+    }  
+  return tempArr;   
+}
+
+
+function checkForDispalyData(pStatus, oE, pDate){
+  if(pStatus == 1){
+    return 1;
+  }
+  else{
+    var d1 = new Date(oE);
+    var d3 = (pDate) ? new Date(pDate) : new Date();
+    if (d1.getTime()< d3.getTime()) {
+      return 0;
+    }   
+    else{
+      return 1;
+    }
+  }   
+}
+
+
+function currencyFormatDE(num) {
+    return num
+       .toFixed(2)
+       .replace(".", ",") 
+       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + " €"; 
+}
+
+function getWeekStart(d){
+  var odt       = new Date(d);
+  var odays     = 0;
+  if(odt.getDay()==0) odays = 1;
+  if(odt.getDay()==6) odays = 2;
+  
+  odt.setDate(odt.getDate() + (odays)); 
+  return odt;
+}
+
+function dateCompairBill(oE){
+  var d1 = new Date(oE); 
+  var d3 = new Date();
+  d3.setDate(d3.getDate() + 42);
+  if (d1.getTime()<= d3.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+
+function dateCompair(oE){
+  var d1 = new Date(oE); 
+  var d2 = new Date();
+  var d3 = new Date();
+  d3.setDate(d3.getDate() + 42);
+  if (d1.getTime()>= d2.getTime() && d1.getTime()<= d3.getTime()) {
+    return 1;
+  }   
+  else{
+    return 0;
+  }
+}
+
+oShow = oHeader+oData;

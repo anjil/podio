@@ -1,0 +1,28 @@
+label: BGS Nummer
+field_id: 129646768
+type: calculation
+script: var uid = @[All of Fulfillment-ubersicht ID](in_129123177_124752897)[0];
+var bgs = @[All of CustomerId](in_124665203_124752897)[0]
+var dt   = @[All of AktuellesDatum](out_128820243_128820289)[0];
+var oId = '';
+var oShow = '';
+
+function GetId(oUniqueId){
+  var regex=/^[0-9]+$/;
+  var oShow = '';
+  for(var i=0;i<oUniqueId.length;i++){
+    if(oUniqueId[i].match(regex)){
+       oShow+= oUniqueId[i];
+    } 
+  }
+  return parseInt(oShow);
+}
+
+if(uid && bgs){
+  oId  = GetId(uid);
+  var  displayURL = 'https://podio.com/karrieretutorde/backoffice/apps/fulfillment-ubersicht/items/'+oId;
+   var displayName =  bgs;
+  oShow =  displayName.link(displayURL);
+}
+
+oShow;

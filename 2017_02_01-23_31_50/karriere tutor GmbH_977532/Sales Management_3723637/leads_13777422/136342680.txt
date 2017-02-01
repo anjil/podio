@@ -1,0 +1,25 @@
+label: Match Betreuer AA / AP Firma(yes=1)
+field_id: 136342680
+type: calculation
+script: var oldKon = @[All of Kontakte Id](out_136292201_107413556)+''
+var newKon = @[All of Old Kontakte Id](out_136107651_136323354)+''
+
+if(oldKon.length == newKon.length){
+  if(oldKon.indexOf(',') > -1){
+    var konArr = oldKon.split(',');
+    var fl = 0;
+    for(var i=0; i<konArr.length; i++){
+      if(newKon.indexOf(konArr[i])>-1){
+        fl = 1;
+      } 
+      else
+       fl = 0;
+    }
+    if(fl==1)
+    1
+  }
+  else
+  1
+}
+else
+0

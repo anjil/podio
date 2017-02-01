@@ -1,0 +1,20 @@
+label: Tutor Id
+field_id: 131560623
+type: calculation
+script: var tutor            = @[Tutor](field_119030137);
+var oShow            = '';
+
+var tutorArr         = [];
+tutorArr['Antje']    = 16;
+tutorArr['Bianca']   = 5;
+tutorArr['HaPe']     = 15;
+tutorArr['Jörg']     = 6;
+tutorArr['Nadine']   = 87;
+tutorArr['Max']      = 86;
+tutorArr['Sonstige'] = 89;
+
+for(var i=0; i<tutor.length; i++){
+  oShow += (oShow) ? ','+tutorArr[tutor[i]]+'' : tutorArr[tutor[i]]+'';
+}
+
+oShow; 

@@ -1,0 +1,10 @@
+label: KalDatum
+field_id: 125001298
+type: calculation
+script: var out = null
+if (@[Art](field_125664107) == "Mit Datum") {
+  out = @[All of Nächster Geburtstag](in_124788038_125001268)[0]
+} else {
+  out = undefined
+}
+out

@@ -1,0 +1,4 @@
+label: Ber_Gebühr
+field_id: 128519471
+type: calculation
+script: @[Rate](field_108137432) * @[Anzahl Raten](field_108136590)

@@ -1,0 +1,30 @@
+label: Expected Transaction Scenario(2n3)
+field_id: 139123538
+type: calculation
+script: var jsonTransaction = @[All of JSON-Transaction](in_124039546_124753397)||[];
+var oZeiteinsatz    = @[All of Zeiteinsatz](in_133706683_124752897)[0]||'';
+var json = @[All of JSON-FinanceUbersicht](in_124762989_124752897)[0];
+var totalWochen = 0;
+var oShow       = 0;
+
+try {
+
+  if(jsonTransaction.length == 0){
+    var js = JSON.parse(json); 
+    for (var i=0; i<js.length; i++){    
+      for(ii=0;ii<js[i].Datam.length;ii++){
+        totalWochen += parseInt(js[i].Datam[ii].Wochen);       
+      }
+    } 
+    if(oZeiteinsatz == 'Teilzeit' || oZeiteinsatz == 'Berufsbegleitend'){
+      oShow = 2;
+    }    
+    else if(totalWochen > 28){
+      oShow = 3;
+    }             
+  }
+}
+catch (e) {
+  "Could not parse JSON";
+}
+oShow;

@@ -1,0 +1,4 @@
+label: Kontaktliste Id
+field_id: 131485155
+type: calculation
+script: @[Unique ID](item_app_item_id)
